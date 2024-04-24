@@ -1,0 +1,20 @@
+{
+    "extends": "expo/tsconfig.base",
+    "compilerOptions": {
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "baseUrl": ".",
+        "paths": {
+            "@firebase/auth": [
+                "./node_modules/@firebase/auth/dist/index.rn.d.ts"
+            ],
+            "@/*": ["src/*"],
+            "@constants/*": ["src/constants/*"],
+            "@components/*": ["src/components/*"],
+            "@screens/*": ["src/app/screens/*"],
+            "@hooks/*": ["src/hooks/*"],
+            "@icons/*": ["assets/icons/*"]
+        }
+    },
+    "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+}
