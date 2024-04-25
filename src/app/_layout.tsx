@@ -7,7 +7,6 @@ import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 
 import { Slot, useRouter, useSegments } from 'expo-router';
 
-
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -49,9 +48,11 @@ export default function RootLayout() {
         return null;
     }
 
-    return <AuthProvider>
-        <MainLayout />
-    </AuthProvider>;
+    return (
+        <AuthProvider>
+            <MainLayout />
+        </AuthProvider>
+    );
 }
 
 function MainLayout() {
@@ -60,16 +61,16 @@ function MainLayout() {
     const router = useRouter();
 
     useEffect(() => {
-        if(typeof isAuthenticated == 'undefined') return;
+        if (typeof isAuthenticated == 'undefined') return;
 
         const inApp = segments[0] == '(app)';
-        
-        if(isAuthenticated && !inApp) {
-            router.replace('/(user)/home-screen');
-        }
-        else if (isAuthenticated == false) {
-            router.replace('/')
-        }
-    }, [isAuthenticated])
 
-    return <Slot />;}
+        if (isAuthenticated && !inApp) {
+            router.replace('/(user)/home');
+        } else if (isAuthenticated == false) {
+            router.replace('/');
+        }
+    }, [isAuthenticated]);
+
+    return <Slot />;
+}

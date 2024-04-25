@@ -1,7 +1,18 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, onAuthStateChanged,  signInWithEmailAndPassword, User  } from "firebase/auth";
-import { FIREBASE_AUTH, FIRESTORE_DB } from "firebaseConfig";
-import {doc, setDoc} from 'firebase/firestore';
+import {
+    createContext,
+    PropsWithChildren,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
+import {
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    User,
+} from 'firebase/auth';
+import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 enum AuthStatus {
     idle = 'idle',
@@ -16,68 +27,86 @@ type AuthResponse = {
     success?: boolean;
     msg?: string;
     status?: AuthStatus;
-}
+};
 
 type AuthData = {
     user: User | null;
     isAuthenticated: boolean | undefined;
     logIn: (data: { email: string; password: string }) => Promise<AuthResponse>;
-    signUp: (data: { name: string; email: string; password: string }) => Promise<AuthResponse>;
+    signUp: (data: {
+        name: string;
+        email: string;
+        password: string;
+    }) => Promise<AuthResponse>;
     logOut: () => Promise<AuthResponse>;
 };
 
 const AuthContext = createContext<AuthData>({
-    user: null, 
-    isAuthenticated: undefined, 
-    logIn: async (data: { email: string; password: string }): Promise<AuthResponse> => ({status: AuthStatus.idle}),  
-    signUp: async (data: { name: string; email: string; password: string }): Promise<AuthResponse> => ({status: AuthStatus.idle}),
-    logOut: async (): Promise<AuthResponse> => ({status: AuthStatus.idle}), 
+    user: null,
+    isAuthenticated: undefined,
+    logIn: async (data: {
+        email: string;
+        password: string;
+    }): Promise<AuthResponse> => ({ status: AuthStatus.idle }),
+    signUp: async (data: {
+        name: string;
+        email: string;
+        password: string;
+    }): Promise<AuthResponse> => ({ status: AuthStatus.idle }),
+    logOut: async (): Promise<AuthResponse> => ({ status: AuthStatus.idle }),
 });
 
-
-
-export const AuthProvider = ({children} : PropsWithChildren) => {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
-   
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(
+        undefined,
+    );
 
     useEffect(() => {
-        const unsub = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+        const unsub = onAuthStateChanged(FIREBASE_AUTH, user => {
             if (user) {
                 console.log('User is signed in');
                 setIsAuthenticated(true);
                 setUser(user);
-                
             } else {
                 setIsAuthenticated(false);
-                setUser(null);    
+                setUser(null);
             }
         });
         return unsub;
     }, []);
 
-    const logOut = async () => { 
+    const logOut = async () => {
         try {
             await FIREBASE_AUTH.signOut();
         } catch (error: any) {
-            return {success: false, msg: error.message, status: AuthStatus.rejected};
+            return {
+                success: false,
+                msg: error.message,
+                status: AuthStatus.rejected,
+            };
         } finally {
-            return {status: AuthStatus.resolved};
+            return { status: AuthStatus.resolved };
         }
-    }
+    };
 
     const logIn = async (data: { email: string; password: string }) => {
         try {
             const response = await signInWithEmailAndPassword(
                 FIREBASE_AUTH,
                 data.email,
-                data.password,)
-            return {success: true, data: response?.user};
+                data.password,
+            );
+            return { success: true, data: response?.user };
         } catch (error: any) {
-            return {success: false, msg: error.message, status: AuthStatus.rejected};
+            return {
+                success: false,
+                msg: error.message,
+                status: AuthStatus.rejected,
+            };
         }
-    }
-    
+    };
+
     const signUp = async (data: {
         name: string;
         email: string;
@@ -90,24 +119,28 @@ export const AuthProvider = ({children} : PropsWithChildren) => {
                 data.password,
             );
 
-            await setDoc(doc(FIRESTORE_DB, "users", response?.user?.uid), {
+            await setDoc(doc(FIRESTORE_DB, 'users', response?.user?.uid), {
                 name: data.name,
                 email: data.email,
                 userId: response?.user?.uid,
             });
-            return {success: true, data: response?.user};
-            
+            return { success: true, data: response?.user };
         } catch (error: any) {
-            return {success: false, msg: error.message, status: AuthStatus.rejected};
+            return {
+                success: false,
+                msg: error.message,
+                status: AuthStatus.rejected,
+            };
         }
-    }
+    };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, logIn, signUp, logOut }}>
+        <AuthContext.Provider
+            value={{ user, isAuthenticated, logIn, signUp, logOut }}>
             {children}
         </AuthContext.Provider>
     );
-}
+};
 
 export const useAuth = () => {
     const value = useContext(AuthContext);
@@ -116,4 +149,4 @@ export const useAuth = () => {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return value;
-}
+};

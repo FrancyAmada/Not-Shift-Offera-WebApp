@@ -8,13 +8,9 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 
-import {
-    FieldValues,
-    SubmitHandler,
-    useForm,
-} from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Link, Stack} from 'expo-router';
+import { Link, Stack } from 'expo-router';
 
 import Colors from '@constants/Colors';
 import Button from '@/components/Button';
@@ -30,7 +26,7 @@ const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const SignupScreen = () => {
     console.log('SIGN UP');
 
-    const {signUp}= useAuth();
+    const { signUp } = useAuth();
     const [loading, setLoading] = useState(false);
     const { control, handleSubmit } = useForm();
 
@@ -47,7 +43,7 @@ const SignupScreen = () => {
         if (response && !response.success) {
             Alert.alert('Sign Up Failed!' + response.msg);
         }
-    }
+    };
 
     return (
         <ScrollView

@@ -27,24 +27,20 @@ const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const LoginScreen = () => {
     console.log('LOG IN');
 
-    const {logIn}= useAuth();
+    const { logIn } = useAuth();
     const [loading, setLoading] = useState(false);
     const { control, handleSubmit } = useForm();
 
-    const authLogIn = async (data: {
-        email: string;
-        password: string;
-    }) => {
+    const authLogIn = async (data: { email: string; password: string }) => {
         setLoading(true);
 
         let response = await logIn(data);
         setLoading(false);
-        
+
         if (response && !response.success) {
             Alert.alert('Sign Up Failed!' + response.msg);
         }
-
-    }
+    };
 
     return (
         <ScrollView
