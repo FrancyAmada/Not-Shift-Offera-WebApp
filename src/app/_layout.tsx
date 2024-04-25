@@ -1,17 +1,12 @@
-import { StyleSheet, View, Text } from 'react-native';
 import { useEffect } from 'react';
 
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-import Colors from '@constants/Colors';
-import TextStyles from '@constants/TextStyles';
-import useAuth from '@hooks/useAuth';
+import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 
-import { Stack } from 'expo-router';
+import { Slot, useRouter, useSegments } from 'expo-router';
 
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import { ReactNativeAsyncStorage } from 'firebase/auth';
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -40,13 +35,6 @@ export default function RootLayout() {
         'Montserrat-Medium': require('../../assets/fonts/Montserrat-Medium.ttf'),
     });
 
-    // const onLayoutRootView = useCallback(async () => {
-    //     if (fontsLoaded || fontError) {
-    //         await SplashScreen.hideAsync();
-    //     }
-    // }, [fontsLoaded, fontError]);
-
-    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
     useEffect(() => {
         if (error) throw error;
     }, [error]);
@@ -61,40 +49,27 @@ export default function RootLayout() {
         return null;
     }
 
-    return <RootLayoutNav />;
+    return <AuthProvider>
+        <MainLayout />
+    </AuthProvider>;
 }
 
-function RootLayoutNav() {
-    const { user } = useAuth();
+function MainLayout() {
+    const { isAuthenticated } = useAuth();
+    const segments = useSegments();
+    const router = useRouter();
 
-    return (
-        <Stack initialRouteName="lindex">
-            <Stack.Screen
-                name="index"
-                options={{
-                    headerShown: false,
-                }}
-            />
-            <Stack.Screen
-                name="(auth)"
-                options={{
-                    headerShown: false,
-                }}
-            />
-            <Stack.Screen
-                name="(user)"
-                options={{
-                    headerShown: false,
-                }}
-            />
-        </Stack>
-    );
-}
+    useEffect(() => {
+        if(typeof isAuthenticated == 'undefined') return;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.white,
-    },
-    label: TextStyles.bold5,
-});
+        const inApp = segments[0] == '(app)';
+        
+        if(isAuthenticated && !inApp) {
+            router.replace('/(user)/home-screen');
+        }
+        else if (isAuthenticated == false) {
+            router.replace('/')
+        }
+    }, [isAuthenticated])
+
+    return <Slot />;}

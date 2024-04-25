@@ -12,7 +12,6 @@ type InputProps = {
     secureTextEntry?: boolean;
     style?: ViewStyle;
     rules?: any;
-    // onChange: any;
 };
 
 const InputField = ({

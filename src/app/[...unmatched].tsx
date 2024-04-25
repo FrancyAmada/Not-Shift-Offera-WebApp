@@ -1,3 +1,12 @@
-import { Unmatched } from 'expo-router';
+// import { Unmatched } from 'expo-router';
+import { View, Text } from 'react-native';
 
-export default Unmatched;
+const NotFoundError = () => {
+    return (
+        <View>
+            <Text>404 Not Found</Text>
+        </View>
+    );
+};
+
+export default NotFoundError;

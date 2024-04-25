@@ -3,22 +3,18 @@ import {
     Text,
     ActivityIndicator,
     ViewStyle,
-    Pressable,
     ScrollView,
+    Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 
 import {
-    FieldValue,
     FieldValues,
-    Form,
     SubmitHandler,
     useForm,
 } from 'react-hook-form';
-import { Link, Stack } from 'expo-router';
 
-import { FIREBASE_AUTH } from '../../../firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Link, Stack} from 'expo-router';
 
 import Colors from '@constants/Colors';
 import Button from '@/components/Button';
@@ -26,34 +22,30 @@ import Separator from '@/components/Separator';
 import FormStyles from '@/constants/FormStyles';
 import TextStyles from '@/constants/TextStyles';
 import InputField from '@/components/InputField';
+import { useAuth } from '@/providers/AuthProvider';
 
 const googleLogo = require('../../../assets/icons/google-logo.png');
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-const auth = FIREBASE_AUTH;
 
 const SignupScreen = () => {
     console.log('SIGN UP');
 
+    const {signUp}= useAuth();
     const [loading, setLoading] = useState(false);
     const { control, handleSubmit } = useForm();
 
-    async function signUp(data: {
+    const authSignUp = async (data: {
         name: string;
         email: string;
         password: string;
-    }) {
+    }) => {
         setLoading(true);
-        try {
-            const response = await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password,
-            );
-            console.log(response);
-        } catch (error: any) {
-            alert('Sign Up Failed!' + error.message);
-        } finally {
-            setLoading(false);
+
+        let response = await signUp(data);
+        setLoading(false);
+
+        if (response && !response.success) {
+            Alert.alert('Sign Up Failed!' + response.msg);
         }
     }
 
@@ -129,7 +121,7 @@ const SignupScreen = () => {
                             <Button
                                 text="Create account"
                                 onPress={handleSubmit(
-                                    signUp as SubmitHandler<FieldValues>,
+                                    authSignUp as SubmitHandler<FieldValues>,
                                 )}
                             />
                         </>

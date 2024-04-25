@@ -2,18 +2,16 @@ import {
     View,
     Text,
     ActivityIndicator,
-    TouchableOpacity,
     ViewStyle,
     Pressable,
     ScrollView,
+    Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { Link, Stack } from 'expo-router';
 
-import { FIREBASE_AUTH } from '../../../firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Link, Stack } from 'expo-router';
 
 import Colors from '@constants/Colors';
 import Button from '@/components/Button';
@@ -21,31 +19,31 @@ import InputField from '@/components/InputField';
 import Separator from '@/components/Separator';
 import FormStyles from '@/constants/FormStyles';
 import TextStyles from '@/constants/TextStyles';
+import { useAuth } from '@/providers/AuthProvider';
 
 const googleLogo = require('../../../assets/icons/google-logo.png');
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-const auth = FIREBASE_AUTH;
 
 const LoginScreen = () => {
     console.log('LOG IN');
 
+    const {logIn}= useAuth();
     const [loading, setLoading] = useState(false);
     const { control, handleSubmit } = useForm();
 
-    async function logIn(data: { email: string; password: string }) {
+    const authLogIn = async (data: {
+        email: string;
+        password: string;
+    }) => {
         setLoading(true);
-        try {
-            const response = await signInWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password,
-            );
-            console.log(response);
-        } catch (error: any) {
-            alert('Log In Failed!' + error.message);
-        } finally {
-            setLoading(false);
+
+        let response = await logIn(data);
+        setLoading(false);
+        
+        if (response && !response.success) {
+            Alert.alert('Sign Up Failed!' + response.msg);
         }
+
     }
 
     return (
@@ -105,7 +103,7 @@ const LoginScreen = () => {
                             <Button
                                 text="Log In"
                                 onPress={handleSubmit(
-                                    logIn as SubmitHandler<FieldValues>,
+                                    authLogIn as SubmitHandler<FieldValues>,
                                 )}
                             />
                         </>
