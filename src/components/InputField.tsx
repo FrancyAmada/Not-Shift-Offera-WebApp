@@ -15,6 +15,9 @@ type InputProps = {
     rules?: any;
     withIcon?: boolean;
     icon?: string;
+    iconColor?: string;
+    editable?: boolean;
+    selectTextOnFocus?: boolean;
 };
 
 const InputField = ({
@@ -27,6 +30,9 @@ const InputField = ({
     withIcon = false,
     icon,
     rules = {},
+    editable = true,
+    selectTextOnFocus = false,
+    iconColor,
 }: InputProps) => {
     return (
         <Controller
@@ -49,11 +55,13 @@ const InputField = ({
                                 <Icon
                                     name={icon}
                                     size={20}
-                                    color={Colors.placeholder}
+                                    color={iconColor || Colors.placeholder}
                                 />
                             </View>
                         )}
                         <TextInput
+                            selectTextOnFocus={selectTextOnFocus}
+                            editable={editable}
                             style={{
                                 ...styles.input,
                                 paddingLeft: withIcon ? 8 : 0,

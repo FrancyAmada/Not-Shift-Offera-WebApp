@@ -1,18 +1,16 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 
-import { Tabs } from 'expo-router';
+import { Stack, Tabs, useRouter } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
 import Icon from '@/components/Icon';
-import InputField from '@/components/InputField';
-import { useForm } from 'react-hook-form';
 
 type IconName = React.ComponentProps<typeof Icon>['name'];
 
 const HomeLayout = () => {
-    const { control } = useForm();
+    const router = useRouter();
 
     return (
         <Tabs
@@ -54,22 +52,7 @@ const HomeLayout = () => {
                 tabBarActiveTintColor: Colors.blue,
                 tabBarStyle: styles.navBar,
                 tabBarLabelStyle: TextStyles.bold1,
-                headerRight: () => (
-                    <View style={styles.headerRightContainer}>
-                        <Pressable style={{ flex: 1 }}>
-                            <InputField
-                                name="search"
-                                placeholder="Search"
-                                control={control}
-                                style={{ height: 'auto', width: '100%' }}
-                                withIcon={true}
-                                icon="search-fill"
-                            />
-                        </Pressable>
-
-                        <Icon name={'profile-outline'} />
-                    </View>
-                ),
+                headerShown: false,
             })}>
             <Tabs.Screen name="home" options={{ tabBarLabel: 'Home' }} />
             <Tabs.Screen
@@ -91,11 +74,11 @@ const HomeLayout = () => {
                         );
                     },
                 }}
-                listeners={({ navigation }) => {
+                listeners={() => {
                     return {
                         tabPress: e => {
                             e.preventDefault();
-                            navigation.navigate('add-post');
+                            router.push('/(user)/add-post');
                         },
                     };
                 }}

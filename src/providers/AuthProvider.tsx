@@ -12,7 +12,7 @@ import {
     User,
 } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 enum AuthStatus {
     idle = 'idle',
@@ -65,9 +65,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     useEffect(() => {
         const unsub = onAuthStateChanged(FIREBASE_AUTH, user => {
             if (user) {
-                console.log('User is signed in');
                 setIsAuthenticated(true);
                 setUser(user);
+                updateUserData(user.uid);
             } else {
                 setIsAuthenticated(false);
                 setUser(null);
@@ -76,7 +76,23 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         return unsub;
     }, []);
 
+    const updateUserData = async (userId: string) => {
+        const docRef = doc(FIRESTORE_DB, 'users', userId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            let data = docSnap.data();
+            setUser({
+                ...user,
+                name: data?.name,
+                email: data?.email,
+                userId: data?.userId,
+            });
+        }
+    };
+
     const logOut = async () => {
+        console.log('Logging out');
         try {
             await FIREBASE_AUTH.signOut();
         } catch (error: any) {
