@@ -16,8 +16,8 @@ const HomeScreen = () => {
         <View style={styles.container}>
             <Stack.Screen
                 options={{
+                    headerShown: true,
                     headerTitle: 'offera',
-                    headerTitleAlign: 'left',
                     headerTitleStyle: TextStyles.bold7,
                     headerTintColor: Colors.blue,
                     headerShadowVisible: true,

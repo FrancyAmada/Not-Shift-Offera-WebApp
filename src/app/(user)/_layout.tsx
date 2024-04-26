@@ -1,56 +1,52 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 
-import { Stack, Tabs } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Icon from '@expo/vector-icons/Ionicons';
+import { Tabs } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
+import Icon from '@/components/Icon';
+import InputField from '@/components/InputField';
+import { useForm } from 'react-hook-form';
 
 type IconName = React.ComponentProps<typeof Icon>['name'];
 
 const HomeLayout = () => {
+    const { control } = useForm();
+
     return (
         <Tabs
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {
-                    let iconName: IconName = 'caret-down-circle-outline';
+                    let iconName: IconName = 'add-circle-outline';
                     switch (route.name) {
                         case 'home':
                             iconName = 'home-outline';
-                            // iconName = focused ? 'home-sharp' : 'home-outline';
+                            iconName = focused ? 'home-fill' : 'home-outline';
                             break;
                         case 'my-applications':
-                            iconName = 'reader-outline';
-                            // iconName = 'document-text-outline';
-                            // iconName = 'receipt-outline';
-                            // iconName = focused
-                            //     ? 'document-text'
-                            //     : 'document-text-outline';
+                            iconName = 'file-outline';
+                            iconName = focused ? 'file-fill' : 'file-outline';
                             break;
-
-                        // case 'add-post':
-                        //     iconName = 'add-circle-outline';
-                        //     // iconName = focused ? 'add-circle' : 'add-circle-outline';
-                        // break;
 
                         case 'my-posts':
-                            iconName = 'newspaper-outline';
-                            // iconName = focused ? 'newspaper' : 'newspaper-outline';
+                            iconName = 'clipboard-outline';
+                            iconName = focused
+                                ? 'clipboard-fill'
+                                : 'clipboard-outline';
                             break;
                         case 'chat':
-                            iconName = 'chatbubble-ellipses-outline';
-                            // iconName = focused
-                            //     ? 'chatbubble-ellipses'
-                            //     : 'chatbubble-ellipses-outline';
+                            iconName = 'chat-outline';
+                            iconName = focused ? 'chat-fill' : 'chat-outline';
                             break;
                     }
                     return (
-                        <Ionicons
+                        <Icon
                             name={iconName}
                             size={32}
-                            color={focused ? Colors.blue : Colors.black}
+                            color={focused ? Colors.blue : Colors.blue}
+                            stroke={focused ? Colors.blue : Colors.blue}
+                            strokeWidth={0.5}
                         />
                     );
                 },
@@ -58,6 +54,22 @@ const HomeLayout = () => {
                 tabBarActiveTintColor: Colors.blue,
                 tabBarStyle: styles.navBar,
                 tabBarLabelStyle: TextStyles.bold1,
+                headerRight: () => (
+                    <View style={styles.headerRightContainer}>
+                        <Pressable style={{ flex: 1 }}>
+                            <InputField
+                                name="search"
+                                placeholder="Search"
+                                control={control}
+                                style={{ height: 'auto', width: '100%' }}
+                                withIcon={true}
+                                icon="search-fill"
+                            />
+                        </Pressable>
+
+                        <Icon name={'profile-outline'} />
+                    </View>
+                ),
             })}>
             <Tabs.Screen name="home" options={{ tabBarLabel: 'Home' }} />
             <Tabs.Screen
@@ -70,9 +82,9 @@ const HomeLayout = () => {
                     tabBarIcon: ({ focused }) => {
                         return (
                             <View style={styles.actionButton}>
-                                <Ionicons
-                                    name="add-circle"
-                                    size={75}
+                                <Icon
+                                    name="add-circle-fill"
+                                    size={70}
                                     color={focused ? Colors.blue : Colors.blue}
                                 />
                             </View>
@@ -105,12 +117,12 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderStyle: 'solid',
         borderColor: Colors.lightGrey,
-        paddingHorizontal: 16,
-        paddingBottom: 8,
+        paddingHorizontal: 8,
+        paddingBottom: 4,
     },
     actionButton: {
-        width: '120%',
-        flexBasis: '130%',
+        width: '100%',
+        flexBasis: '100%',
         flexWrap: 'wrap',
         alignContent: 'center',
         alignItems: 'center',
@@ -118,7 +130,15 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         backgroundColor: Colors.white,
         marginBottom: '80%',
-        elevation: 4,
+        elevation: 3,
+    },
+    headerRightContainer: {
+        flex: 1,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        gap: 16,
+        alignItems: 'center',
+        alignSelf: 'stretch',
     },
 });
 
