@@ -99,9 +99,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             );
             return { success: true, data: response?.user };
         } catch (error: any) {
+            let msg = error.message;
+            if (error.code === 'auth/invalid-credential') {
+                msg = 'The email address or password is incorrect';
+            }
+            if (error.code === 'auth/too-many-requests') {
+                msg = 'Too many requests. Try again later';
+            }
             return {
                 success: false,
-                msg: error.message,
+                msg,
                 status: AuthStatus.rejected,
             };
         }
@@ -126,9 +133,19 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             });
             return { success: true, data: response?.user };
         } catch (error: any) {
+            let msg = error.message;
+            if (error.code === 'auth/email-already-in-use') {
+                msg = 'Email already in use';
+            }
+            if (error.code === 'auth/weak-password') {
+                msg = 'Password is too weak';
+            }
+            if (error.code === 'auth/invalid-email') {
+                msg = 'Invalid email';
+            }
             return {
                 success: false,
-                msg: error.message,
+                msg,
                 status: AuthStatus.rejected,
             };
         }

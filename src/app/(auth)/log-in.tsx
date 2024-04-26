@@ -38,7 +38,7 @@ const LoginScreen = () => {
         setLoading(false);
 
         if (response && !response.success) {
-            Alert.alert('Sign Up Failed!' + response.msg);
+            Alert.alert('Log in Failed', response.msg, [{ text: 'OK' }]);
         }
     };
 

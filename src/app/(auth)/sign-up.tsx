@@ -41,7 +41,7 @@ const SignupScreen = () => {
         setLoading(false);
 
         if (response && !response.success) {
-            Alert.alert('Sign Up Failed!' + response.msg);
+            Alert.alert('Sign up Failed', response.msg, [{ text: 'OK' }]);
         }
     };
 
