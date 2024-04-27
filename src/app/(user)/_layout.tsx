@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { Tabs, useRouter } from 'expo-router';
+import { Tabs } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';

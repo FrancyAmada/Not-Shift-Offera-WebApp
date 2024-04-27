@@ -14,21 +14,15 @@ const ApplicationsStack = () => {
                 headerTitleStyle: TextStyles.bold6,
                 headerShadowVisible: true,
                 headerLeft: () => {
-                    return (
-                        <View style={{ paddingRight: 16 }}>
-                            {/* <IconButton
-                                icon="chevron-left"
-                                onPress={() => router.back()}
-                            /> */}
-                        </View>
-                    );
+                    return <View style={{ paddingRight: 16 }}></View>;
                 },
                 headerRight: () => {
                     return (
                         <View>
                             <IconButton
-                                icon="profile-fill"
+                                icon="profile-outline"
                                 route="/(user)/home/profile"
+                                strokeWidth={0.5}
                             />
                         </View>
                     );

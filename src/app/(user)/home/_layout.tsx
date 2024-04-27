@@ -3,15 +3,17 @@ import { TouchableOpacity, StyleSheet, View } from 'react-native';
 
 import { useForm } from 'react-hook-form';
 
-import { Link, Stack, router } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 
 import TextStyles from '@/constants/TextStyles';
 import Colors from '@/constants/Colors';
 
 import InputField from '@/components/InputField';
 import IconButton from '@/components/IconButton';
+import BackButton from '@/components/BackButton';
 
 const HomeStack = () => {
+    const router = useRouter();
     const { control } = useForm();
 
     return (
@@ -39,8 +41,9 @@ const HomeStack = () => {
                                 </TouchableOpacity>
                             </Link>
                             <IconButton
-                                icon="profile-fill"
+                                icon="profile-outline"
                                 route="/(user)/home/profile"
+                                strokeWidth={0.5}
                             />
                         </View>
                     ),
@@ -53,14 +56,7 @@ const HomeStack = () => {
                     headerTitleStyle: TextStyles.bold6,
                     headerShadowVisible: true,
                     headerLeft: () => {
-                        return (
-                            <View style={{ paddingRight: 16 }}>
-                                <IconButton
-                                    icon="chevron-left"
-                                    onPress={() => router.back()}
-                                />
-                            </View>
-                        );
+                        return <BackButton router={router} />;
                     },
                 }}
             />
@@ -71,14 +67,7 @@ const HomeStack = () => {
                     headerTitleStyle: TextStyles.bold6,
                     headerShadowVisible: true,
                     headerLeft: () => {
-                        return (
-                            <View style={{ paddingRight: 16 }}>
-                                <IconButton
-                                    icon="chevron-left"
-                                    onPress={() => router.back()}
-                                />
-                            </View>
-                        );
+                        return <BackButton router={router} />;
                     },
                 }}
             />
@@ -94,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        paddingHorizontal: 16,
+        paddingEnd: 5,
         gap: 16,
     },
     searchButtonContainer: {

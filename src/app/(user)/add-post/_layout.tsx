@@ -5,6 +5,7 @@ import { Stack, useRouter } from 'expo-router';
 import TextStyles from '@/constants/TextStyles';
 import IconButton from '@/components/IconButton';
 import { View } from 'react-native';
+import BackButton from '@/components/BackButton';
 
 const AddPostStack = () => {
     const router = useRouter();
@@ -16,23 +17,15 @@ const AddPostStack = () => {
                 headerTitleStyle: TextStyles.bold6,
                 headerShadowVisible: true,
                 headerLeft: () => {
-                    return (
-                        <View style={{ paddingRight: 16 }}>
-                            {/* <IconButton
-                                icon="chevron-left"
-                                onPress={() => router.back()}
-                            /> */}
-                        </View>
-                    );
+                    return <View style={{ paddingRight: 16 }}></View>;
                 },
                 headerRight: () => {
                     return (
-                        <View>
-                            <IconButton
-                                icon="profile-fill"
-                                route="/(user)/home/profile"
-                            />
-                        </View>
+                        <IconButton
+                            icon="profile-outline"
+                            route="/(user)/home/profile"
+                            strokeWidth={0.5}
+                        />
                     );
                 },
             }}>
