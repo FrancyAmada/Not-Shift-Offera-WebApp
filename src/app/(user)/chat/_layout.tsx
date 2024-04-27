@@ -12,7 +12,6 @@ const HomeStack = () => {
                 headerTitleAlign: 'center',
                 headerTitleStyle: TextStyles.bold5,
                 headerShadowVisible: true,
-                presentation: 'modal',
             }}>
             <Stack.Screen name="index" />
         </Stack>

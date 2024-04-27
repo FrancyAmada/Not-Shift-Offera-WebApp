@@ -57,7 +57,6 @@ const HomeStack = () => {
                     headerTitleAlign: 'center',
                     headerTitleStyle: TextStyles.bold5,
                     headerShadowVisible: true,
-                    presentation: 'modal',
                 }}
             />
             <Stack.Screen
@@ -67,7 +66,6 @@ const HomeStack = () => {
                     headerTitleAlign: 'center',
                     headerTitleStyle: TextStyles.bold5,
                     headerShadowVisible: true,
-                    presentation: 'modal',
                 }}
             />
         </Stack>
