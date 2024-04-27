@@ -29,12 +29,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Colors.white,
     },
-    headerRightContainer: {
-        flex: 1,
-        paddingHorizontal: 16,
-        flexDirection: 'row',
-        gap: 16,
-        alignItems: 'center',
-        alignSelf: 'stretch',
-    },
 });

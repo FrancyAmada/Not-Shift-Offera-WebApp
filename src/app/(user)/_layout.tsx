@@ -11,11 +11,16 @@ import Icon from '@/components/Icon';
 type IconName = React.ComponentProps<typeof Icon>['name'];
 
 const HomeLayout = () => {
-    const router = useRouter();
-
     return (
         <Tabs
+            initialRouteName="home"
+            backBehavior="history"
             screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarActiveTintColor: Colors.blue,
+                tabBarStyle: styles.navBar,
+                tabBarLabelStyle: TextStyles.bold1,
                 tabBarIcon: ({ focused }) => {
                     let iconName: IconName = 'add-circle-outline';
                     switch (route.name) {
@@ -49,11 +54,6 @@ const HomeLayout = () => {
                         />
                     );
                 },
-                tabBarShowLabel: false,
-                tabBarActiveTintColor: Colors.blue,
-                tabBarStyle: styles.navBar,
-                tabBarLabelStyle: TextStyles.bold1,
-                headerShown: false,
             })}>
             <Tabs.Screen name="home" options={{ tabBarLabel: 'Home' }} />
             <Tabs.Screen
@@ -75,14 +75,14 @@ const HomeLayout = () => {
                         );
                     },
                 }}
-                listeners={() => {
-                    return {
-                        tabPress: e => {
-                            e.preventDefault();
-                            router.push('/(user)/add-post');
-                        },
-                    };
-                }}
+                // listeners={() => {
+                //     return {
+                //         tabPress: e => {
+                //             e.preventDefault();
+                //             router.push('/(user)/add-post');
+                //         },
+                //     };
+                // }}
             />
             <Tabs.Screen
                 name="my-posts"
