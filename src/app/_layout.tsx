@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 
 import { useFonts } from 'expo-font';
+import { Slot, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
-
-import { Slot, useRouter, useSegments } from 'expo-router';
 
 export {
     // Catch any errors thrown by the Layout component.

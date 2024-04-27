@@ -1,5 +1,6 @@
-// import { Unmatched } from 'expo-router';
 import { View, Text } from 'react-native';
+
+// import { Unmatched } from 'expo-router';
 
 const NotFoundError = () => {
     console.log('404 Not Found');

@@ -1,10 +1,12 @@
-import { StyleSheet, View, Text, Image, ViewStyle } from 'react-native';
 import React from 'react';
+import { StyleSheet, View, Text, Image, ViewStyle } from 'react-native';
 
-import Button from '@/components/Button';
+import { useRouter } from 'expo-router';
+
 import Colors from '@constants/Colors';
 import TextStyles from '@constants/TextStyles';
-import { useRouter } from 'expo-router';
+
+import Button from '@/components/Button';
 
 const index = () => {
     console.log('WELCOME');

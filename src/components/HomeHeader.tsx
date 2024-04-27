@@ -1,21 +1,41 @@
+import React from 'react';
 import {
     SafeAreaView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
+    ViewStyle,
 } from 'react-native';
-import React from 'react';
+import { useForm } from 'react-hook-form';
 
 import { Link } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
+
 import Icon from '@/components/Icon';
 import InputField from '@/components/InputField';
-import { useForm } from 'react-hook-form';
 
-const HomeHeader = () => {
+type HomeHeaderProps = {
+    type: 'home' | 'profile' | 'search' | 'tab';
+    navigation?: any;
+    title?: string;
+    titleStyle?: ViewStyle;
+    left?: React.ReactNode;
+    mid?: React.ReactNode;
+    right?: React.ReactNode;
+};
+
+const HomeHeader: React.FC<HomeHeaderProps> = ({
+    type,
+    navigation,
+    title,
+    titleStyle,
+    left,
+    mid,
+    right,
+}) => {
     const { control } = useForm();
 
     return (
@@ -23,7 +43,7 @@ const HomeHeader = () => {
             <View style={styles.container}>
                 <View style={styles.actionRow}>
                     <Text style={styles.headerTitle}>offera</Text>
-                    <Link href="/(user)/my-posts" asChild>
+                    <Link href="/(user)/home/search" asChild>
                         <TouchableOpacity style={styles.searchButtonContainer}>
                             <InputField
                                 name="search"
@@ -32,7 +52,7 @@ const HomeHeader = () => {
                                 style={styles.searchButton}
                                 withIcon={true}
                                 icon="search-fill"
-                                editable={false}
+                                editable={type === 'search' ? true : false}
                             />
                         </TouchableOpacity>
                     </Link>
@@ -63,6 +83,7 @@ const styles = StyleSheet.create({
     },
     actionRow: {
         alignItems: 'center',
+        justifyContent: 'space-between',
         height: 'auto',
         width: '100%',
         flexDirection: 'row',

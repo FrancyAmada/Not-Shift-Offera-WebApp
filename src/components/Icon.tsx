@@ -1,8 +1,7 @@
-import { Svg, Path } from 'react-native-svg';
-import Icons from '@/constants/Icons';
 import React from 'react';
+import { Svg, Path } from 'react-native-svg';
 
-const path = '../assets/icons/';
+import Icons from '@/constants/Icons';
 
 type IconProps = {
     name: string;

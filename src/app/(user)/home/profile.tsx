@@ -1,7 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
+
 import { useAuth } from '@/providers/AuthProvider';
+
 import Colors from '@/constants/Colors';
+
 import Button from '@/components/Button';
 
 const profile = () => {

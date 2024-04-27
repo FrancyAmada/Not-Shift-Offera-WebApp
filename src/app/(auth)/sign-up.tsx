@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -6,18 +7,19 @@ import {
     ScrollView,
     Alert,
 } from 'react-native';
-import React, { useState } from 'react';
 
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Link, Stack } from 'expo-router';
 
 import Colors from '@constants/Colors';
+import TextStyles from '@/constants/TextStyles';
+
 import Button from '@/components/Button';
 import Separator from '@/components/Separator';
 import FormStyles from '@/constants/FormStyles';
-import TextStyles from '@/constants/TextStyles';
 import InputField from '@/components/InputField';
+
 import { useAuth } from '@/providers/AuthProvider';
 
 const googleLogo = require('../../../assets/icons/google-logo.png');

@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
-import { Stack, Tabs, useRouter } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
+
 import Icon from '@/components/Icon';
 
 type IconName = React.ComponentProps<typeof Icon>['name'];

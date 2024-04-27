@@ -1,12 +1,16 @@
-import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
 import Colors from '@/constants/Colors';
 
 const addPost = () => {
     console.log('ADD POST');
 
-    return <View style={styles.container}></View>;
+    return (
+        <View style={styles.container}>
+            <Text>add post</Text>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -25,3 +29,5 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
 });
+
+export default addPost;

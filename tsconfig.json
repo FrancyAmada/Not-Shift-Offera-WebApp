@@ -14,7 +14,8 @@
             "@screens/*": ["src/app/screens/*"],
             "@hooks/*": ["src/hooks/*"],
             "@icons/*": ["assets/icons/*"],
-            "@providers/*": ["src/providers/*"]
+            "@providers/*": ["src/providers/*"],
+            "@assets/*": ["assets/*"]
         }
     },
     "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]

@@ -1,7 +1,9 @@
 import { StyleSheet, Text, View, ViewStyle, TextInput } from 'react-native';
+import { Controller } from 'react-hook-form';
+
 import Colors from '../constants/Colors';
 import TextStyles from '@/constants/TextStyles';
-import { Controller } from 'react-hook-form';
+
 import Icon from '@/components/Icon';
 
 type InputProps = {

@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import {
     Pressable,
     StyleSheet,
@@ -6,7 +7,6 @@ import {
     Image,
     ViewStyle,
 } from 'react-native';
-import { forwardRef } from 'react';
 
 import Colors from '../constants/Colors';
 import TextStyles from '@/constants/TextStyles';
