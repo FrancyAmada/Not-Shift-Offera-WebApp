@@ -24,7 +24,7 @@ const AddPostStack = () => {
                     return (
                         <IconButton
                             icon="profile-fill"
-                            color={Colors.white}
+                            color={Colors.blue}
                             route="/(user)/home/profile"
                             strokeWidth={0}
                         />

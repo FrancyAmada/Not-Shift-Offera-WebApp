@@ -7,19 +7,11 @@ import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
 
 import Icon from '@/components/Icon';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type IconName = React.ComponentProps<typeof Icon>['name'];
 
 const HomeLayout = () => {
-    const insets = useSafeAreaInsets();
     return (
-        // <View
-        //     style={{
-        //         flex: 1,
-        //         paddingBottom: insets.bottom,
-        //     }}
-        //     >
         <Tabs
             initialRouteName="home"
             backBehavior="history"
@@ -102,7 +94,6 @@ const HomeLayout = () => {
             />
             <Tabs.Screen name="chat" options={{ tabBarLabel: 'Chats' }} />
         </Tabs>
-        // </View>
     );
 };
 

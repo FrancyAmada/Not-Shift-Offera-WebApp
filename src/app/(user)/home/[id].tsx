@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: Colors.white,
         borderRadius: 16,
-        gap: 16,
         paddingTop: 8,
+        gap: 8,
         paddingHorizontal: 16,
     },
     image: {
@@ -161,11 +161,11 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flex: 1,
+        margin: 8,
         borderColor: Colors.placeholder,
         gap: 16,
     },
     header: {
-        paddingLeft: 8,
         gap: 4,
     },
     title: {
