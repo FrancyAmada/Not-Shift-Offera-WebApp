@@ -26,12 +26,7 @@ export default function RootLayout() {
     const [loaded, error] = useFonts({
         'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
         'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
-        'Montserrat-ExtraLight': require('../../assets/fonts/Montserrat-ExtraLight.ttf'),
-        'Montserrat-Thin': require('../../assets/fonts/Montserrat-Thin.ttf'),
-        'Montserrat-Italic': require('../../assets/fonts/Montserrat-Italic.ttf'),
-        'Montserrat-ExtraBold': require('../../assets/fonts/Montserrat-ExtraBold.ttf'),
         'Montserrat-Bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
-        'Montserrat-Black': require('../../assets/fonts/Montserrat-Black.ttf'),
         'Montserrat-SemiBold': require('../../assets/fonts/Montserrat-SemiBold.ttf'),
         'Montserrat-Medium': require('../../assets/fonts/Montserrat-Medium.ttf'),
     });
