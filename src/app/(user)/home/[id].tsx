@@ -90,18 +90,6 @@ const PostDetails = () => {
             />
             <View style={{ flex: 1 }}>
                 <View style={styles.textContainer}>
-                    <View style={styles.header}>
-                        <Text style={styles.title} numberOfLines={2}>
-                            {post.title}
-                        </Text>
-                        <Text style={styles.rate} numberOfLines={2}>
-                            ₱{post.rate.toLocaleString()}
-                        </Text>
-                    </View>
-                    <Button
-                        text={post.type === 'task' ? 'Apply' : 'Inquire'}
-                        style={{ width: '100%', borderRadius: 8 }}
-                    />
                     <View style={styles.userTag}>
                         <Image
                             source={defaultUserImage}
@@ -133,6 +121,19 @@ const PostDetails = () => {
                             {post.createdAt}
                         </Text>
                     </View>
+                    <View style={styles.header}>
+                        <Text style={styles.title} numberOfLines={2}>
+                            {post.title}
+                        </Text>
+                        <Text style={styles.rate} numberOfLines={2}>
+                            ₱{post.rate.toLocaleString()}
+                        </Text>
+                    </View>
+                    <Button
+                        text={post.type === 'task' ? 'Apply' : 'Inquire'}
+                        style={{ width: '100%', borderRadius: 8 }}
+                    />
+
                     <Text style={styles.description}>{post.description}</Text>
                 </View>
             </View>
@@ -164,6 +165,7 @@ const styles = StyleSheet.create({
         gap: 16,
     },
     header: {
+        paddingLeft: 8,
         gap: 4,
     },
     title: {
@@ -174,7 +176,8 @@ const styles = StyleSheet.create({
         color: Colors.blue,
     },
     description: {
-        ...TextStyles.regular3,
+        textAlign: 'justify',
+        ...TextStyles.medium2,
     },
     userTag: {
         alignItems: 'center',
