@@ -72,7 +72,7 @@ const HomeLayout = () => {
             <Tabs.Screen
                 name="add-post"
                 options={{
-                    tabBarLabel(props) {
+                    tabBarLabel() {
                         return null;
                     },
                     tabBarIcon: ({ focused }) => {

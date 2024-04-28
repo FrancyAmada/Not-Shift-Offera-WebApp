@@ -5,8 +5,9 @@ import { Stack, useRouter } from 'expo-router';
 import TextStyles from '@/constants/TextStyles';
 import IconButton from '@/components/IconButton';
 import { View } from 'react-native';
-import BackButton from '@/components/BackButton';
+
 import Colors from '@/constants/Colors';
+import HeaderStyle from '@/constants/HeaderStyle';
 
 const AddPostStack = () => {
     const router = useRouter();
@@ -15,12 +16,7 @@ const AddPostStack = () => {
         <Stack
             screenOptions={{
                 title: 'Add Post',
-                headerTitleStyle: TextStyles.bold6,
-                // headerStyle: { backgroundColor: Colors.blue },
-                // headerTintColor: Colors.white,
-                headerStyle: { backgroundColor: Colors.white },
-                headerTintColor: Colors.blue,
-                headerShadowVisible: true,
+                ...{ ...HeaderStyle },
                 headerLeft: () => {
                     return <View style={{ paddingRight: 16 }}></View>;
                 },

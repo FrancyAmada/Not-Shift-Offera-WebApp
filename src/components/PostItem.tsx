@@ -8,6 +8,7 @@ const defaultImage = require('@assets/images/default-img.png');
 const defaultUserImage = require('@assets/images/default-user.png');
 
 import { Post } from '@/types';
+import { Link } from 'expo-router';
 
 type PostItemProps = {
     post: Post;
@@ -24,100 +25,102 @@ const PostItem = ({ post, variant }: PostItemProps) => {
     const imageStyle = isPortrait ? styles.imagePortrait : styles.image;
 
     return (
-        <TouchableOpacity style={containerStyle}>
-            <Image source={post.image || defaultImage} style={imageStyle} />
-            <View style={styles.textContainer}>
-                {isPortrait && (
-                    <View style={styles.header}>
-                        <Text
-                            style={{
-                                ...TextStyles.medium2,
-                                flexDirection: 'row',
-                            }}
-                            numberOfLines={1}>
-                            {post.title}
-                        </Text>
-                        <View style={styles.userTag}>
-                            <Image
-                                source={defaultUserImage}
-                                style={styles.userImage}
-                            />
+        <Link href={`/home/${post.id}`} asChild>
+            <TouchableOpacity style={containerStyle}>
+                <Image source={post.image || defaultImage} style={imageStyle} />
+                <View style={styles.textContainer}>
+                    {isPortrait && (
+                        <View style={styles.header}>
                             <Text
                                 style={{
-                                    ...TextStyles.regular1,
-                                    minWidth: 20,
-                                    maxWidth: 120,
-                                    flexShrink: 0,
+                                    ...TextStyles.medium2,
+                                    flexDirection: 'row',
                                 }}
                                 numberOfLines={1}>
-                                {post.author.fullName}
+                                {post.title}
                             </Text>
+                            <View style={styles.userTag}>
+                                <Image
+                                    source={defaultUserImage}
+                                    style={styles.userImage}
+                                />
+                                <Text
+                                    style={{
+                                        ...TextStyles.regular1,
+                                        minWidth: 20,
+                                        maxWidth: 120,
+                                        flexShrink: 0,
+                                    }}
+                                    numberOfLines={1}>
+                                    {post.author.fullName}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
-                )}
+                    )}
 
-                {!isPortrait && (
-                    <View style={styles.header}>
-                        <View style={styles.userTag}>
-                            <Image
-                                source={defaultUserImage}
-                                style={styles.userImage}
-                            />
+                    {!isPortrait && (
+                        <View style={styles.header}>
+                            <View style={styles.userTag}>
+                                <Image
+                                    source={defaultUserImage}
+                                    style={styles.userImage}
+                                />
+                                <Text
+                                    style={{
+                                        ...TextStyles.regular1,
+                                        minWidth: 20,
+                                        maxWidth: 120,
+                                        flexShrink: 0,
+                                    }}
+                                    numberOfLines={1}>
+                                    {post.author.fullName}
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...TextStyles.regular1,
+                                    }}>
+                                    •
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...TextStyles.regular1,
+                                        flexShrink: 0,
+                                        flex: 1,
+                                    }}>
+                                    {post.createdAt}
+                                </Text>
+                            </View>
                             <Text
                                 style={{
-                                    ...TextStyles.regular1,
-                                    minWidth: 20,
-                                    maxWidth: 120,
-                                    flexShrink: 0,
+                                    ...TextStyles.medium2,
+                                    flexDirection: 'row',
                                 }}
                                 numberOfLines={1}>
-                                {post.author.fullName}
-                            </Text>
-                            <Text
-                                style={{
-                                    ...TextStyles.regular1,
-                                }}>
-                                •
-                            </Text>
-                            <Text
-                                style={{
-                                    ...TextStyles.regular1,
-                                    flexShrink: 0,
-                                    flex: 1,
-                                }}>
-                                {post.createdAt}
+                                {post.title}
                             </Text>
                         </View>
+                    )}
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                        }}>
                         <Text
-                            style={{
-                                ...TextStyles.medium2,
-                                flexDirection: 'row',
-                            }}
-                            numberOfLines={1}>
-                            {post.title}
+                            numberOfLines={2}
+                            style={
+                                isPortrait
+                                    ? {
+                                          ...TextStyles.cardDescription,
+                                          paddingTop: 2,
+                                      }
+                                    : TextStyles.cardDescription
+                            }>
+                            {post.description}
                         </Text>
                     </View>
-                )}
-
-                <View
-                    style={{
-                        flexDirection: 'row',
-                    }}>
-                    <Text
-                        numberOfLines={2}
-                        style={
-                            isPortrait
-                                ? {
-                                      ...TextStyles.cardDescription,
-                                      paddingTop: 2,
-                                  }
-                                : TextStyles.cardDescription
-                        }>
-                        {post.description}
-                    </Text>
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </Link>
     );
 };
 

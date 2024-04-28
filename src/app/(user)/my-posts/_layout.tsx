@@ -7,18 +7,18 @@ import TextStyles from '@/constants/TextStyles';
 
 import IconButton from '@/components/IconButton';
 import Colors from '@/constants/Colors';
+import HeaderStyle from '@/constants/HeaderStyle';
 
 const PostsStack = () => {
     return (
         <Stack
             screenOptions={{
+                headerTransparent: true,
                 title: 'My Posts',
-                headerTitleStyle: TextStyles.bold6,
-                // headerStyle: { backgroundColor: Colors.blue },
-                // headerTintColor: Colors.white,
-                headerStyle: { backgroundColor: Colors.white },
-                headerTintColor: Colors.blue,
-                headerShadowVisible: true,
+                ...{
+                    ...HeaderStyle,
+                    headerStyle: { backgroundColor: 'transparent' },
+                },
                 headerLeft: () => {
                     return <View style={{ paddingRight: 16 }}></View>;
                 },

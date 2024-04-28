@@ -6,18 +6,14 @@ import TextStyles from '@/constants/TextStyles';
 import { View } from 'react-native';
 import IconButton from '@/components/IconButton';
 import Colors from '@/constants/Colors';
+import HeaderStyle from '@/constants/HeaderStyle';
 
 const ApplicationsStack = () => {
     return (
         <Stack
             screenOptions={{
                 title: 'My Applications',
-                headerTitleStyle: TextStyles.bold6,
-                // headerStyle: { backgroundColor: Colors.blue },
-                // headerTintColor: Colors.white,
-                headerStyle: { backgroundColor: Colors.white },
-                headerTintColor: Colors.blue,
-                headerShadowVisible: true,
+                ...{ ...HeaderStyle },
                 headerLeft: () => {
                     return <View style={{ paddingRight: 16 }}></View>;
                 },

@@ -5,12 +5,13 @@ import { useForm } from 'react-hook-form';
 
 import { Link, Stack, useRouter } from 'expo-router';
 
-import TextStyles from '@/constants/TextStyles';
 import Colors from '@/constants/Colors';
+import HeaderStyle from '@/constants/HeaderStyle';
 
 import InputField from '@/components/InputField';
 import IconButton from '@/components/IconButton';
 import BackButton from '@/components/BackButton';
+import TextStyles from '@/constants/TextStyles';
 
 const HomeStack = () => {
     const router = useRouter();
@@ -23,12 +24,7 @@ const HomeStack = () => {
                 options={{
                     navigationBarColor: Colors.white,
                     headerTitle: 'offera',
-                    // headerStyle: { backgroundColor: Colors.blue },
-                    // headerTintColor: Colors.white,
-                    headerStyle: { backgroundColor: Colors.white },
-                    headerTintColor: Colors.blue,
-                    headerTitleStyle: { ...TextStyles.bold6 },
-
+                    ...{ ...HeaderStyle, headerTitleStyle: TextStyles.bold7 },
                     headerRight: () => (
                         <View style={styles.actionRow}>
                             <Link href="/(user)/home/search" asChild>
@@ -59,12 +55,7 @@ const HomeStack = () => {
                 name="profile"
                 options={{
                     title: 'Profile',
-                    headerTitleStyle: TextStyles.bold6,
-                    // headerStyle: { backgroundColor: Colors.blue },
-                    // headerTintColor: Colors.white,
-                    headerStyle: { backgroundColor: Colors.white },
-                    headerTintColor: Colors.blue,
-                    headerShadowVisible: true,
+                    ...{ ...HeaderStyle },
                     headerLeft: () => {
                         return (
                             <BackButton router={router} color={Colors.blue} />
@@ -76,12 +67,7 @@ const HomeStack = () => {
                 name="search"
                 options={{
                     title: 'Search',
-                    headerTitleStyle: TextStyles.bold6,
-                    // headerStyle: { backgroundColor: Colors.blue },
-                    // headerTintColor: Colors.white,
-                    headerStyle: { backgroundColor: Colors.white },
-                    headerTintColor: Colors.blue,
-                    headerShadowVisible: true,
+                    ...{ ...HeaderStyle },
                     headerLeft: () => {
                         return (
                             <BackButton router={router} color={Colors.blue} />
