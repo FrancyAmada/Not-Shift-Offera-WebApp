@@ -14,7 +14,6 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.servicesSection}></View>
             <FlatList
                 alwaysBounceVertical={true}
                 showsVerticalScrollIndicator={false}
@@ -64,9 +63,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         padding: 16,
         paddingVertical: 8,
-    },
-    servicesSection: {
-        flex: 1,
     },
 });
 

@@ -9,6 +9,7 @@ const defaultUserImage = require('@assets/images/default-user.png');
 
 import { Post } from '@/types';
 import { Link } from 'expo-router';
+import UserTag from './userTag';
 
 type PostItemProps = {
     post: Post;
@@ -39,57 +40,13 @@ const PostItem = ({ post, variant }: PostItemProps) => {
                                 numberOfLines={1}>
                                 {post.title}
                             </Text>
-                            <View style={styles.userTag}>
-                                <Image
-                                    source={defaultUserImage}
-                                    style={styles.userImage}
-                                />
-                                <Text
-                                    style={{
-                                        ...TextStyles.regular1,
-                                        minWidth: 20,
-                                        maxWidth: 120,
-                                        flexShrink: 0,
-                                    }}
-                                    numberOfLines={1}>
-                                    {post.author.fullName}
-                                </Text>
-                            </View>
+                            <UserTag post={post} />
                         </View>
                     )}
 
                     {!isPortrait && (
                         <View style={styles.header}>
-                            <View style={styles.userTag}>
-                                <Image
-                                    source={defaultUserImage}
-                                    style={styles.userImage}
-                                />
-                                <Text
-                                    style={{
-                                        ...TextStyles.regular1,
-                                        minWidth: 20,
-                                        maxWidth: 120,
-                                        flexShrink: 0,
-                                    }}
-                                    numberOfLines={1}>
-                                    {post.author.fullName}
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...TextStyles.regular1,
-                                    }}>
-                                    •
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...TextStyles.regular1,
-                                        flexShrink: 0,
-                                        flex: 1,
-                                    }}>
-                                    {post.createdAt}
-                                </Text>
-                            </View>
+                            <UserTag post={post} />
                             <Text
                                 style={{
                                     ...TextStyles.medium2,

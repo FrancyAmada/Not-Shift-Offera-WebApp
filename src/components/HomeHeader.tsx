@@ -27,6 +27,8 @@ type HomeHeaderProps = {
     right?: React.ReactNode;
 };
 
+// UNUSED
+
 const HomeHeader: React.FC<HomeHeaderProps> = ({
     type,
     navigation,

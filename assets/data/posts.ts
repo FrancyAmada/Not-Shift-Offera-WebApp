@@ -15,7 +15,7 @@ export const posts: Post[] = [
         description: 'Yugs nahulog ref nmon sa hagdan. Sno pwede da',
 
         image: require('@assets/images/task-sample.png'),
-        rate: 4,
+        rate: 1000,
         createdAt: '12h',
     },
     {
@@ -31,7 +31,7 @@ export const posts: Post[] = [
             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
         image: require('@assets/images/task-sample.png'),
-        rate: 4,
+        rate: 500,
         createdAt: '10m',
     },
     {
@@ -47,7 +47,7 @@ export const posts: Post[] = [
             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
         image: require('@assets/images/task-sample.png'),
-        rate: 4,
+        rate: 250,
         createdAt: '1h',
     },
     {
@@ -63,7 +63,7 @@ export const posts: Post[] = [
             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
         image: require('@assets/images/task-sample.png'),
-        rate: 4,
+        rate: 10000,
         createdAt: '12h',
     },
     {
@@ -79,7 +79,7 @@ export const posts: Post[] = [
             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
         image: require('@assets/images/task-sample.png'),
-        rate: 4,
+        rate: 100,
         createdAt: '12h',
     },
     {
@@ -95,7 +95,7 @@ export const posts: Post[] = [
             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
         image: require('@assets/images/service-sample.png'),
-        rate: 4,
+        rate: 1600,
         createdAt: '23m',
     },
     {
@@ -111,7 +111,7 @@ export const posts: Post[] = [
             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
         image: require('@assets/images/service-sample.png'),
-        rate: 4,
+        rate: 9000,
         createdAt: '23m',
     },
 ];
