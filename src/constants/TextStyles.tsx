@@ -1,6 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 const TextStyles = StyleSheet.create({
+    cardDescription: {
+        fontFamily: 'Montserrat-SemiBold',
+        height: 'auto',
+        fontSize: 12,
+    },
+
     light1: {
         fontFamily: 'Montserrat-Light',
         height: 16,

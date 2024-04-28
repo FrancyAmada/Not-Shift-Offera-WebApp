@@ -15,32 +15,7 @@ import {
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-enum AuthStatus {
-    idle = 'idle',
-    resolved = 'resolved',
-    rejected = 'rejected',
-}
-
-type AuthResponse = {
-    name?: string;
-    email?: string;
-    password?: string;
-    success?: boolean;
-    msg?: string;
-    status?: AuthStatus;
-};
-
-type AuthData = {
-    user: User | null;
-    isAuthenticated: boolean | undefined;
-    logIn: (data: { email: string; password: string }) => Promise<AuthResponse>;
-    signUp: (data: {
-        name: string;
-        email: string;
-        password: string;
-    }) => Promise<AuthResponse>;
-    logOut: () => Promise<AuthResponse>;
-};
+import { AuthData, AuthResponse, AuthStatus, UserProfile } from '@/types';
 
 const AuthContext = createContext<AuthData>({
     user: null,
@@ -50,7 +25,7 @@ const AuthContext = createContext<AuthData>({
         password: string;
     }): Promise<AuthResponse> => ({ status: AuthStatus.idle }),
     signUp: async (data: {
-        name: string;
+        fullName: string;
         email: string;
         password: string;
     }): Promise<AuthResponse> => ({ status: AuthStatus.idle }),
@@ -58,7 +33,7 @@ const AuthContext = createContext<AuthData>({
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserProfile | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(
         undefined,
     );
@@ -67,7 +42,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         const unsub = onAuthStateChanged(FIREBASE_AUTH, user => {
             if (user) {
                 setIsAuthenticated(true);
-                setUser(user);
                 updateUserData(user.uid);
             } else {
                 setIsAuthenticated(false);
@@ -85,10 +59,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             let data = docSnap.data();
             setUser({
                 ...user,
-                name: data?.name,
+                fullName: data?.fullName,
                 email: data?.email,
                 userId: data?.userId,
-            });
+            } as UserProfile);
         }
     };
 
@@ -132,7 +106,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     };
 
     const signUp = async (data: {
-        name: string;
+        fullName: string;
         email: string;
         password: string;
     }) => {
@@ -144,7 +118,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             );
 
             await setDoc(doc(FIRESTORE_DB, 'users', response?.user?.uid), {
-                name: data.name,
+                fullName: data.fullName,
                 email: data.email,
                 userId: response?.user?.uid,
             });
@@ -170,7 +144,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     return (
         <AuthContext.Provider
-            value={{ user, isAuthenticated, logIn, signUp, logOut }}>
+            value={{
+                user: user as User | null,
+                isAuthenticated,
+                logIn,
+                signUp,
+                logOut,
+            }}>
             {children}
         </AuthContext.Provider>
     );

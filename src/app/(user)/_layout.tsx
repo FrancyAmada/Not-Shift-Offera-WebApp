@@ -7,105 +7,123 @@ import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
 
 import Icon from '@/components/Icon';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type IconName = React.ComponentProps<typeof Icon>['name'];
 
 const HomeLayout = () => {
+    const insets = useSafeAreaInsets();
     return (
-        <Tabs
-            initialRouteName="home"
-            backBehavior="history"
-            screenOptions={({ route }) => ({
-                headerShown: false,
-                tabBarShowLabel: false,
-                tabBarActiveTintColor: Colors.blue,
-                tabBarStyle: styles.navBar,
-                tabBarLabelStyle: TextStyles.bold1,
-                tabBarIcon: ({ focused }) => {
-                    let iconName: IconName = 'add-circle-outline';
-                    switch (route.name) {
-                        case 'home':
-                            iconName = 'home-outline';
-                            iconName = focused ? 'home-fill' : 'home-outline';
-                            break;
-                        case 'my-applications':
-                            iconName = 'file-outline';
-                            iconName = focused ? 'file-fill' : 'file-outline';
-                            break;
-
-                        case 'my-posts':
-                            iconName = 'clipboard-outline';
-                            iconName = focused
-                                ? 'clipboard-fill'
-                                : 'clipboard-outline';
-                            break;
-                        case 'chat':
-                            iconName = 'chat-outline';
-                            iconName = focused ? 'chat-fill' : 'chat-outline';
-                            break;
-                    }
-                    return (
-                        <Icon
-                            name={iconName}
-                            size={32}
-                            color={focused ? Colors.blue : Colors.blue}
-                            stroke={focused ? Colors.blue : Colors.blue}
-                            strokeWidth={0.5}
-                        />
-                    );
-                },
-            })}>
-            <Tabs.Screen name="home" options={{ tabBarLabel: 'Home' }} />
-            <Tabs.Screen
-                name="my-applications"
-                options={{ tabBarLabel: 'My Applications' }}
-            />
-            <Tabs.Screen
-                name="add-post"
-                options={{
+        <View
+            style={{
+                flex: 1,
+                paddingBottom: insets.bottom,
+            }}>
+            <Tabs
+                initialRouteName="home"
+                backBehavior="history"
+                screenOptions={({ route }) => ({
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarStyle: styles.navBar,
+                    tabBarLabelStyle: TextStyles.bold1,
                     tabBarIcon: ({ focused }) => {
+                        let iconName: IconName = 'add-circle-outline';
+                        switch (route.name) {
+                            case 'home':
+                                iconName = 'home-outline';
+                                iconName = focused
+                                    ? 'home-fill'
+                                    : 'home-outline';
+                                break;
+                            case 'my-applications':
+                                iconName = 'file-outline';
+                                iconName = focused
+                                    ? 'file-fill'
+                                    : 'file-outline';
+                                break;
+
+                            case 'my-posts':
+                                iconName = 'clipboard-outline';
+                                iconName = focused
+                                    ? 'clipboard-fill'
+                                    : 'clipboard-outline';
+                                break;
+                            case 'chat':
+                                iconName = 'chat-outline';
+                                iconName = focused
+                                    ? 'chat-fill'
+                                    : 'chat-outline';
+                                break;
+                        }
                         return (
-                            <View style={styles.actionButton}>
-                                <Icon
-                                    name="add-circle-fill"
-                                    size={70}
-                                    color={focused ? Colors.blue : Colors.blue}
-                                />
-                            </View>
+                            <Icon
+                                name={iconName}
+                                size={32}
+                                color={focused ? Colors.white : Colors.white}
+                                stroke={focused ? Colors.white : Colors.white}
+                                strokeWidth={0}
+                            />
                         );
                     },
-                }}
-                // listeners={() => {
-                //     return {
-                //         tabPress: e => {
-                //             e.preventDefault();
-                //             router.push('/(user)/add-post');
-                //         },
-                //     };
-                // }}
-            />
-            <Tabs.Screen
-                name="my-posts"
-                options={{ tabBarLabel: 'My Posts' }}
-            />
-            <Tabs.Screen name="chat" options={{ tabBarLabel: 'Chat' }} />
-        </Tabs>
+                })}>
+                <Tabs.Screen name="home" options={{ tabBarLabel: 'Home' }} />
+                <Tabs.Screen
+                    name="my-applications"
+                    options={{ tabBarLabel: 'Offers' }}
+                />
+                <Tabs.Screen
+                    name="add-post"
+                    options={{
+                        tabBarLabel(props) {
+                            return null;
+                        },
+                        tabBarIcon: ({ focused }) => {
+                            return (
+                                <View style={styles.actionButton}>
+                                    <Icon
+                                        name="add-circle-fill"
+                                        size={70}
+                                        color={
+                                            focused ? Colors.blue : Colors.blue
+                                        }
+                                    />
+                                </View>
+                            );
+                        },
+                    }}
+                    // listeners={() => {
+                    //     return {
+                    //         tabPress: e => {
+                    //             e.preventDefault();
+                    //             router.push('/(user)/add-post');
+                    //         },
+                    //     };
+                    // }}
+                />
+                <Tabs.Screen
+                    name="my-posts"
+                    options={{ tabBarLabel: 'My Posts' }}
+                />
+                <Tabs.Screen name="chat" options={{ tabBarLabel: 'Chats' }} />
+            </Tabs>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     navBar: {
         height: 72,
+        backgroundColor: Colors.blue,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         borderTopWidth: 1,
         borderStyle: 'solid',
         borderColor: Colors.lightGrey,
         paddingHorizontal: 8,
-        paddingBottom: 4,
+        paddingBottom: 0,
     },
     actionButton: {
-        width: '100%',
         flexBasis: '100%',
         flexWrap: 'wrap',
         alignContent: 'center',

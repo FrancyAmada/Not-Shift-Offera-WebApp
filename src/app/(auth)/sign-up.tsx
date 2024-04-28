@@ -33,7 +33,7 @@ const SignupScreen = () => {
     const { control, handleSubmit } = useForm();
 
     const authSignUp = async (data: {
-        name: string;
+        fullName: string;
         email: string;
         password: string;
     }) => {

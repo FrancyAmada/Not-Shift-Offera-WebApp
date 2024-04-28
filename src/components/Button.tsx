@@ -6,6 +6,7 @@ import {
     View,
     Image,
     ViewStyle,
+    TextStyle,
 } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -17,7 +18,8 @@ type ButtonProps = {
     hasBackground?: boolean;
     backgroundColor?: string;
     icon?: any;
-    textStyle?: ViewStyle;
+    style?: ViewStyle;
+    textStyle?: TextStyle;
     iconPosition?: 'left' | 'right' | 'center';
 } & React.ComponentPropsWithoutRef<typeof Pressable>;
 
@@ -29,6 +31,7 @@ const Button = forwardRef<View | null, ButtonProps>(
             textStyle,
             hasBackground = true,
             backgroundColor = Colors.blue,
+            style,
             icon,
             iconPosition = 'left',
             ...pressableProps
@@ -42,6 +45,7 @@ const Button = forwardRef<View | null, ButtonProps>(
                 style={[
                     styles.container,
                     hasBackground && backgroundColor ? { backgroundColor } : {},
+                    style,
                 ]}>
                 {type === 'withIcon' && iconPosition === 'left' && icon && (
                     <Image source={icon} style={styles.icon} />

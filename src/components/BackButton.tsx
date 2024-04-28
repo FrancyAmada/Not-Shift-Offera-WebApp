@@ -1,16 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import IconButton from './IconButton';
+import Colors from '@/constants/Colors';
 
 type BackButtonProps = {
     router: any;
     icon?: string;
+    color?: string;
     strokeWidth?: number;
 };
 
 const BackButton = ({
     icon = 'chevron-left',
+    color = Colors.white,
     router,
     strokeWidth = 1,
 }: BackButtonProps) => {
@@ -18,6 +21,7 @@ const BackButton = ({
         <View style={{ paddingRight: 16 }}>
             <IconButton
                 icon={icon}
+                color={color}
                 onPress={() => router.back()}
                 strokeWidth={strokeWidth}
             />

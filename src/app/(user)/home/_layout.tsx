@@ -21,9 +21,14 @@ const HomeStack = () => {
             <Stack.Screen
                 name="index"
                 options={{
+                    navigationBarColor: Colors.blue,
                     headerTitle: 'offera',
-                    headerTitleStyle: TextStyles.bold7,
-                    headerTintColor: Colors.blue,
+                    headerStyle: { backgroundColor: Colors.blue },
+                    headerTintColor: Colors.white,
+                    // headerStyle: { backgroundColor: Colors.white },
+                    // headerTintColor: Colors.blue,
+                    headerTitleStyle: { ...TextStyles.bold6 },
+
                     headerRight: () => (
                         <View style={styles.actionRow}>
                             <Link href="/(user)/home/search" asChild>
@@ -41,9 +46,10 @@ const HomeStack = () => {
                                 </TouchableOpacity>
                             </Link>
                             <IconButton
-                                icon="profile-outline"
+                                icon="profile-fill"
+                                color={Colors.white}
                                 route="/(user)/home/profile"
-                                strokeWidth={0.5}
+                                strokeWidth={0}
                             />
                         </View>
                     ),
@@ -54,6 +60,10 @@ const HomeStack = () => {
                 options={{
                     title: 'Profile',
                     headerTitleStyle: TextStyles.bold6,
+                    headerStyle: { backgroundColor: Colors.blue },
+                    headerTintColor: Colors.white,
+                    // headerStyle: { backgroundColor: Colors.white },
+                    // headerTintColor: Colors.blue,
                     headerShadowVisible: true,
                     headerLeft: () => {
                         return <BackButton router={router} />;
@@ -65,6 +75,10 @@ const HomeStack = () => {
                 options={{
                     title: 'Search',
                     headerTitleStyle: TextStyles.bold6,
+                    headerStyle: { backgroundColor: Colors.blue },
+                    headerTintColor: Colors.white,
+                    // headerStyle: { backgroundColor: Colors.white },
+                    // headerTintColor: Colors.blue,
                     headerShadowVisible: true,
                     headerLeft: () => {
                         return <BackButton router={router} />;

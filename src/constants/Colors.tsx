@@ -6,4 +6,5 @@ export default {
     grey: '#CDD7E5',
     placeholder: '#64748B',
     red: '#FC1616',
+    yellow: '#FFCC1A',
 };
