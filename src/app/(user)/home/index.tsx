@@ -1,15 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, View, FlatList } from 'react-native';
 
 import { posts } from '@assets/data/posts';
 
 import Colors from '@/constants/Colors';
-import TextStyles from '@/constants/TextStyles';
 
 import PostItem from '@/components/PostItem';
 import Separator from '@/components/Separator';
-import Button from '@/components/Button';
 import ListHeader from '@/components/ListHeader';
 
 const HomeScreen = () => {

@@ -25,7 +25,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
 
     return (
         <TouchableOpacity style={containerStyle}>
-            <Image source={defaultImage} style={imageStyle} />
+            <Image source={post.image || defaultImage} style={imageStyle} />
             <View style={styles.textContainer}>
                 {isPortrait && (
                     <View style={styles.header}>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     containerPortrait: {
-        width: '50%',
+        maxWidth: '48.5%',
         flexDirection: 'column',
         backgroundColor: 'white',
         borderRadius: 16,
