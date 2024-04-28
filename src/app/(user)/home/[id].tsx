@@ -39,7 +39,10 @@ const PostDetails = () => {
                     headerTransparent: true,
                     headerBlurEffect: 'light',
                     headerTitle: 'Details',
-                    ...{ ...HeaderStyle },
+                    ...{
+                        ...HeaderStyle,
+                        headerStyle: { backgroundColor: 'transparent' },
+                    },
                     headerLeft: () => {
                         return (
                             <BackButton router={router} color={Colors.blue} />

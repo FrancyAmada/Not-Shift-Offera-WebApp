@@ -13,11 +13,9 @@ const PostsStack = () => {
     return (
         <Stack
             screenOptions={{
-                headerTransparent: true,
                 title: 'My Posts',
                 ...{
                     ...HeaderStyle,
-                    headerStyle: { backgroundColor: 'transparent' },
                 },
                 headerLeft: () => {
                     return <View style={{ paddingRight: 16 }}></View>;
