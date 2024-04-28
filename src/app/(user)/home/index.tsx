@@ -29,14 +29,18 @@ const HomeScreen = () => {
                                 onPress={() => console.log('VIEW ALL')}
                             />
                             <FlatList
-                                numColumns={2}
+                                style={{ flex: 1 }}
+                                horizontal
                                 data={posts.filter(
                                     post => post.type === 'service',
                                 )}
                                 renderItem={({ item }) => (
                                     <PostItem post={item} variant="portrait" />
                                 )}
-                                columnWrapperStyle={{ gap: 8 }}
+                                contentContainerStyle={{
+                                    maxWidth: '120%',
+                                    gap: 16,
+                                }}
                             />
                         </View>
                         <ListHeader

@@ -85,7 +85,7 @@ export const posts: Post[] = [
     {
         type: 'service',
         author: {
-            fullName: 'Shish Grabe',
+            fullName: 'Hev Abi',
             userId: '2',
             profileImg: '../icons/icon.png',
         },

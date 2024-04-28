@@ -126,15 +126,15 @@ export default PostItem;
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
         borderRadius: 16,
         borderColor: Colors.lightGrey,
         borderWidth: 1,
     },
     containerPortrait: {
-        maxWidth: '48.5%',
+        flexBasis: '50%',
         flexDirection: 'column',
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
         borderRadius: 16,
         borderColor: Colors.lightGrey,
         borderWidth: 1,
