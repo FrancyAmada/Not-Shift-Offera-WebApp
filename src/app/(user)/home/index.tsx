@@ -38,7 +38,7 @@ const HomeScreen = () => {
                                     <PostItem post={item} variant="portrait" />
                                 )}
                                 contentContainerStyle={{
-                                    maxWidth: '120%',
+                                    maxWidth: '150%',
                                     gap: 16,
                                 }}
                             />
