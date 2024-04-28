@@ -21,12 +21,12 @@ const HomeStack = () => {
             <Stack.Screen
                 name="index"
                 options={{
-                    navigationBarColor: Colors.blue,
+                    navigationBarColor: Colors.white,
                     headerTitle: 'offera',
-                    headerStyle: { backgroundColor: Colors.blue },
-                    headerTintColor: Colors.white,
-                    // headerStyle: { backgroundColor: Colors.white },
-                    // headerTintColor: Colors.blue,
+                    // headerStyle: { backgroundColor: Colors.blue },
+                    // headerTintColor: Colors.white,
+                    headerStyle: { backgroundColor: Colors.white },
+                    headerTintColor: Colors.blue,
                     headerTitleStyle: { ...TextStyles.bold6 },
 
                     headerRight: () => (
@@ -47,7 +47,7 @@ const HomeStack = () => {
                             </Link>
                             <IconButton
                                 icon="profile-fill"
-                                color={Colors.white}
+                                color={Colors.blue}
                                 route="/(user)/home/profile"
                                 strokeWidth={0}
                             />
@@ -60,13 +60,15 @@ const HomeStack = () => {
                 options={{
                     title: 'Profile',
                     headerTitleStyle: TextStyles.bold6,
-                    headerStyle: { backgroundColor: Colors.blue },
-                    headerTintColor: Colors.white,
-                    // headerStyle: { backgroundColor: Colors.white },
-                    // headerTintColor: Colors.blue,
+                    // headerStyle: { backgroundColor: Colors.blue },
+                    // headerTintColor: Colors.white,
+                    headerStyle: { backgroundColor: Colors.white },
+                    headerTintColor: Colors.blue,
                     headerShadowVisible: true,
                     headerLeft: () => {
-                        return <BackButton router={router} />;
+                        return (
+                            <BackButton router={router} color={Colors.blue} />
+                        );
                     },
                 }}
             />
@@ -75,13 +77,15 @@ const HomeStack = () => {
                 options={{
                     title: 'Search',
                     headerTitleStyle: TextStyles.bold6,
-                    headerStyle: { backgroundColor: Colors.blue },
-                    headerTintColor: Colors.white,
-                    // headerStyle: { backgroundColor: Colors.white },
-                    // headerTintColor: Colors.blue,
+                    // headerStyle: { backgroundColor: Colors.blue },
+                    // headerTintColor: Colors.white,
+                    headerStyle: { backgroundColor: Colors.white },
+                    headerTintColor: Colors.blue,
                     headerShadowVisible: true,
                     headerLeft: () => {
-                        return <BackButton router={router} />;
+                        return (
+                            <BackButton router={router} color={Colors.blue} />
+                        );
                     },
                 }}
             />

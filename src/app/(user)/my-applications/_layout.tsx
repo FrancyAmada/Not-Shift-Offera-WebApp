@@ -13,10 +13,10 @@ const ApplicationsStack = () => {
             screenOptions={{
                 title: 'My Applications',
                 headerTitleStyle: TextStyles.bold6,
-                headerStyle: { backgroundColor: Colors.blue },
-                headerTintColor: Colors.white,
-                // headerStyle: { backgroundColor: Colors.white },
-                // headerTintColor: Colors.blue,
+                // headerStyle: { backgroundColor: Colors.blue },
+                // headerTintColor: Colors.white,
+                headerStyle: { backgroundColor: Colors.white },
+                headerTintColor: Colors.blue,
                 headerShadowVisible: true,
                 headerLeft: () => {
                     return <View style={{ paddingRight: 16 }}></View>;
