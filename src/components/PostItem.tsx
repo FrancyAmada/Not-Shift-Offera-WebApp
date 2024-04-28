@@ -9,7 +9,7 @@ const defaultUserImage = require('@assets/images/default-user.png');
 
 import { Post } from '@/types';
 import { Link } from 'expo-router';
-import UserTag from './userTag';
+import UserTag from './UserTag';
 
 type PostItemProps = {
     post: Post;
@@ -40,13 +40,19 @@ const PostItem = ({ post, variant }: PostItemProps) => {
                                 numberOfLines={1}>
                                 {post.title}
                             </Text>
-                            <UserTag post={post} />
+                            <UserTag
+                                post={post}
+                                userImgStyle={styles.userImage}
+                            />
                         </View>
                     )}
 
                     {!isPortrait && (
                         <View style={styles.header}>
-                            <UserTag post={post} />
+                            <UserTag
+                                post={post}
+                                userImgStyle={styles.userImage}
+                            />
                             <Text
                                 style={{
                                     ...TextStyles.medium2,

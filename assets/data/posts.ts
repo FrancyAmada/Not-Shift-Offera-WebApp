@@ -114,4 +114,20 @@ export const posts: Post[] = [
         rate: 9000,
         createdAt: '23m',
     },
+    {
+        type: 'service',
+        author: {
+            fullName: 'Metro Boomin',
+            userId: '10',
+            profileImg: '../icons/icon.png',
+        },
+        id: 8,
+        title: 'Unli praise jam package',
+        description:
+            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+
+        image: require('@assets/images/service-sample.png'),
+        rate: 9000,
+        createdAt: '23m',
+    },
 ];
