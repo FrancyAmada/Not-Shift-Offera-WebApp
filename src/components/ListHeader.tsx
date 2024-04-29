@@ -1,7 +1,15 @@
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import {
+    Text,
+    TextStyle,
+    TouchableOpacity,
+    View,
+    ViewStyle,
+} from 'react-native';
 import React from 'react';
+
 import TextStyles from '@/constants/TextStyles';
 import Colors from '@/constants/Colors';
+
 import Button from './Button';
 
 type ListHeaderProps = {
@@ -40,19 +48,21 @@ const ListHeader = ({
                 {title}
             </Text>
             {canExpand && (
-                <Button
-                    onPress={onPress}
-                    text="View all"
-                    hasBackground={false}
-                    style={{
-                        minWidth: 'auto',
-                        width: 'auto',
-                    }}
-                    textStyle={{
-                        ...TextStyles.medium2,
-                        color: Colors.white,
-                    }}
-                />
+                <TouchableOpacity>
+                    <Button
+                        onPress={onPress}
+                        text="View all"
+                        hasBackground={false}
+                        style={{
+                            minWidth: 'auto',
+                            width: 'auto',
+                        }}
+                        textStyle={{
+                            ...TextStyles.medium2,
+                            color: Colors.white,
+                        }}
+                    />
+                </TouchableOpacity>
             )}
         </View>
     );

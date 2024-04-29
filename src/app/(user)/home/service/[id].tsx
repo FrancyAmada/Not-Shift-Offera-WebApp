@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import HeaderStyle from '@/constants/HeaderStyle';
@@ -40,12 +40,11 @@ const PostDetails = () => {
     }
 
     return (
-        <View style={{ ...styles.container, marginTop: insets.top }}>
+        <View style={{ ...styles.container }}>
             <Stack.Screen
                 options={{
-                    headerTitle: '',
                     headerTransparent: true,
-                    headerBlurEffect: 'systemThickMaterial',
+                    headerTitle: '',
                     ...{
                         ...HeaderStyle,
                         headerShadowVisible: false,
@@ -129,10 +128,16 @@ const PostDetails = () => {
                             ₱{post.rate.toLocaleString()}
                         </Text>
                     </View>
-                    <Button
-                        text={post.type === 'task' ? 'Apply' : 'Inquire'}
-                        style={{ width: '100%', borderRadius: 8 }}
-                    />
+                    <Link href={'/apply'} asChild>
+                        <Button
+                            text={'Inquire'}
+                            style={{
+                                width: '100%',
+                                maxWidth: '100%',
+                                borderRadius: 8,
+                            }}
+                        />
+                    </Link>
 
                     <Text style={styles.description}>{post.description}</Text>
                 </View>
@@ -147,23 +152,29 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: Colors.white,
+        alignItems: 'center',
         borderRadius: 16,
-        paddingTop: 8,
-        gap: 8,
-        paddingHorizontal: 16,
+        backgroundColor: Colors.white,
+        gap: -32,
+        // paddingTop: 8,
+        // paddingHorizontal: 16,
     },
     image: {
+        height: 300,
+        width: '100%',
         resizeMode: 'cover',
-        width: 'auto',
-        height: 250,
-        borderRadius: 16,
     },
     textContainer: {
+        minWidth: '100%',
         flex: 1,
-        margin: 8,
-        borderColor: Colors.placeholder,
         gap: 16,
+        padding: 16,
+        borderRadius: 40,
+        borderBottomStartRadius: 0,
+        borderBottomEndRadius: 0,
+        backgroundColor: Colors.white,
+        elevation: 5,
+        borderColor: Colors.placeholder,
     },
     header: {
         gap: 4,

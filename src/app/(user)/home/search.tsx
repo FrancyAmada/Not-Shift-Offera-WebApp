@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import Colors from '@/constants/Colors';
 
-const search = () => {
+const SearchScreen = () => {
     return (
         <View style={styles.container}>
             <Text>search</Text>
@@ -11,7 +11,7 @@ const search = () => {
     );
 };
 
-export default search;
+export default SearchScreen;
 
 const styles = StyleSheet.create({
     container: {

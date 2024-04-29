@@ -5,7 +5,6 @@ import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
 
 const defaultImage = require('@assets/images/default-img.png');
-const defaultUserImage = require('@assets/images/default-user.png');
 
 import { Post } from '@/types';
 import { Link } from 'expo-router';
@@ -26,7 +25,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
     const imageStyle = isPortrait ? styles.imagePortrait : styles.image;
 
     return (
-        <Link href={`/home/${post.id}`} asChild>
+        <Link href={`/home/${post.type}/${post.id}`} asChild>
             <TouchableOpacity style={containerStyle}>
                 <Image source={post.image || defaultImage} style={imageStyle} />
                 <View style={styles.textContainer}>

@@ -7,7 +7,7 @@ import Colors from '@/constants/Colors';
 
 import Button from '@/components/Button';
 
-const profile = () => {
+const ProfileScreen = () => {
     const { logOut } = useAuth();
     const authLogOut = async () => {
         await logOut();
@@ -20,7 +20,7 @@ const profile = () => {
     );
 };
 
-export default profile;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
     container: {
