@@ -35,14 +35,17 @@ const PostDetails = () => {
         return (
             <View style={(styles.container, { marginTop: insets.top })}>
                 <Text>Post not found</Text>
+                //{' '}
             </View>
         );
     }
 
     return (
-        <View style={{ ...styles.container }}>
+        <View style={styles.container}>
             <Stack.Screen
                 options={{
+                    // statusBarTranslucent: true,
+                    // statusBarStyle: 'light',
                     headerTransparent: true,
                     headerTitle: '',
                     ...{
@@ -84,7 +87,7 @@ const PostDetails = () => {
                 }}
             />
             <Image
-                source={post.image as ImageSourcePropType}
+                source={post.imageList[0] as ImageSourcePropType}
                 style={styles.image}
             />
             <View style={{ flex: 1 }}>

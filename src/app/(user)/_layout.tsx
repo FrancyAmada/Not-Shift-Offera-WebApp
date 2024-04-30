@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-import { Link, Tabs, useNavigation, useRouter } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
@@ -64,7 +64,7 @@ const HomeLayout = () => {
                 options={{ tabBarLabel: 'Offers' }}
             />
             <Tabs.Screen
-                name="add-post"
+                name="post"
                 options={{
                     tabBarLabel() {
                         return null;
@@ -84,7 +84,7 @@ const HomeLayout = () => {
                 listeners={() => ({
                     tabPress: e => {
                         e.preventDefault();
-                        router.push('/create-post');
+                        router.push('/add-post');
                     },
                 })}
             />
@@ -120,14 +120,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         marginBottom: '80%',
         elevation: 3,
-    },
-    headerRightContainer: {
-        flex: 1,
-        paddingHorizontal: 16,
-        flexDirection: 'row',
-        gap: 16,
-        alignItems: 'center',
-        alignSelf: 'stretch',
     },
 });
 

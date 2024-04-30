@@ -6,7 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { View } from 'react-native';
+import { Platform, StatusBar, View } from 'react-native';
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -22,7 +22,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-    const insets = useSafeAreaInsets();
+    // const insets = useSafeAreaInsets();
     const [loaded, error] = useFonts({
         'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
         'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
@@ -30,6 +30,12 @@ export default function RootLayout() {
         'Montserrat-SemiBold': require('../../assets/fonts/Montserrat-SemiBold.ttf'),
         'Montserrat-Medium': require('../../assets/fonts/Montserrat-Medium.ttf'),
     });
+
+    useEffect(() => {
+        if (Platform.OS === 'android') {
+            StatusBar.setTranslucent(true);
+        }
+    }, []);
 
     useEffect(() => {
         if (error) throw error;
@@ -47,9 +53,9 @@ export default function RootLayout() {
 
     return (
         <AuthProvider>
-            <View style={{ flex: 1, paddingBottom: insets.bottom }}>
-                <MainLayout />
-            </View>
+            {/* <View style={{ flex: 1, paddingBottom: insets.bottom }}> */}
+            <MainLayout />
+            {/* </View> */}
         </AuthProvider>
     );
 }
@@ -72,10 +78,10 @@ function MainLayout() {
     }, [isAuthenticated]);
 
     return (
-        <Stack screenOptions={{ headerShown: false }}>
+        <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }}>
             <Stack.Screen name="index" />
             <Stack.Screen
-                name="create-post"
+                name="add-post"
                 options={{
                     animation: 'slide_from_bottom',
                     presentation: 'modal',

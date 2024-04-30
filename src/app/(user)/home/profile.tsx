@@ -10,7 +10,11 @@ import Button from '@/components/Button';
 const ProfileScreen = () => {
     const { logOut } = useAuth();
     const authLogOut = async () => {
-        await logOut();
+        try {
+            await logOut();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (

@@ -10,15 +10,16 @@ import {
 
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 
 import Colors from '@constants/Colors';
 import TextStyles from '@/constants/TextStyles';
+import FormStyles from '@/constants/FormStyles';
 
 import Button from '@/components/Button';
 import Separator from '@/components/Separator';
-import FormStyles from '@/constants/FormStyles';
 import InputField from '@/components/InputField';
+import BackButton from '@/components/BackButton';
 
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -28,6 +29,7 @@ const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const SignupScreen = () => {
     console.log('SIGN UP');
 
+    const router = useRouter();
     const { signUp } = useAuth();
     const [loading, setLoading] = useState(false);
     const { control, handleSubmit } = useForm();
@@ -58,6 +60,14 @@ const SignupScreen = () => {
                         headerTitleAlign: 'center',
                         headerTitleStyle: TextStyles.bold5,
                         headerShadowVisible: false,
+                        headerLeft: () => {
+                            return (
+                                <BackButton
+                                    router={router}
+                                    color={Colors.blue}
+                                />
+                            );
+                        },
                     }}
                 />
                 <View style={FormStyles.form}>

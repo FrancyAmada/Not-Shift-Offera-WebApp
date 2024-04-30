@@ -41,34 +41,31 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
     const { control } = useForm();
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <View style={styles.actionRow}>
-                    <Text style={styles.headerTitle}>offera</Text>
-                    <Link href="/(user)/home/search" asChild>
-                        <TouchableOpacity style={styles.searchButtonContainer}>
-                            <InputField
-                                name="search"
-                                placeholder="Search"
-                                control={control}
-                                style={styles.searchButton}
-                                withIcon={true}
-                                icon="search-fill"
-                                editable={type === 'search' ? true : false}
-                            />
-                        </TouchableOpacity>
-                    </Link>
-                    <Link href="/(user)/home/profile" asChild>
-                        <TouchableOpacity>
-                            <Icon
-                                name={'profile-outline'}
-                                color={Colors.blue}
-                            />
-                        </TouchableOpacity>
-                    </Link>
-                </View>
+        // <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+            <View style={styles.actionRow}>
+                <Text style={styles.headerTitle}>offera</Text>
+                <Link href="/(user)/home/search" asChild>
+                    <TouchableOpacity style={styles.searchButtonContainer}>
+                        <InputField
+                            name="search"
+                            placeholder="Search"
+                            control={control}
+                            style={styles.searchButton}
+                            withIcon={true}
+                            icon="search-fill"
+                            editable={type === 'search' ? true : false}
+                        />
+                    </TouchableOpacity>
+                </Link>
+                <Link href="/(user)/home/profile" asChild>
+                    <TouchableOpacity>
+                        <Icon name={'profile-outline'} color={Colors.blue} />
+                    </TouchableOpacity>
+                </Link>
             </View>
-        </SafeAreaView>
+        </View>
+        // </SafeAreaView>
     );
 };
 

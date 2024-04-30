@@ -8,8 +8,10 @@ import Colors from '@/constants/Colors';
 import PostItem from '@/components/PostItem';
 import Separator from '@/components/Separator';
 import ListHeader from '@/components/ListHeader';
+import { useRouter } from 'expo-router';
 
 const HomeScreen = () => {
+    const router = useRouter();
     console.log('HOME');
 
     return (
@@ -25,7 +27,9 @@ const HomeScreen = () => {
                         <View style={{ gap: 8 }}>
                             <ListHeader
                                 title={'Featured Services'}
-                                onPress={() => console.log('VIEW ALL')}
+                                onPress={() =>
+                                    router.push('/home/service/feed')
+                                }
                             />
                             <FlatList
                                 style={{ flex: 1 }}
@@ -44,7 +48,7 @@ const HomeScreen = () => {
                         </View>
                         <ListHeader
                             title={'Tasks'}
-                            onPress={() => console.log('VIEW ALL')}
+                            onPress={() => router.push('/home/task/feed')}
                             style={{ top: 8 }}
                         />
                     </View>

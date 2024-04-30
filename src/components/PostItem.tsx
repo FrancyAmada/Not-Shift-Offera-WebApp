@@ -27,7 +27,10 @@ const PostItem = ({ post, variant }: PostItemProps) => {
     return (
         <Link href={`/home/${post.type}/${post.id}`} asChild>
             <TouchableOpacity style={containerStyle}>
-                <Image source={post.image || defaultImage} style={imageStyle} />
+                <Image
+                    source={post.imageList[0] || defaultImage}
+                    style={imageStyle}
+                />
                 <View style={styles.textContainer}>
                     {isPortrait && (
                         <View style={styles.header}>

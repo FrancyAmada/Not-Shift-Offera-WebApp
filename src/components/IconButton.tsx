@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { Link, LinkProps } from 'expo-router';
 
@@ -14,6 +14,7 @@ interface IconButtonProps {
     size?: number;
     strokeWidth?: number;
     onPress?: () => void;
+    style?: ViewStyle;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({
@@ -23,9 +24,10 @@ const IconButton: React.FC<IconButtonProps> = ({
     strokeWidth,
     color = Colors.blue,
     size = 32,
+    style,
 }: IconButtonProps) => {
     return (
-        <>
+        <View style={style}>
             {route ? (
                 <Link href={route} asChild>
                     <TouchableOpacity onPress={onPress}>
@@ -49,7 +51,7 @@ const IconButton: React.FC<IconButtonProps> = ({
                     />
                 </TouchableOpacity>
             )}
-        </>
+        </View>
     );
 };
 

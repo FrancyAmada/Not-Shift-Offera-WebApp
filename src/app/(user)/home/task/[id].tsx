@@ -6,7 +6,7 @@ import {
     Image,
     ImageSourcePropType,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
@@ -24,7 +24,7 @@ import Button from '@/components/Button';
 const defaultUserImage = require('@assets/images/default-user.png');
 
 const PostDetails = () => {
-    const insets = useSafeAreaInsets();
+    // const insets = useSafeAreaInsets();
     const router = useRouter();
 
     const { id } = useLocalSearchParams();
@@ -33,9 +33,9 @@ const PostDetails = () => {
 
     if (!post) {
         return (
-            <View style={(styles.container, { marginTop: insets.top })}>
-                <Text>Post not found</Text>
-            </View>
+            // <View style={(styles.container, { marginTop: insets.top })}>
+            <Text>Post not found</Text>
+            // </View>
         );
     }
 
@@ -43,6 +43,8 @@ const PostDetails = () => {
         <View style={{ ...styles.container }}>
             <Stack.Screen
                 options={{
+                    // statusBarTranslucent: true,
+                    // statusBarStyle: 'light',
                     headerTransparent: true,
                     headerTitle: '',
                     ...{
@@ -84,7 +86,7 @@ const PostDetails = () => {
                 }}
             />
             <Image
-                source={post.image as ImageSourcePropType}
+                source={post.imageList[0] as ImageSourcePropType}
                 style={styles.image}
             />
             <View style={{ flex: 1 }}>

@@ -6,7 +6,7 @@ export type Post = {
     id: number;
     title: string;
     description: string;
-    image: string;
+    imageList: string[];
     rate: number;
     createdAt: string;
 };
