@@ -1,133 +1,149 @@
-import { Post } from '@/types';
+import { Post } from '@/types'
 
 // Test data for posts
 
 export const posts: Post[] = [
-    {
-        type: 'task',
-        author: {
-            fullName: 'Shawn Kini Alair',
-            userId: '1',
-            profileImg: '../icons/icon.png',
-        },
-        id: 1,
-        title: "Pakay'o b da Ref",
-        description: 'Yugs nahulog ref nmon sa hagdan. Sno pwede da',
-
-        imageList: [require('@assets/images/task-sample.png')],
-        rate: 1000,
-        createdAt: '12h',
+  {
+    type: 'task',
+    author: {
+      fullName: 'Shawn Kini Alair',
+      userId: '1',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'task',
-        author: {
-            fullName: 'Francy Angelo Amada',
-            userId: '1',
-            profileImg: '../icons/icon.png',
-        },
-        id: 2,
-        title: 'Patakod Christmas Lights',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 1,
+    title: "Pakay'o b da Ref",
+    description: 'Yugs nahulog ref nmon sa hagdan. Sno pwede da',
 
-        imageList: [require('@assets/images/task-sample.png')],
-        rate: 500,
-        createdAt: '10m',
+    imageList: [require('@assets/images/task-sample.png')],
+    rate: 1000,
+    createdAt: '12h',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'task',
+    author: {
+      fullName: 'Francy Angelo Amada',
+      userId: '1',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'task',
-        author: {
-            fullName: 'Jose Rizal',
-            userId: '1',
-            profileImg: '../icons/icon.png',
-        },
-        id: 3,
-        title: 'Patudlo calculus',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 2,
+    title: 'Patakod Christmas Lights',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
-        imageList: [require('@assets/images/task-sample.png')],
-        rate: 250,
-        createdAt: '1h',
+    imageList: [require('@assets/images/task-sample.png')],
+    rate: 500,
+    createdAt: '10m',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'task',
+    author: {
+      fullName: 'Jose Rizal',
+      userId: '1',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'task',
-        author: {
-            fullName: 'John Doe',
-            userId: '1',
-            profileImg: '../icons/icon.png',
-        },
-        id: 4,
-        title: 'Papilot finals pls 10k budget',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 3,
+    title: 'Patudlo calculus',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
-        imageList: [require('@assets/images/task-sample.png')],
-        rate: 10000,
-        createdAt: '12h',
+    imageList: [require('@assets/images/task-sample.png')],
+    rate: 250,
+    createdAt: '1h',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'task',
+    author: {
+      fullName: 'John Doe',
+      userId: '1',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'task',
-        author: {
-            fullName: 'Jose Arron Franz Suoberon',
-            userId: '1',
-            profileImg: '../icons/icon.png',
-        },
-        id: 5,
-        title: 'Post Title 1',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 4,
+    title: 'Papilot finals pls 10k budget',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
-        imageList: [require('@assets/images/task-sample.png')],
-        rate: 100,
-        createdAt: '12h',
+    imageList: [require('@assets/images/task-sample.png')],
+    rate: 10000,
+    createdAt: '12h',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'task',
+    author: {
+      fullName: 'Jose Arron Franz Suoberon',
+      userId: '1',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'service',
-        author: {
-            fullName: 'Hev Abi',
-            userId: '2',
-            profileImg: '../icons/icon.png',
-        },
-        id: 6,
-        title: 'Thesis mo thesis ko',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 5,
+    title: 'Post Title 1',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
-        imageList: [require('@assets/images/service-sample.png')],
-        rate: 1600,
-        createdAt: '23m',
+    imageList: [require('@assets/images/task-sample.png')],
+    rate: 100,
+    createdAt: '12h',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'service',
+    author: {
+      fullName: 'Hev Abi',
+      userId: '2',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'service',
-        author: {
-            fullName: 'Metro Boomin',
-            userId: '2',
-            profileImg: '../icons/icon.png',
-        },
-        id: 7,
-        title: 'Unli praise jam package',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 6,
+    title: 'Thesis mo thesis ko',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
-        imageList: [require('@assets/images/service-sample.png')],
-        rate: 9000,
-        createdAt: '23m',
+    imageList: [require('@assets/images/service-sample.png')],
+    rate: 1600,
+    createdAt: '23m',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'service',
+    author: {
+      fullName: 'Metro Boomin',
+      userId: '2',
+      profileImg: '../icons/icon.png',
     },
-    {
-        type: 'service',
-        author: {
-            fullName: 'Metro Boomin',
-            userId: '10',
-            profileImg: '../icons/icon.png',
-        },
-        id: 8,
-        title: 'Unli praise jam package',
-        description:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+    id: 7,
+    title: 'Unli praise jam package',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
 
-        imageList: [require('@assets/images/service-sample.png')],
-        rate: 9000,
-        createdAt: '23m',
+    imageList: [require('@assets/images/service-sample.png')],
+    rate: 9000,
+    createdAt: '23m',
+    applicants: [],
+    status: 'Active',
+  },
+  {
+    type: 'service',
+    author: {
+      fullName: 'Metro Boomin',
+      userId: '10',
+      profileImg: '../icons/icon.png',
     },
-];
+    id: 8,
+    title: 'Unli praise jam package',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum voluptatum laborum rem ipsum nihil facilis excepturi dicta natus earum sapiente tempora omnis, atque ea accusantium ut odit id temporibus. Voluptatum.',
+
+    imageList: [require('@assets/images/service-sample.png')],
+    rate: 9000,
+    createdAt: '23m',
+    applicants: [],
+    status: 'Active',
+  },
+]
