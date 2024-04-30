@@ -1,46 +1,40 @@
-import { User } from 'firebase/auth';
+import { User } from 'firebase/auth'
 
-export type Post = {
-    author: UserProfile;
-    type: 'task' | 'service';
-    id: number;
-    title: string;
-    description: string;
-    imageList: string[];
-    rate: number;
-    createdAt: string;
-};
-
-export enum AuthStatus {
-    idle = 'idle',
-    resolved = 'resolved',
-    rejected = 'rejected',
+export interface UserProfile extends User {
+  userId: string
+  fullName: string
+  profileImg: string
 }
 
-export type UserProfile = {
-    fullName: string;
-    profileImg: string;
-    userId: string;
-    email?: string;
-} & Partial<User>;
+export type AuthStatus = 'Idle' | 'Resolved' | 'Error'
 
 export type AuthResponse = {
-    fullName?: string;
-    email?: string;
-    password?: string;
-    success?: boolean;
-    msg?: string;
-    status?: AuthStatus;
-};
+  success?: boolean
+  msg?: string
+  status: AuthStatus
+}
+
+export type PostStatus = 'Active' | 'Pending' | 'Completed' | 'Cancelled'
+
+export type ApplicationStatus = 'Pending' | 'Accepted' | 'Rejected'
+
+export type Post = {
+  author: UserProfile
+  type: 'task' | 'service'
+  id: number
+  title: string
+  description: string
+  imageList: string[]
+  rate: number
+  createdAt: string
+  applicants: User[]
+  status: PostStatus
+}
 
 export type AuthData = {
-    user: User | null;
-    isAuthenticated: boolean | undefined;
-    logIn: (data: { email: string; password: string }) => Promise<AuthResponse>;
-    signUp: (data: {
-        fullName: string;
-        email: string;
-        password: string;
-    }) => Promise<AuthResponse>;
-    logOut: () => Promise<AuthResponse>;
-};
+  user: User | null
+  isAuthenticated: boolean
+  logIn: (data: { email: string; password: string }) => Promise<AuthResponse>
+  signUp: (data: { fullName: string; email: string; password: string }) => Promise<AuthResponse>
+  logOut: () => Promise<AuthResponse>
+}

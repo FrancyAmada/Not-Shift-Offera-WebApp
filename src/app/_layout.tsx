@@ -1,101 +1,109 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { useFonts } from 'expo-font';
-import { Stack, useRouter, useSegments } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font'
+import { Stack, useRouter, useSegments } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
 
-import { AuthProvider, useAuth } from '@/providers/AuthProvider';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Platform, StatusBar, View } from 'react-native';
+import { AuthProvider, useAuth } from '@/providers/AuthProvider'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Platform, StatusBar, View } from 'react-native'
 
 export {
-    // Catch any errors thrown by the Layout component.
-    ErrorBoundary,
-} from 'expo-router';
+  // Catch any errors thrown by the Layout component.
+  ErrorBoundary,
+} from 'expo-router'
 
 export const unstable_settings = {
-    // Ensure that reloading on `/modal` keeps a back button present.
-    initialRouteName: 'index',
-};
+  // Ensure that reloading on `/modal` keeps a back button present.
+  initialRouteName: 'index',
+}
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-    // const insets = useSafeAreaInsets();
-    const [loaded, error] = useFonts({
-        'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
-        'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
-        'Montserrat-Bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
-        'Montserrat-SemiBold': require('../../assets/fonts/Montserrat-SemiBold.ttf'),
-        'Montserrat-Medium': require('../../assets/fonts/Montserrat-Medium.ttf'),
-    });
+  // const insets = useSafeAreaInsets();
+  const [loaded, error] = useFonts({
+    'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
+    'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
+    'Montserrat-Bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
+    'Montserrat-SemiBold': require('../../assets/fonts/Montserrat-SemiBold.ttf'),
+    'Montserrat-Medium': require('../../assets/fonts/Montserrat-Medium.ttf'),
+  })
 
-    useEffect(() => {
-        if (Platform.OS === 'android') {
-            StatusBar.setTranslucent(true);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (error) throw error;
-    }, [error]);
-
-    useEffect(() => {
-        if (loaded) {
-            SplashScreen.hideAsync();
-        }
-    }, [loaded]);
-
-    if (!loaded) {
-        return null;
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      StatusBar.setTranslucent(true)
     }
+  }, [])
 
-    return (
-        <AuthProvider>
-            {/* <View style={{ flex: 1, paddingBottom: insets.bottom }}> */}
-            <MainLayout />
-            {/* </View> */}
-        </AuthProvider>
-    );
+  useEffect(() => {
+    if (error) throw error
+  }, [error])
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync()
+    }
+  }, [loaded])
+
+  if (!loaded) {
+    return null
+  }
+
+  return (
+    <AuthProvider>
+      {/* <View style={{ flex: 1, paddingBottom: insets.bottom }}> */}
+      <MainLayout />
+      {/* </View> */}
+    </AuthProvider>
+  )
 }
 
 function MainLayout() {
-    const { isAuthenticated } = useAuth();
-    const segments = useSegments();
-    const router = useRouter();
+  const { isAuthenticated } = useAuth()
+  const segments = useSegments()
+  const router = useRouter()
 
-    useEffect(() => {
-        if (typeof isAuthenticated == 'undefined') return;
+  useEffect(() => {
+    if (typeof isAuthenticated == 'undefined') return
 
-        const inApp = segments[0] == '(app)';
+    const inApp = segments[0] == '(app)'
 
-        if (isAuthenticated && !inApp) {
-            router.replace('/(user)/home/');
-        } else if (isAuthenticated == false) {
-            router.replace('/');
-        }
-    }, [isAuthenticated]);
+    if (isAuthenticated && !inApp) {
+      router.replace('/(user)/home/')
+    } else if (isAuthenticated == false) {
+      router.replace('/')
+    }
+  }, [isAuthenticated])
 
-    return (
-        <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen
-                name="add-post"
-                options={{
-                    animation: 'slide_from_bottom',
-                    presentation: 'modal',
-                    gestureEnabled: true,
-                }}
-            />
-            <Stack.Screen
-                name="apply"
-                options={{
-                    animation: 'slide_from_bottom',
-                    presentation: 'modal',
-                    gestureEnabled: true,
-                }}
-            />
-        </Stack>
-    );
+  return (
+    <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }}>
+      <Stack.Screen name='index' />
+      <Stack.Screen
+        name='verify-email'
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name='add-post'
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name='apply'
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+          gestureEnabled: true,
+        }}
+      />
+    </Stack>
+  )
 }
