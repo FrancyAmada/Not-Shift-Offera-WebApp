@@ -1,18 +1,40 @@
-import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, Alert } from 'react-native'
 
 import { useAuth } from '@/providers/AuthProvider'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
 import Colors from '@/constants/Colors'
-
 import Button from '@/components/Button'
 import TextStyles from '@/constants/TextStyles'
 import { err } from 'react-native-svg'
 import style from 'react-native-multiple-switch/style'
+import InputField from '@/components/InputField'
+
+import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
+import { doc, updateDoc, getDoc } from 'firebase/firestore'
+
+const FULL_NAME_REGEX = /^[ \t]*[a-zA-Z]+(?:[ '-][a-zA-Z]+)+[ \t]*$/
 
 const defaultUserImage = require('@assets/images/default-user.png')
 
 const ProfileScreen = () => {
+  console.log('PROFILE')
+  const userAuthData = useAuth()
+  const [userFullName, setUserFullName] = useState(userAuthData.user.fullName)
+  //   var userFullName = 'Full Name'
+  var userEmail = 'Email'
+  var userId = ''
+  //   console.log(useAuth())
+  try {
+    if (userAuthData.user != null) {
+      // setUserFullName(userData.user.fullName)
+      userEmail = userAuthData.user.email
+      userId = userAuthData.user.userId
+    }
+  } catch (error) {
+    console.log(error)
+  }
   const { logOut } = useAuth()
   const authLogOut = async () => {
     try {
@@ -21,39 +43,88 @@ const ProfileScreen = () => {
       console.log(error)
     }
   }
-  const userData = useAuth()
-  var userFullName = 'Full Name'
-  var userEmail = 'Email'
-  //   console.log(useAuth())
-  try {
-    if (userData.user != null) {
-      userFullName = userData.user.fullName
-      userEmail = userData.user.email
-    }
-  } catch (error) {
-    console.log(error)
+
+  const [loading, setLoading] = useState(false)
+  const { control, handleSubmit } = useForm()
+  const authChangeName = async (data: { fullName: string }) => {
+    setLoading(true)
+    const docRef = doc(FIRESTORE_DB, 'users', userId)
+    // Set the name of the user
+    await updateDoc(docRef, { fullName: data.fullName })
+      .then(() => {
+        Alert.alert('Change Name Success', 'Successfully updated your Full Name!', [{ text: 'OK' }])
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    setLoading(false)
+    setUserFullName(data.fullName)
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Image source={defaultUserImage} style={styles.userImage} />
+    <ScrollView style={styles.avoid} showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Image source={defaultUserImage} style={styles.userImage} />
+          </View>
+          <View style={styles.headerContent}>
+            <Text style={styles.name} numberOfLines={1}>
+              {userFullName}
+            </Text>
+            <Text style={styles.email} numberOfLines={1}>
+              {userEmail}
+            </Text>
+          </View>
         </View>
-        <View style={styles.headerContent}>
-          <Text style={styles.name} numberOfLines={1}>
-            {userFullName}
-          </Text>
-          <Text style={styles.email} numberOfLines={1}>
-            {userEmail}
-          </Text>
+        <View style={styles.settings}>
+          <Text style={styles.settingsText}>Settings</Text>
+          <View style={styles.settingsContent}>
+            <View style={styles.settingsContainer}>
+              <Text style={styles.settingsContentText}>Change Name</Text>
+              <View style={styles.inputContainer}>
+                <InputField
+                  rules={{
+                    required: 'Full name is required',
+                    pattern: {
+                      value: FULL_NAME_REGEX,
+                      message:
+                        'Full name must be at least 2 words and contain only letters, spaces, apostrophes, and hyphens',
+                    },
+                    minLength: {
+                      value: 3,
+                      message: 'Name must be at least 3 characters',
+                    },
+                    maxLength: {
+                      value: 50,
+                      message: 'Name must be at most 50 characters',
+                    },
+                  }}
+                  control={control}
+                  name='fullName'
+                  placeholder='Full Name'
+                  autoCapitalize='words'></InputField>
+              </View>
+            </View>
+            {loading ? (
+              <ActivityIndicator size='large' color={Colors.blue} />
+            ) : (
+              <>
+                <Button text='Change Name' onPress={handleSubmit(authChangeName as SubmitHandler<FieldValues>)} />
+              </>
+            )}
+            <View style={styles.settingsContainer}>
+              <Text style={styles.settingsContentText}>Change Password</Text>
+            </View>
+            <View style={styles.settingsContainer}>
+              <Text style={styles.settingsContentText}>Confirm Password</Text>
+            </View>
+            <Button text='Change Password' onPress={authLogOut} />
+            <Button text='Sign Out' onPress={authLogOut} />
+          </View>
         </View>
       </View>
-      <View style={styles.settingsContent}>
-        <Text style={styles.settings}>Settings</Text>
-      </View>
-      <Button text='Sign Out' onPress={authLogOut} />
-    </View>
+    </ScrollView>
   )
 }
 
@@ -62,12 +133,17 @@ export default ProfileScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGrey,
+  },
+  avoid: {
+    flex: 1,
+    backgroundColor: Colors.lightGrey,
   },
   header: {
     backgroundColor: Colors.blue,
     flexDirection: 'row',
     height: 300,
+    minHeight: 100,
     maxHeight: '25%',
   },
   headerContent: {
@@ -75,6 +151,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignContent: 'center',
     justifyContent: 'center',
+    minHeight: '100%',
   },
   name: {
     ...TextStyles.bold6,
@@ -86,15 +163,33 @@ const styles = StyleSheet.create({
   },
   userImage: {
     width: 96,
+    height: 96,
     maxWidth: '100%',
-    height: '61%',
-  },
-  settingsContent: {
-    alignContent: 'center',
-    height: '60%',
-    padding: 16,
+    maxHeight: '100%',
   },
   settings: {
+    alignContent: 'center',
+    minHeight: 200,
+    maxHeight: '60%',
+    padding: 16,
+  },
+  settingsText: {
     ...TextStyles.bold6,
+  },
+  settingsContent: {
+    padding: 16,
+    gap: 16,
+  },
+  settingsContentText: {
+    ...TextStyles.bold4,
+  },
+  settingsContainer: {
+    gap: 3,
+  },
+  inputContainer: {
+    padding: 10,
+    backgroundColor: Colors.white,
+    borderRadius: 5,
+    marginTop: 5,
   },
 })
