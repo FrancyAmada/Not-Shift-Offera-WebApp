@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useFonts } from 'expo-font';
-import { Slot, useRouter, useSegments } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
@@ -71,5 +71,25 @@ function MainLayout() {
         }
     }, [isAuthenticated]);
 
-    return <Slot />;
+    return (
+        <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen
+                name="create-post"
+                options={{
+                    animation: 'slide_from_bottom',
+                    presentation: 'modal',
+                    gestureEnabled: true,
+                }}
+            />
+            <Stack.Screen
+                name="apply"
+                options={{
+                    animation: 'slide_from_bottom',
+                    presentation: 'modal',
+                    gestureEnabled: true,
+                }}
+            />
+        </Stack>
+    );
 }

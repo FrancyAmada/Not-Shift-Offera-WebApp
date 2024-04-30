@@ -22,6 +22,7 @@ const HomeStack = () => {
             <Stack.Screen
                 name="index"
                 options={{
+                    statusBarStyle: 'dark',
                     navigationBarColor: Colors.white,
                     headerTitle: 'offera',
                     ...{ ...HeaderStyle, headerTitleStyle: TextStyles.bold7 },

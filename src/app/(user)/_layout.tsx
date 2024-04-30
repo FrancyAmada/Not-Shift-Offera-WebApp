@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Tabs } from 'expo-router';
+import { Link, Tabs, useNavigation, useRouter } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import TextStyles from '@/constants/TextStyles';
@@ -11,6 +11,8 @@ import Icon from '@/components/Icon';
 type IconName = React.ComponentProps<typeof Icon>['name'];
 
 const HomeLayout = () => {
+    const router = useRouter();
+
     return (
         <Tabs
             initialRouteName="home"
@@ -79,14 +81,12 @@ const HomeLayout = () => {
                         );
                     },
                 }}
-                // listeners={() => {
-                //     return {
-                //         tabPress: e => {
-                //             e.preventDefault();
-                //             router.push('/(user)/add-post');
-                //         },
-                //     };
-                // }}
+                listeners={() => ({
+                    tabPress: e => {
+                        e.preventDefault();
+                        router.push('/create-post');
+                    },
+                })}
             />
             <Tabs.Screen
                 name="my-posts"
