@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, FlatList, Text } from 'react-native'
+import MultipleSwitch from 'react-native-multiple-switch'
 
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
 import Colors from '@/constants/Colors'
@@ -16,10 +17,11 @@ const myPosts = () => {
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
   const { fetchPosts, posts, loading, error } = usePosts()
   const { newPostAdded, setNewPostAdded } = usePostContext()
+  const [type, setType] = useState('Task')
 
   useEffect(() => {
     fetchPosts()
-  }, [newPostAdded])
+  }, [newPostAdded, type])
 
   useEffect(() => {
     if (newPostAdded) {
@@ -30,12 +32,31 @@ const myPosts = () => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <Text style={styles.titleText}>My Tasks</Text>
+        <MultipleSwitch
+          items={['Task', 'Service']}
+          value={type}
+          onChange={setType}
+          textStyle={{
+            color: Colors.blue,
+            ...TextStyles.bold4,
+          }}
+          activeTextStyle={{
+            color: Colors.white,
+            ...TextStyles.bold4,
+          }}
+          sliderStyle={{
+            backgroundColor: Colors.blue,
+            margin: -2,
+            borderRadius: 8,
+            height: 50,
+          }}
+          containerStyle={styles.switchContainer}
+        />
         <FlatList
           alwaysBounceVertical={true}
           showsVerticalScrollIndicator={false}
-          data={posts.filter(post => post.type === 'Task' && post.authorId === userId)}
-          renderItem={({ item }) => <PostItem post={item} fromTasksPage={true} />}
+          data={posts.filter(post => post.type === type && post.authorId === userId)}
+          renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={true} />}
           contentContainerStyle={{ gap: 16 }}
           ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
         />
@@ -59,6 +80,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'stretch',
   },
+  switchContainer: {
+    height: 50,
+    backgroundColor: Colors.white,
+    borderWidth: 2,
+    borderColor: Colors.blue,
+    borderRadius: 8,
+    padding: 0,
+    margin: 0,
+  },
   titleText: {
     ...TextStyles.bold6,
     color: Colors.black,
@@ -73,6 +103,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     padding: 16,
+    gap: 16,
   },
 })
 

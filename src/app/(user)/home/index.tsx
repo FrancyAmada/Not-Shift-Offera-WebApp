@@ -47,7 +47,7 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         data={posts.filter(post => post.type === 'Task')}
-        renderItem={({ item }) => <PostItem post={item} />}
+        renderItem={({ item }) => <PostItem post={item} fromTasksPage={false} />}
         contentContainerStyle={{ gap: 16 }}
         ListHeaderComponent={() => (
           <View style={{ gap: 16 }}>
@@ -57,7 +57,7 @@ const HomeScreen = () => {
                 style={{ flex: 1 }}
                 horizontal
                 data={posts.filter(post => post.type === 'Service')}
-                renderItem={({ item }) => <PostItem post={item} variant='portrait' />}
+                renderItem={({ item }) => <PostItem post={item} variant='portrait' fromTasksPage={false} />}
                 contentContainerStyle={{
                   maxWidth: '150%',
                   gap: 16,

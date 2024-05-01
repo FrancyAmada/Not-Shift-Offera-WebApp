@@ -28,6 +28,7 @@ const ProfileScreen = () => {
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
 
   const { control, handleSubmit } = useForm()
+
   const authChangeName = async (data: { fullName: string }) => {
     setChangeNameLoading(true)
     const docRef = doc(FIRESTORE_DB, 'users', userId)
