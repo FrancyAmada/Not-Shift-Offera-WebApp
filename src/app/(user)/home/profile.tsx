@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, Alert } from 'react-native'
 
 import { useAuth } from '@/providers/AuthProvider'
@@ -49,6 +49,11 @@ const ProfileScreen = () => {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    console.log('Profile Loaded')
+    setUserFullName(userProfile.fullName)
+  }, [userProfile])
 
   return (
     <ScrollView style={styles.avoid} showsVerticalScrollIndicator={false}>
