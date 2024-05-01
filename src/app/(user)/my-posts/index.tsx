@@ -56,7 +56,7 @@ const myPosts = () => {
           alwaysBounceVertical={true}
           showsVerticalScrollIndicator={false}
           data={posts.filter(post => post.type === type && post.authorId === userId)}
-          renderItem={({ item }) => <PostItem post={item} fromTasksPage={true} />}
+          renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={true} />}
           contentContainerStyle={{ gap: 16 }}
           ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
         />

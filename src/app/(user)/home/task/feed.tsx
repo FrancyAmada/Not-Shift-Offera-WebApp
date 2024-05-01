@@ -54,7 +54,7 @@ const TaskFeed = () => {
         alwaysBounceVertical={true}
         showsVerticalScrollIndicator={false}
         data={posts.filter(post => post.type === 'Task')}
-        renderItem={({ item }) => <PostItem post={item} />}
+        renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={false} />}
         contentContainerStyle={{ gap: 16 }}
         ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
       />

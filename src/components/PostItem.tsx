@@ -12,10 +12,10 @@ const defaultImage = require('@assets/images/default-img.png')
 type PostItemProps = {
   post: Post
   variant?: 'landscape' | 'portrait'
-  fromTasksPage: boolean
+  fromMyPostsPage: boolean
 }
 
-const PostItem = ({ post, variant, fromTasksPage = false }: PostItemProps) => {
+const PostItem = ({ post, variant, fromMyPostsPage }: PostItemProps) => {
   const isPortrait = variant === 'portrait'
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
@@ -24,7 +24,7 @@ const PostItem = ({ post, variant, fromTasksPage = false }: PostItemProps) => {
 
   return (
     <Link
-      href={fromTasksPage ? `/home/my-posts/${post.postId}` : `/home/${post.type.toLowerCase()}/${post.postId}`}
+      href={fromMyPostsPage ? `/my-posts/${post.postId}` : `/home/${post.type.toLowerCase()}/${post.postId}`}
       asChild>
       <TouchableOpacity style={containerStyle}>
         <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
