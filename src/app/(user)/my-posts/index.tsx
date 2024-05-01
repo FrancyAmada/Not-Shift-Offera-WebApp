@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, FlatList, Text } from 'react-native'
+import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native'
 import MultipleSwitch from 'react-native-multiple-switch'
 
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
@@ -16,18 +16,15 @@ const myPosts = () => {
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
   const { fetchPosts, posts, loading, error } = usePosts()
-  const { newPostAdded, setNewPostAdded } = usePostContext()
+  const { newPostChanges, setNewPostChanges } = usePostContext()
   const [type, setType] = useState('Task')
 
   useEffect(() => {
-    fetchPosts()
-  }, [newPostAdded, type])
-
-  useEffect(() => {
-    if (newPostAdded) {
-      setNewPostAdded(false)
+    if (newPostChanges) {
+      setNewPostChanges(false)
     }
-  }, [newPostAdded, setNewPostAdded])
+    fetchPosts()
+  }, [newPostChanges, type])
 
   return (
     <View style={styles.container}>
@@ -52,14 +49,20 @@ const myPosts = () => {
           }}
           containerStyle={styles.switchContainer}
         />
-        <FlatList
-          alwaysBounceVertical={true}
-          showsVerticalScrollIndicator={false}
-          data={posts.filter(post => post.type === type && post.authorId === userId)}
-          renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={true} />}
-          contentContainerStyle={{ gap: 16 }}
-          ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
-        />
+        {loading ? (
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <ActivityIndicator size='large' color={Colors.blue} />
+          </View>
+        ) : (
+          <FlatList
+            alwaysBounceVertical={true}
+            showsVerticalScrollIndicator={false}
+            data={posts.filter(post => post.type === type && post.authorId === userId)}
+            renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={true} />}
+            contentContainerStyle={{ gap: 16 }}
+            ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
+          />
+        )}
       </View>
     </View>
   )
@@ -100,8 +103,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    alignContent: 'center',
-    justifyContent: 'center',
     padding: 16,
     gap: 16,
   },

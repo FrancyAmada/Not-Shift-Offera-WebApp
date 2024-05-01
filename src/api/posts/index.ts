@@ -10,7 +10,7 @@ import { usePostContext } from '@/providers/PostProvider'
 import { UserProfile, Post } from '@/types'
 
 export const useAddPost = () => {
-  const { setNewPostAdded } = usePostContext()
+  const { setNewPostChanges } = usePostContext()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [finished, setFinished] = useState(false)
@@ -38,24 +38,24 @@ export const useAddPost = () => {
           const downloadUrl = await getDownloadURL(storageRef)
           imageUrls.push(downloadUrl)
         }
+
+        await setDoc(newPostRef, {
+          postId: newPostRef.id,
+          authorId: FIREBASE_AUTH.currentUser?.uid,
+          type: data.type,
+          title: data.title,
+          rate: data.rate,
+          description: data.description,
+          imageList: imageUrls,
+          applicants: [],
+          status: 'Active',
+          createdAt: 'Time',
+        } as Post)
+
+        console.log('Document written with ID: ', newPostRef.id)
+        setNewPostChanges(true)
+        setLoading(false)
       }
-
-      await setDoc(newPostRef, {
-        postId: newPostRef.id,
-        authorId: FIREBASE_AUTH.currentUser?.uid,
-        type: data.type,
-        title: data.title,
-        rate: data.rate,
-        description: data.description,
-        imageList: imageUrls,
-        applicants: [],
-        status: 'Active',
-        createdAt: 'Time',
-      } as Post)
-
-      console.log('Document written with ID: ', newPostRef.id)
-      setNewPostAdded(true)
-      setLoading(false)
     } catch (error: any) {
       setError(error.message)
       setLoading(false)
@@ -161,12 +161,31 @@ export const useUserProfile = (userId: string) => {
   return { userProfile, userProfileLoading, error }
 }
 
-export const updatePost = (data: { title: string; rate: number; description: string }, postId: string) => {
-  try {
-    const docRef = doc(FIRESTORE_DB, 'posts', postId)
-    updateDoc(docRef, { title: data.title, rate: data.rate, description: data.description })
-    return { success: true, msg: 'Successfully updated your post', status: 'Error' }
-  } catch (error) {
-    return { success: false, msg: String(error), status: 'Error' }
+export const useUpdatePost = () => {
+  const { setNewPostChanges } = usePostContext()
+  const [updateLoading, setUpdateLoading] = useState(false)
+
+  const updatePost = async (data: { title: string; rate: number; description: string }, postId: string) => {
+    setUpdateLoading(true)
+
+    try {
+      const docRef = doc(FIRESTORE_DB, 'posts', postId)
+      const updates = {} as Partial<Post>
+
+      if (data.title !== undefined) updates.title = data.title
+      if (data.rate !== undefined) updates.rate = data.rate
+      if (data.description !== undefined) updates.description = data.description
+
+      await updateDoc(docRef, updates)
+      setNewPostChanges(true)
+      setUpdateLoading(false)
+      return { success: true, msg: 'Successfully updated your post', status: 'Resolved' }
+    } catch (error: any) {
+      setUpdateLoading(false)
+      return { success: false, msg: String(error), status: 'Error' }
+    } finally {
+    }
   }
+
+  return { updatePost, updateLoading }
 }

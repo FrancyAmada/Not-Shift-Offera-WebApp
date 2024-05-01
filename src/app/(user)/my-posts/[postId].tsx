@@ -15,7 +15,7 @@ import BackButton from '@/components/BackButton'
 import IconButton from '@/components/IconButton'
 
 import Button from '@/components/Button'
-import { usePost, useUserProfile, updatePost } from '@/api/posts'
+import { usePost, useUserProfile, useUpdatePost } from '@/api/posts'
 
 const defaultUserImage = require('@assets/images/default-user.png')
 const defaultImage = require('@assets/images/default-img.png')
@@ -23,52 +23,40 @@ const defaultImage = require('@assets/images/default-img.png')
 const PostDetails = () => {
   const router = useRouter()
   const { postId } = useLocalSearchParams()
-
   const id = typeof postId === 'string' ? postId : postId[0]
 
-  const { control, handleSubmit } = useForm()
+  const { control, handleSubmit, reset } = useForm()
 
-  const { post, error, loading } = usePost(id)
-
+  const { post, loading } = usePost(id)
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  const { updatePost, updateLoading } = useUpdatePost()
 
   const [editingPost, setEditingPost] = useState(false)
 
-  const [changesLoading, setChangesLoading] = useState(false)
+  useEffect(() => {
+    if (post) {
+      reset({
+        title: post.title,
+        rate: post.rate,
+        description: post.description,
+      })
+    }
+  }, [post, reset])
 
-  const [postTitle, setPostTitle] = useState('Post Title')
-  const [postRate, setPostRate] = useState(0)
-  const [postDesc, setPostDesc] = useState('Description')
-
-  const setEditPost = async () => {
+  const handleEditPost = () => {
     setEditingPost(!editingPost)
-    clearInputs()
   }
 
-  const editPost = async (data: { title: string; rate: number; description: string }) => {
-    setChangesLoading(true)
+  const onSubmitEdit = async (data: { title: string; rate: number; description: string }) => {
     const response = await updatePost(data, id)
     setEditingPost(false)
+
     if (response.success) {
       Alert.alert('Updated Post!', response.msg, [{ text: 'OK' }])
     } else {
       Alert.alert('Error Updating Post.', response.msg, [{ text: 'OK' }])
     }
-    clearInputs()
-    setChangesLoading(false)
   }
-
-  const clearInputs = () => {
-    setPostTitle(post.title)
-    setPostRate(post.rate)
-    setPostDesc(post.description)
-  }
-
-  useEffect(() => {
-    if (post) {
-      clearInputs()
-    }
-  }, [post])
 
   if (loading || userProfileLoading) {
     return (
@@ -164,7 +152,7 @@ const PostDetails = () => {
                   maxLength={64}
                   numberOfLines={4}
                   name='title'
-                  placeholder={String(postTitle)}
+                  placeholder={String(post.title)}
                   autoGrow={true}
                   style={styles.titleContainer}
                   inputStyle={styles.titleInput}
@@ -173,7 +161,7 @@ const PostDetails = () => {
               </>
             ) : (
               <Text style={styles.title} numberOfLines={2}>
-                {postTitle}
+                {post.title}
               </Text>
             )}
             {editingPost ? (
@@ -200,7 +188,7 @@ const PostDetails = () => {
                     maxLength={10}
                     numberOfLines={1}
                     name='rate'
-                    placeholder={String(postRate)}
+                    placeholder={String(post.rate)}
                     placeholderTextColor={Colors.blue + '90'}
                     style={styles.rateContainer}
                     inputStyle={styles.rateInput}
@@ -210,7 +198,7 @@ const PostDetails = () => {
               </>
             ) : (
               <Text style={styles.rate} numberOfLines={2}>
-                ₱{postRate}
+                ₱{post.rate}
               </Text>
             )}
           </View>
@@ -226,21 +214,21 @@ const PostDetails = () => {
               numberOfLines={8}
               autoGrow={true}
               name='description'
-              placeholder={String(postDesc)}
+              placeholder={String(post.description)}
               style={styles.descContainer}
               inputStyle={styles.descInput}
               control={control}
             />
           ) : (
-            <Text style={styles.description}>{postDesc}</Text>
+            <Text style={styles.description}>{post.description}</Text>
           )}
 
           {editingPost ? (
-            changesLoading ? (
+            updateLoading ? (
               <ActivityIndicator size={'large'} color={Colors.blue} style={styles.loadingIndicator} />
             ) : (
               <>
-                <Button text='Cancel Changes' onPress={setEditPost}></Button>
+                <Button text='Cancel Changes' onPress={handleEditPost}></Button>
                 <Button
                   text='Apply Changes'
                   onPress={handleSubmit(data => {
@@ -249,12 +237,12 @@ const PostDetails = () => {
                       rate: data.rate,
                       description: data.description,
                     }
-                    editPost(postData)
+                    onSubmitEdit(postData)
                   })}></Button>
               </>
             )
           ) : (
-            <Button text='Edit Post' onPress={setEditPost}></Button>
+            <Button text='Edit Post' onPress={handleEditPost}></Button>
           )}
         </View>
       </View>
