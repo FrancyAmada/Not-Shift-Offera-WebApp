@@ -26,7 +26,7 @@ export const useAddPost = () => {
       const newPostRef = doc(collection(FIRESTORE_DB, 'posts'))
       await setDoc(newPostRef, {
         postId: newPostRef.id,
-        auhtorId: FIREBASE_AUTH.currentUser?.uid,
+        authorId: FIREBASE_AUTH.currentUser?.uid,
         type: data.type,
         title: data.title,
         rate: data.rate,
@@ -35,7 +35,7 @@ export const useAddPost = () => {
         applicants: [],
         status: 'Active',
         createdAt: 'Time',
-      })
+      } as Post)
       console.log('Document written with ID: ', newPostRef.id)
       setNewPostAdded(true)
       setLoading(false)
