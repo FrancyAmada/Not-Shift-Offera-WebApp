@@ -18,17 +18,14 @@ const HomeScreen = () => {
   console.log('HOME')
 
   const { fetchPosts, posts, loading } = usePosts()
-  const { newPostAdded, setNewPostAdded } = usePostContext()
+  const { newPostChanges, setNewPostChanges } = usePostContext()
 
   useEffect(() => {
-    fetchPosts()
-  }, [newPostAdded])
-
-  useEffect(() => {
-    if (newPostAdded) {
-      setNewPostAdded(false)
+    if (newPostChanges) {
+      setNewPostChanges(false)
     }
-  }, [newPostAdded, setNewPostAdded])
+    fetchPosts()
+  }, [newPostChanges])
 
   if (loading) {
     return (
@@ -47,7 +44,7 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         data={posts.filter(post => post.type === 'Task')}
-        renderItem={({ item }) => <PostItem post={item} fromTasksPage={false} />}
+        renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={false} />}
         contentContainerStyle={{ gap: 16 }}
         ListHeaderComponent={() => (
           <View style={{ gap: 16 }}>
@@ -57,7 +54,7 @@ const HomeScreen = () => {
                 style={{ flex: 1 }}
                 horizontal
                 data={posts.filter(post => post.type === 'Service')}
-                renderItem={({ item }) => <PostItem post={item} variant='portrait' fromTasksPage={false} />}
+                renderItem={({ item }) => <PostItem post={item} variant='portrait' fromMyPostsPage={false} />}
                 contentContainerStyle={{
                   maxWidth: '150%',
                   gap: 16,

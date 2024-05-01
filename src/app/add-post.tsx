@@ -15,16 +15,18 @@ import BackButton from '@/components/BackButton'
 import InputField from '@/components/InputField'
 import IconButton from '@/components/IconButton'
 
+const imgIcon = require('@assets/icons/img_placeholder.png')
+const defaultImage = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
+
 import { useAddPost } from '@/api/posts'
 
 const addPostScreen = () => {
   console.log('ADD POST')
-  const imgIcon = require('@assets/icons/img_placeholder.png')
 
   const router = useRouter()
   const { control, handleSubmit } = useForm()
   const [type, setType] = useState('Task')
-  const [imageList, setImageList] = useState<string[]>([''])
+  const [imageList, setImageList] = useState<string[]>([defaultImage])
 
   const { addPost, loading, error, finished } = useAddPost()
 
@@ -89,7 +91,7 @@ const addPostScreen = () => {
           />
 
           <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
-            {imageList[0] ? (
+            {imageList[0] !== defaultImage ? (
               <Image source={{ uri: imageList[0] }} style={styles.uploadedImg} />
             ) : (
               <>

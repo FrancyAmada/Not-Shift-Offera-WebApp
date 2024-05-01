@@ -1,14 +1,14 @@
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react'
 
 export const PostContext = createContext({
-  newPostAdded: false,
-  setNewPostAdded: (value: boolean) => {},
+  newPostChanges: false,
+  setNewPostChanges: (value: boolean) => {},
 })
 
 export const PostProvider = ({ children }: PropsWithChildren) => {
-  const [newPostAdded, setNewPostAdded] = useState(false)
+  const [newPostChanges, setNewPostChanges] = useState(false)
 
-  return <PostContext.Provider value={{ newPostAdded, setNewPostAdded }}>{children}</PostContext.Provider>
+  return <PostContext.Provider value={{ newPostChanges, setNewPostChanges }}>{children}</PostContext.Provider>
 }
 
 export const usePostContext = () => {

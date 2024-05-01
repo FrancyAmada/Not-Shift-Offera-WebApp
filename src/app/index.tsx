@@ -8,6 +8,8 @@ import TextStyles from '@constants/TextStyles'
 
 import Button from '@/components/Button'
 
+const logo = require('../../assets/logo/logo.png')
+
 const index = () => {
   console.log('WELCOME')
 
@@ -17,7 +19,7 @@ const index = () => {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../../assets/logo/logo.png')}
+          source={logo}
           style={{
             width: 120,
             height: 120,
