@@ -19,7 +19,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
-  console.log('post', post.postId)
+  console.log('post', post)
 
   return (
     <Link href={`/home/${post.type.toLowerCase()}/${post.postId}`} asChild>

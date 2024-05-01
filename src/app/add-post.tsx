@@ -24,7 +24,7 @@ const addPostScreen = () => {
   const router = useRouter()
   const { control, handleSubmit } = useForm()
   const [type, setType] = useState('Task')
-  const [imageList, setImageList] = useState<string[] | null>(null)
+  const [imageList, setImageList] = useState<string[]>([''])
 
   const { addPost, loading, error, finished } = useAddPost()
 
@@ -89,7 +89,7 @@ const addPostScreen = () => {
           />
 
           <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
-            {imageList ? (
+            {imageList[0] ? (
               <Image source={{ uri: imageList[0] }} style={styles.uploadedImg} />
             ) : (
               <>
