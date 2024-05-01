@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { View, Text, ActivityIndicator, ViewStyle, ScrollView, Alert } from 'react-native'
-
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
 import { Link, Stack, useRouter } from 'expo-router'

@@ -1,10 +1,5 @@
 import { User } from 'firebase/auth'
-
-export interface UserProfile extends User {
-  userId: string
-  fullName: string
-  profileImg: string
-}
+import { FIRESTORE_DB } from 'firebaseConfig'
 
 export type AuthStatus = 'Idle' | 'Resolved' | 'Error'
 
@@ -19,16 +14,23 @@ export type PostStatus = 'Active' | 'Pending' | 'Completed' | 'Cancelled'
 export type ApplicationStatus = 'Pending' | 'Accepted' | 'Rejected'
 
 export type Post = {
-  author: UserProfile
-  type: 'task' | 'service'
-  id: number
+  authorId: string
+  type: 'Task' | 'Service'
+  postId: string
   title: string
   description: string
   imageList: string[]
   rate: number
   createdAt: string
-  applicants: User[]
+  applicants: string[]
   status: PostStatus
+}
+
+export type UserProfile = {
+  fullName: string
+  email: string
+  userId: string
+  profileImg?: string | undefined
 }
 
 export type AuthData = {
