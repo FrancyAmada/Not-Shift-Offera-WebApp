@@ -121,20 +121,6 @@ const ProfileScreen = () => {
             )}
             <View style={styles.settingsContainer}>
               <Text style={styles.settingsContentText}>Change Password</Text>
-              {/* <View style={styles.inputContainer}>
-                <InputField
-                  rules={{
-                    required: 'Password is required',
-                    minLength: {
-                      value: 6,
-                      message: 'Password must be at least 6 characters',
-                    },
-                  }}
-                  control={control}
-                  name='password'
-                  secureTextEntry={true}
-                  placeholder='New Password'></InputField>
-              </View> */}
             </View>
             {changePasswordLoading ? (
               <ActivityIndicator size='large' color={Colors.blue} />
