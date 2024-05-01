@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { collection, query, getDocs, orderBy, doc, setDoc, getDoc } from 'firebase/firestore'
+import { collection, query, getDocs, orderBy, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
 import { FIRESTORE_DB, FIREBASE_AUTH } from 'firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { FIREBASE_STORAGE } from 'firebaseConfig'
@@ -159,4 +159,14 @@ export const useUserProfile = (userId: string) => {
   }, [userId])
 
   return { userProfile, userProfileLoading, error }
+}
+
+export const updatePost = (data: { title: string; rate: number; description: string }, postId: string) => {
+  try {
+    const docRef = doc(FIRESTORE_DB, 'posts', postId)
+    updateDoc(docRef, { title: data.title, rate: data.rate, description: data.description })
+    return { success: true, msg: 'Successfully updated your post', status: 'Error' }
+  } catch (error) {
+    return { success: false, msg: String(error), status: 'Error' }
+  }
 }
