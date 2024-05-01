@@ -5,7 +5,7 @@ import { Stack, useRouter, useSegments } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 
 import { AuthProvider, useAuth } from '@/providers/AuthProvider'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { PostProvider } from '@/providers/PostProvider'
 import { Platform, StatusBar, View } from 'react-native'
 
 export {
@@ -22,7 +22,6 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  // const insets = useSafeAreaInsets();
   const [loaded, error] = useFonts({
     'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
     'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
@@ -53,9 +52,9 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      {/* <View style={{ flex: 1, paddingBottom: insets.bottom }}> */}
-      <MainLayout />
-      {/* </View> */}
+      <PostProvider>
+        <MainLayout />
+      </PostProvider>
     </AuthProvider>
   )
 }

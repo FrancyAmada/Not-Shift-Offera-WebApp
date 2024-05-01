@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import MultipleSwitch from 'react-native-multiple-switch'
 import { useForm } from 'react-hook-form'
@@ -15,32 +15,24 @@ import BackButton from '@/components/BackButton'
 import InputField from '@/components/InputField'
 import IconButton from '@/components/IconButton'
 
+import { useAddPost } from '@/api/posts'
+
 const addPostScreen = () => {
   console.log('ADD POST')
   const imgIcon = require('@assets/icons/img_placeholder.png')
 
   const router = useRouter()
   const { control, handleSubmit } = useForm()
-  const [loading, setLoading] = useState(false)
-
   const [type, setType] = useState('')
   const [imageList, setImageList] = useState<string[] | null>(null)
 
-  const addPost = async (data: { title: string; rate: number; description: string }) => {
-    setLoading(true)
+  const { addPost, loading, error, finished } = useAddPost()
 
-    console.log('POST:', {
-      type,
-      title: data.title,
-      rate: data.rate,
-      description: data.description,
-      imageList,
-    })
-    setTimeout(() => {
-      setLoading(false)
+  useEffect(() => {
+    if (finished) {
       router.back()
-    }, 3000)
-  }
+    }
+  }, [finished])
 
   const pickImage = async () => {
     try {
@@ -301,10 +293,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 30,
     bottom: 30,
-    flexBasis: '100%',
-    alignContent: 'center',
+    height: 70,
+    width: 70,
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
     borderRadius: 50,
     backgroundColor: Colors.white,
     elevation: 3,

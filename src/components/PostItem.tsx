@@ -1,14 +1,13 @@
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { Link } from 'expo-router'
 
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
+import UserTag from './UserTag'
+import { Post } from '@/types'
 
 const defaultImage = require('@assets/images/default-img.png')
-
-import { Post } from '@/types'
-import { Link } from 'expo-router'
-import UserTag from './UserTag'
 
 type PostItemProps = {
   post: Post
@@ -17,61 +16,38 @@ type PostItemProps = {
 
 const PostItem = ({ post, variant }: PostItemProps) => {
   const isPortrait = variant === 'portrait'
-
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
-
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
+  console.log('post', post.postId)
+
   return (
-    <Link href={`/home/${post.type}/${post.id}`} asChild>
+    <Link href={`/home/${post.type.toLowerCase()}/${post.postId}`} asChild>
       <TouchableOpacity style={containerStyle}>
-        <Image source={post.imageList[0] || defaultImage} style={imageStyle} />
+        <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
         <View style={styles.textContainer}>
-          {isPortrait && (
-            <View style={styles.header}>
-              <Text
-                style={{
-                  ...TextStyles.medium2,
-                  flexDirection: 'row',
-                }}
-                numberOfLines={1}>
-                {post.title}
-              </Text>
-              <UserTag post={post} userImgStyle={styles.userImage} />
-            </View>
-          )}
-
-          {!isPortrait && (
-            <View style={styles.header}>
-              <UserTag post={post} userImgStyle={styles.userImage} />
-              <Text
-                style={{
-                  ...TextStyles.medium2,
-                  flexDirection: 'row',
-                }}
-                numberOfLines={1}>
-                {post.title}
-              </Text>
-            </View>
-          )}
-
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <Text
-              numberOfLines={2}
-              style={
-                isPortrait
-                  ? {
-                      ...TextStyles.cardDescription,
-                      paddingTop: 2,
-                    }
-                  : TextStyles.cardDescription
-              }>
-              {post.description}
-            </Text>
+          <View style={styles.header}>
+            {isPortrait ? (
+              <>
+                <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
+                  {post.title}
+                </Text>
+                <UserTag post={post} userImgStyle={styles.userImage} />
+              </>
+            ) : (
+              <>
+                <UserTag post={post} userImgStyle={styles.userImage} />
+                <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
+                  {post.title}
+                </Text>
+              </>
+            )}
           </View>
+          <Text
+            numberOfLines={2}
+            style={isPortrait ? { ...TextStyles.cardDescription, paddingTop: 2 } : TextStyles.cardDescription}>
+            {post.description}
+          </Text>
         </View>
       </TouchableOpacity>
     </Link>

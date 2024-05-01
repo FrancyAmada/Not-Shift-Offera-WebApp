@@ -1,55 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, Alert } from 'react-native'
 
 import { useAuth } from '@/providers/AuthProvider'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
+import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
+import { doc, updateDoc } from 'firebase/firestore'
+
 import Colors from '@/constants/Colors'
-import Button from '@/components/Button'
 import TextStyles from '@/constants/TextStyles'
-import { err } from 'react-native-svg'
-import style from 'react-native-multiple-switch/style'
+
+import Button from '@/components/Button'
 import InputField from '@/components/InputField'
 
-import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
-import { doc, updateDoc, getDoc } from 'firebase/firestore'
+import { useUserProfile } from '@/api/posts'
 
 const FULL_NAME_REGEX = /^[ \t]*[a-zA-Z]+(?:[ '-][a-zA-Z]+)+[ \t]*$/
-
 const defaultUserImage = require('@assets/images/default-user.png')
 
 const ProfileScreen = () => {
   console.log('PROFILE')
-  const userAuthData = useAuth()
-  const [userFullName, setUserFullName] = useState(userAuthData.user.fullName)
-  //   var userFullName = 'Full Name'
-  var userEmail = 'Email'
-  var userId = ''
-  //   console.log(useAuth())
-  try {
-    if (userAuthData.user != null) {
-      // setUserFullName(userData.user.fullName)
-      userEmail = userAuthData.user.email
-      userId = userAuthData.user.userId
-    }
-  } catch (error) {
-    console.log(error)
-  }
-  const { logOut } = useAuth()
-  const authLogOut = async () => {
-    try {
-      await logOut()
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
+  const userId = FIREBASE_AUTH.currentUser?.uid || ''
+  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const [userFullName, setUserFullName] = useState(userProfile.fullName)
   const [loading, setLoading] = useState(false)
+
   const { control, handleSubmit } = useForm()
   const authChangeName = async (data: { fullName: string }) => {
     setLoading(true)
     const docRef = doc(FIRESTORE_DB, 'users', userId)
-    // Set the name of the user
     await updateDoc(docRef, { fullName: data.fullName })
       .then(() => {
         Alert.alert('Change Name Success', 'Successfully updated your Full Name!', [{ text: 'OK' }])
@@ -59,6 +39,15 @@ const ProfileScreen = () => {
       })
     setLoading(false)
     setUserFullName(data.fullName)
+  }
+
+  const { logOut } = useAuth()
+  const authLogOut = async () => {
+    try {
+      await logOut()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -73,7 +62,7 @@ const ProfileScreen = () => {
               {userFullName}
             </Text>
             <Text style={styles.email} numberOfLines={1}>
-              {userEmail}
+              {userProfile.email}
             </Text>
           </View>
         </View>
