@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { collection, query, getDocs, orderBy, doc, setDoc, getDoc } from 'firebase/firestore'
 import { FIRESTORE_DB, FIREBASE_AUTH } from 'firebaseConfig'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { FIREBASE_STORAGE } from 'firebaseConfig'
 
 import { usePostContext } from '@/providers/PostProvider'
 
@@ -17,13 +19,27 @@ export const useAddPost = () => {
     title: string
     rate: number
     description: string
-    imageList: string[] | null
+    imageList: string[]
     type: string
   }) => {
     setLoading(true)
 
     try {
       const newPostRef = doc(collection(FIRESTORE_DB, 'posts'))
+
+      const imageUrls: string[] = []
+      if (data.imageList) {
+        for (const [index, imageUri] of data.imageList.entries()) {
+          console.log('Uploading image: ', imageUri)
+          const response = await fetch(imageUri)
+          const blob = await response.blob()
+          const storageRef = ref(FIREBASE_STORAGE, `posts/${newPostRef.id}/image_${index}_${Date.now()}.jpg`)
+          await uploadBytes(storageRef, blob)
+          const downloadUrl = await getDownloadURL(storageRef)
+          imageUrls.push(downloadUrl)
+        }
+      }
+
       await setDoc(newPostRef, {
         postId: newPostRef.id,
         authorId: FIREBASE_AUTH.currentUser?.uid,
@@ -31,11 +47,12 @@ export const useAddPost = () => {
         title: data.title,
         rate: data.rate,
         description: data.description,
-        imageList: data.imageList,
+        imageList: imageUrls,
         applicants: [],
         status: 'Active',
         createdAt: 'Time',
       } as Post)
+
       console.log('Document written with ID: ', newPostRef.id)
       setNewPostAdded(true)
       setLoading(false)
@@ -94,7 +111,7 @@ export const usePost = (postId: string) => {
         if (docSnap.exists()) {
           setPost(docSnap.data() as Post)
         } else {
-          setError('No such document!')
+          setError('Document does not exist')
         }
         setLoading(false)
       } catch (error: any) {
@@ -129,7 +146,7 @@ export const useUserProfile = (userId: string) => {
         if (docSnap.exists()) {
           setUserProfile(docSnap.data() as UserProfile)
         } else {
-          setError('No such document!')
+          setError('Document does not exist')
         }
         setUserProfileLoading(false)
       } catch (error: any) {

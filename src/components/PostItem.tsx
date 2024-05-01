@@ -20,7 +20,7 @@ const PostItem = ({ post, variant, fromTasksPage = false }: PostItemProps) => {
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
-  console.log('post', post.postId)
+  console.log('post', post)
 
   if (fromTasksPage) {
     return (
