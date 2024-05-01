@@ -23,7 +23,7 @@ const addPostScreen = () => {
 
   const router = useRouter()
   const { control, handleSubmit } = useForm()
-  const [type, setType] = useState('')
+  const [type, setType] = useState('Task')
   const [imageList, setImageList] = useState<string[] | null>(null)
 
   const { addPost, loading, error, finished } = useAddPost()
