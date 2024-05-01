@@ -12,46 +12,81 @@ const defaultImage = require('@assets/images/default-img.png')
 type PostItemProps = {
   post: Post
   variant?: 'landscape' | 'portrait'
+  fromTasksPage: boolean
 }
 
-const PostItem = ({ post, variant }: PostItemProps) => {
+const PostItem = ({ post, variant, fromTasksPage = false }: PostItemProps) => {
   const isPortrait = variant === 'portrait'
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
   console.log('post', post)
 
-  return (
-    <Link href={`/home/${post.type.toLowerCase()}/${post.postId}`} asChild>
-      <TouchableOpacity style={containerStyle}>
-        <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
-        <View style={styles.textContainer}>
-          <View style={styles.header}>
-            {isPortrait ? (
-              <>
-                <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
-                  {post.title}
-                </Text>
-                <UserTag post={post} userImgStyle={styles.userImage} />
-              </>
-            ) : (
-              <>
-                <UserTag post={post} userImgStyle={styles.userImage} />
-                <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
-                  {post.title}
-                </Text>
-              </>
-            )}
+  if (fromTasksPage) {
+    return (
+      <Link href={`/home/my-posts/${post.postId}`} asChild>
+        <TouchableOpacity style={containerStyle}>
+          <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
+          <View style={styles.textContainer}>
+            <View style={styles.header}>
+              {isPortrait ? (
+                <>
+                  <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
+                    {post.title}
+                  </Text>
+                  <UserTag post={post} userImgStyle={styles.userImage} />
+                </>
+              ) : (
+                <>
+                  <UserTag post={post} userImgStyle={styles.userImage} />
+                  <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
+                    {post.title}
+                  </Text>
+                </>
+              )}
+            </View>
+            <Text
+              numberOfLines={2}
+              style={isPortrait ? { ...TextStyles.cardDescription, paddingTop: 2 } : TextStyles.cardDescription}>
+              {post.description}
+            </Text>
           </View>
-          <Text
-            numberOfLines={2}
-            style={isPortrait ? { ...TextStyles.cardDescription, paddingTop: 2 } : TextStyles.cardDescription}>
-            {post.description}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </Link>
-  )
+        </TouchableOpacity>
+      </Link>
+    )
+  } else {
+    return (
+      <Link href={`/home/${post.type.toLowerCase()}/${post.postId}`} asChild>
+        <TouchableOpacity style={containerStyle}>
+          <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
+          <View style={styles.textContainer}>
+            <View style={styles.header}>
+              {isPortrait ? (
+                <>
+                  <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
+                    {post.title}
+                  </Text>
+                  <UserTag post={post} userImgStyle={styles.userImage} />
+                </>
+              ) : (
+                <>
+                  <UserTag post={post} userImgStyle={styles.userImage} />
+                  <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
+                    {post.title}
+                  </Text>
+                </>
+              )}
+            </View>
+            <Text
+              numberOfLines={2}
+              style={isPortrait ? { ...TextStyles.cardDescription, paddingTop: 2 } : TextStyles.cardDescription}>
+              {post.description}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </Link>
+    )
+  }
 }
 
 export default PostItem
