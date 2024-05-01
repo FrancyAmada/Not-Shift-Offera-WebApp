@@ -29,6 +29,7 @@ const UserTag: React.FC<UserTagProps> = ({
   showCreatedAt = true,
 }: UserTagProps) => {
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  // console.log('userProfile', userProfile.fullName)
 
   return (
     <View style={style}>
@@ -41,7 +42,7 @@ const UserTag: React.FC<UserTagProps> = ({
           flexShrink: 0,
         }}
         numberOfLines={1}>
-        {userProfile?.fullName}
+        {userProfile.fullName}
       </Text>
 
       {showCreatedAt && (

@@ -82,7 +82,7 @@ function MainLayout() {
       <Stack.Screen
         name='verify-email'
         options={{
-          animation: 'slide_from_bottom',
+          animation: 'slide_from_right',
           presentation: 'modal',
           gestureEnabled: true,
         }}
