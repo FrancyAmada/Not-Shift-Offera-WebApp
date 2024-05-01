@@ -6,6 +6,7 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   User,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
@@ -124,4 +125,13 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return value
+}
+
+export const changePassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(FIREBASE_AUTH, email)
+    return { success: true, msg: 'Successfully sent password reset email.', status: 'Resolved' }
+  } catch (error: any) {
+    return { success: false, msg: 'Error sending password reset email', status: 'Error' }
+  }
 }

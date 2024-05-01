@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, Alert } from 'react-native'
 
-import { useAuth } from '@/providers/AuthProvider'
+import { useAuth, changePassword } from '@/providers/AuthProvider'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
@@ -24,11 +24,12 @@ const ProfileScreen = () => {
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
   const { userProfile, userProfileLoading } = useUserProfile(userId)
   const [userFullName, setUserFullName] = useState(userProfile.fullName)
-  const [loading, setLoading] = useState(false)
+  const [changeNameLoading, setChangeNameLoading] = useState(false)
+  const [changePasswordLoading, setChangePasswordLoading] = useState(false)
 
   const { control, handleSubmit } = useForm()
   const authChangeName = async (data: { fullName: string }) => {
-    setLoading(true)
+    setChangeNameLoading(true)
     const docRef = doc(FIRESTORE_DB, 'users', userId)
     await updateDoc(docRef, { fullName: data.fullName })
       .then(() => {
@@ -37,8 +38,19 @@ const ProfileScreen = () => {
       .catch(err => {
         console.log(err)
       })
-    setLoading(false)
+    setChangeNameLoading(false)
     setUserFullName(data.fullName)
+  }
+
+  const authChangePassword = async () => {
+    setChangePasswordLoading(true)
+    const response = await changePassword(userProfile.email)
+    if (response.success) {
+      Alert.alert('Change Password Success', response.msg, [{ text: 'OK' }])
+    } else {
+      Alert.alert(response.status, response.msg, [{ text: 'OK' }])
+    }
+    setChangePasswordLoading(false)
   }
 
   const { logOut } = useAuth()
@@ -51,7 +63,7 @@ const ProfileScreen = () => {
   }
 
   useEffect(() => {
-    console.log('Profile Loaded')
+    // console.log('Profile Loaded')
     setUserFullName(userProfile.fullName)
   }, [userProfile])
 
@@ -100,7 +112,7 @@ const ProfileScreen = () => {
                   autoCapitalize='words'></InputField>
               </View>
             </View>
-            {loading ? (
+            {changeNameLoading ? (
               <ActivityIndicator size='large' color={Colors.blue} />
             ) : (
               <>
@@ -109,11 +121,28 @@ const ProfileScreen = () => {
             )}
             <View style={styles.settingsContainer}>
               <Text style={styles.settingsContentText}>Change Password</Text>
+              {/* <View style={styles.inputContainer}>
+                <InputField
+                  rules={{
+                    required: 'Password is required',
+                    minLength: {
+                      value: 6,
+                      message: 'Password must be at least 6 characters',
+                    },
+                  }}
+                  control={control}
+                  name='password'
+                  secureTextEntry={true}
+                  placeholder='New Password'></InputField>
+              </View> */}
             </View>
-            <View style={styles.settingsContainer}>
-              <Text style={styles.settingsContentText}>Confirm Password</Text>
-            </View>
-            <Button text='Change Password' onPress={authLogOut} />
+            {changePasswordLoading ? (
+              <ActivityIndicator size='large' color={Colors.blue} />
+            ) : (
+              <>
+                <Button text='Send Change Password Email' onPress={authChangePassword} />
+              </>
+            )}
             <Button text='Sign Out' onPress={authLogOut} />
           </View>
         </View>
