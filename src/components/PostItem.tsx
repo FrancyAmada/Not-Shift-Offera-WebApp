@@ -20,7 +20,7 @@ const PostItem = ({ post, variant, fromMyPostsPage }: PostItemProps) => {
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
-  console.log('post', post)
+  // console.log('post', post)
 
   return (
     <Link
