@@ -125,6 +125,35 @@ export const usePost = (postId: string) => {
   return { post, loading, error }
 }
 
+export const useGetPost = () => {
+  const [post, setPost] = useState<Post | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchPost = async (postId: string) => {
+    setLoading(true)
+
+    try {
+      const docRef = doc(FIRESTORE_DB, 'posts', postId)
+
+      const docSnap = await getDoc(docRef)
+      console.log(docSnap.data())
+
+      if (docSnap.exists()) {
+        setPost(docSnap.data() as Post)
+      } else {
+        setError('Document does not exist')
+      }
+      setLoading(false)
+    } catch (error: any) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
+
+  return { fetchPost, post, loading, error }
+}
+
 export const useUserProfile = (userId: string) => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: '',
