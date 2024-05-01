@@ -13,25 +13,32 @@ import TextStyles from '@/constants/TextStyles'
 import InputField from '@/components/InputField'
 import BackButton from '@/components/BackButton'
 import IconButton from '@/components/IconButton'
-
 import Button from '@/components/Button'
-import { usePost, useUserProfile, useUpdatePost } from '@/api/posts'
+
+import { useGetPost, useUserProfile, useUpdatePost } from '@/api/posts'
+import { usePostContext } from '@/providers/PostProvider'
 
 const defaultUserImage = require('@assets/images/default-user.png')
 const defaultImage = require('@assets/images/default-img.png')
 
 const PostDetails = () => {
   const router = useRouter()
+  const { newPostChanges } = usePostContext()
+
   const { postId } = useLocalSearchParams()
   const id = typeof postId === 'string' ? postId : postId[0]
 
   const { control, handleSubmit, reset } = useForm()
 
-  const { post, loading } = usePost(id)
+  const { fetchPost, post, loading } = useGetPost()
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
   const { updatePost, updateLoading } = useUpdatePost()
 
   const [editingPost, setEditingPost] = useState(false)
+
+  useEffect(() => {
+    fetchPost(id)
+  }, [id, newPostChanges])
 
   useEffect(() => {
     if (post) {
