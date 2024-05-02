@@ -49,6 +49,7 @@ const PostDetails = () => {
         rate: post.rate,
         description: post.description,
       })
+      console.log(post)
     }
   }, [post, reset])
 

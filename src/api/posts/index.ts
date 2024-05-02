@@ -129,7 +129,7 @@ export const usePost = (postId: string) => {
         const docRef = doc(FIRESTORE_DB, 'posts', postId)
 
         const docSnap = await getDoc(docRef)
-        console.log(docSnap.data())
+        // console.log(docSnap.data())
 
         if (docSnap.exists()) {
           setPost(docSnap.data() as Post)
