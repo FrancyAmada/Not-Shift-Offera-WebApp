@@ -25,7 +25,7 @@ const ServiceFeed = () => {
     setRefreshing(true)
     setTimeout(() => {
       setRefreshing(false)
-    }, 2000)
+    })
   }, [])
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const ServiceFeed = () => {
     }
     fetchPosts('Service')
     console.log('error', error)
-  }, [newPostChanges, onRefresh])
+  }, [newPostChanges, refreshing])
 
   if (loading) {
     return (

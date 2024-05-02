@@ -22,11 +22,27 @@ const PostItem = ({ post, variant }: PostItemProps) => {
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
   const userId = FIREBASE_AUTH.currentUser?.uid
+
+  if (!userId) {
+    return null
+  }
+
   const timeAgo = getTimeAgo(post.createdAt)
   const isUserPost = post.authorId === userId
+  const isAppliedTo = post.applicants.includes(userId)
+
+  // console.log(isAppliedTo, userId, post.applicants, post.title)
 
   return (
-    <Link href={isUserPost ? `/my-posts/${post.postId}` : `/home/${post.type.toLowerCase()}/${post.postId}`} asChild>
+    <Link
+      href={
+        isAppliedTo
+          ? `/my-applications/${post.postId}`
+          : isUserPost
+            ? `/my-posts/${post.postId}`
+            : `/home/${post.type.toLowerCase()}/${post.postId}`
+      }
+      asChild>
       <TouchableOpacity style={containerStyle}>
         <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
         <View style={styles.textContainer}>

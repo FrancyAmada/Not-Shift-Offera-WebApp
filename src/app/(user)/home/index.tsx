@@ -30,7 +30,7 @@ const HomeScreen = () => {
       setNewPostChanges(false)
     }
     fetchPosts()
-  }, [newPostChanges])
+  }, [newPostChanges, refreshing])
 
   if (loading) {
     return (
