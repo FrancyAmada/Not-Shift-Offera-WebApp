@@ -84,7 +84,7 @@ export const usePosts = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchPosts = async (type?: string, authorId?: string) => {
+  const fetchPosts = async (type?: string, authorId?: string, inMyApplications?: boolean) => {
     setLoading(true)
     setError(null)
 
@@ -95,8 +95,12 @@ export const usePosts = () => {
         constraints.push(where('type', '==', type))
       }
 
-      if (authorId) {
+      if (!inMyApplications && authorId) {
         constraints.push(where('authorId', '==', authorId))
+      }
+
+      if (inMyApplications && authorId) {
+        constraints.push(where('applicants', 'array-contains', authorId))
       }
 
       const q = query(collection(FIRESTORE_DB, 'posts'), ...constraints)
