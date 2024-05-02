@@ -61,9 +61,11 @@ const PostDetails = () => {
     setEditingPost(false)
 
     if (response.success) {
-      Alert.alert('Updated Post!', response.msg, [{ text: 'OK', onPress: () => router.back() }])
+      Alert.alert('Updated Post!', response.msg, [{ text: 'OK', onPress: () => router.navigate('/(user)/my-posts/') }])
     } else {
-      Alert.alert('Error Updating Post.', response.msg, [{ text: 'OK', onPress: () => router.back() }])
+      Alert.alert('Error Updating Post.', response.msg, [
+        { text: 'OK', onPress: () => router.navigate('/(user)/my-posts/') },
+      ])
     }
   }
 

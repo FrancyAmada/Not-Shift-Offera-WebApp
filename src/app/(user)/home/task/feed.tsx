@@ -60,7 +60,7 @@ const TaskFeed = () => {
         alwaysBounceVertical={true}
         showsVerticalScrollIndicator={false}
         data={posts}
-        renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={false} />}
+        renderItem={({ item }) => <PostItem post={item} />}
         contentContainerStyle={{ gap: 16 }}
         ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
       />

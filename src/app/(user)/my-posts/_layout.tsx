@@ -10,6 +10,7 @@ import HeaderStyle from '@/constants/HeaderStyle'
 const PostsStack = () => {
   return (
     <Stack
+      initialRouteName='index'
       screenOptions={{
         title: 'My Posts',
         ...{
