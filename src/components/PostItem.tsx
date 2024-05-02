@@ -36,7 +36,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
                   {post.title}
                 </Text>
-                <UserTag post={post} userImgStyle={styles.userImage} showCreatedAt={false} maxWidth={200} />
+                <UserTag post={post} userImgStyle={styles.userImage} showCreatedAt={true} maxWidth={200} />
               </>
             ) : (
               <>
