@@ -95,14 +95,14 @@ function MainLayout() {
           gestureEnabled: true,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name='apply'
         options={{
           animation: 'slide_from_bottom',
           presentation: 'modal',
           gestureEnabled: true,
         }}
-      />
+      /> */}
     </Stack>
   )
 }
