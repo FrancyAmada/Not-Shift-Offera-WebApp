@@ -32,10 +32,9 @@ const SearchScreen = () => {
     setTimeout(() => {
       setRefreshing(false)
     })
-    setPostsShown(posts)
   }, [])
 
-  const filterBySearchingFor = async () => {
+  const filterBySearchingFor = () => {
     if (searchingFor != '') {
       let postsToShow: Array<Post> = []
       for (let post of posts) {
@@ -54,15 +53,18 @@ const SearchScreen = () => {
       setNewPostChanges(false)
     }
     fetchPosts(type, userId, false, true)
-    filterBySearchingFor()
     // console.log('error', error)
-  }, [newPostChanges, type, refreshing, searchingFor])
+  }, [newPostChanges, type, refreshing])
 
   const onClear = () => {
     setSearchingFor('')
   }
 
-  console.log(posts)
+  useEffect(() => {
+    filterBySearchingFor()
+  }, [searchingFor, type, posts])
+
+  // console.log(posts)
 
   return (
     <View style={styles.container}>
