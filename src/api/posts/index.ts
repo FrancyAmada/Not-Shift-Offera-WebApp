@@ -106,7 +106,7 @@ export const usePosts = () => {
       const q = query(collection(FIRESTORE_DB, 'posts'), ...constraints)
 
       const querySnapshot = await getDocs(q)
-      console.log(querySnapshot.docs.map(doc => doc.data()))
+      // console.log(querySnapshot.docs.map(doc => doc.data()))
 
       const fetchedPosts: Post[] = querySnapshot.docs.map(doc => doc.data() as Post)
       setPosts(fetchedPosts)
