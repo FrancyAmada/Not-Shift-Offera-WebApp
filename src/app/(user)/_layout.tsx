@@ -16,7 +16,7 @@ const HomeLayout = () => {
   return (
     <Tabs
       initialRouteName='home'
-      backBehavior='firstRoute'
+      backBehavior='history'
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
@@ -60,7 +60,7 @@ const HomeLayout = () => {
         name='home'
         options={{
           tabBarLabel: 'Home',
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
           // listeners={({navigation}) => ({blur: () => navigation.setParams({screen: undefined})}),
         }}
       />
@@ -68,7 +68,7 @@ const HomeLayout = () => {
         name='my-applications'
         options={{
           tabBarLabel: 'Offers',
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
         }}
       />
       <Tabs.Screen
@@ -92,8 +92,8 @@ const HomeLayout = () => {
           },
         })}
       />
-      <Tabs.Screen name='my-posts' options={{ tabBarLabel: 'My Posts', unmountOnBlur: true }} />
-      <Tabs.Screen name='chat' options={{ tabBarLabel: 'Chats', unmountOnBlur: true }} />
+      <Tabs.Screen name='my-posts' options={{ tabBarLabel: 'My Posts' }} />
+      <Tabs.Screen name='chat' options={{ tabBarLabel: 'Chats' }} />
     </Tabs>
   )
 }

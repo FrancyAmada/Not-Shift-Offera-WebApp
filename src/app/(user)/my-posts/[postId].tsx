@@ -104,7 +104,7 @@ const PostDetails = () => {
                   ...IconStyle.fill,
                   alignItems: 'flex-start',
                 }}>
-                <BackButton icon='chevron-left-fill' router={router} color={Colors.white} />
+                <BackButton icon='chevron-left-fill' router={router} color={Colors.white} route='/(user)/my-posts' />
               </View>
             )
           },
