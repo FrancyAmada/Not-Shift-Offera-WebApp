@@ -84,7 +84,7 @@ export const usePosts = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchPosts = async (type?: string, userId?: string, inMyApplications?: boolean) => {
+  const fetchPosts = async (type?: string, userId?: string, inMyApplications?: boolean, inSearchPage?: boolean) => {
     setLoading(true)
     setError(null)
 
@@ -95,11 +95,11 @@ export const usePosts = () => {
         constraints.push(where('type', '==', type))
       }
 
-      if (!inMyApplications && userId) {
+      if (!inMyApplications && userId && !inSearchPage) {
         constraints.push(where('authorId', '==', userId))
       }
 
-      if (inMyApplications && userId) {
+      if (inMyApplications && userId && !inSearchPage) {
         constraints.push(where('applicants', 'array-contains', userId))
       }
 
