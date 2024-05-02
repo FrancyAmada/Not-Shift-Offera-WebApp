@@ -24,7 +24,7 @@ const TaskFeed = () => {
     setRefreshing(true)
     setTimeout(() => {
       setRefreshing(false)
-    }, 2000)
+    })
   }, [])
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const TaskFeed = () => {
       setNewPostChanges(false)
     }
     fetchPosts('Task')
-  }, [newPostChanges])
+  }, [newPostChanges, refreshing])
 
   if (loading) {
     return (

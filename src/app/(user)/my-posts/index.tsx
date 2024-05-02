@@ -24,7 +24,7 @@ const myPosts = () => {
     setRefreshing(true)
     setTimeout(() => {
       setRefreshing(false)
-    }, 2000)
+    })
   }, [])
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const myPosts = () => {
     }
     fetchPosts(type, userId, false)
     // console.log('error', error)
-  }, [newPostChanges, type])
+  }, [newPostChanges, type, refreshing])
 
   return (
     <View style={styles.container}>
