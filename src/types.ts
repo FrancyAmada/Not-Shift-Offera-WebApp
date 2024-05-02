@@ -1,4 +1,5 @@
 import { User } from 'firebase/auth'
+import { Timestamp } from 'firebase/firestore'
 import { FIRESTORE_DB } from 'firebaseConfig'
 
 export type AuthStatus = 'Idle' | 'Resolved' | 'Error'
@@ -21,7 +22,7 @@ export type Post = {
   description: string
   imageList: string[]
   rate: number
-  createdAt: string
+  createdAt: Timestamp
   applicants: string[]
   status: PostStatus
 }

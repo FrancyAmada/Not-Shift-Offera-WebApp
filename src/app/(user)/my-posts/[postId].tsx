@@ -15,6 +15,8 @@ import BackButton from '@/components/BackButton'
 import IconButton from '@/components/IconButton'
 import Button from '@/components/Button'
 
+import { getTimeAgo } from '@/utils/timeAgo'
+
 import { useGetPost, useUserProfile, useUpdatePost } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
 
@@ -59,9 +61,9 @@ const PostDetails = () => {
     setEditingPost(false)
 
     if (response.success) {
-      Alert.alert('Updated Post!', response.msg, [{ text: 'OK' }])
+      Alert.alert('Updated Post!', response.msg, [{ text: 'OK', onPress: () => router.back() }])
     } else {
-      Alert.alert('Error Updating Post.', response.msg, [{ text: 'OK' }])
+      Alert.alert('Error Updating Post.', response.msg, [{ text: 'OK', onPress: () => router.back() }])
     }
   }
 
@@ -77,6 +79,7 @@ const PostDetails = () => {
   if (!post) {
     return <Text>Post not found</Text>
   }
+  const timeAgo = getTimeAgo(post.createdAt)
 
   return (
     <View style={styles.container}>
@@ -143,7 +146,7 @@ const PostDetails = () => {
                 flexShrink: 0,
                 flex: 1,
               }}>
-              {post.createdAt}
+              {timeAgo}
             </Text>
           </View>
           <View style={styles.header}>

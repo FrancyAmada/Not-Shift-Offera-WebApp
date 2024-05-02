@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
 
 import { Stack, useRouter } from 'expo-router'
 
@@ -17,17 +17,22 @@ const TaskFeed = () => {
   console.log('TASK FEED')
 
   const { fetchPosts, posts, loading, error } = usePosts()
-  const { newPostAdded, setNewPostAdded } = usePostContext()
+  const { newPostChanges, setNewPostChanges } = usePostContext()
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
+  }, [])
 
   useEffect(() => {
-    fetchPosts()
-  }, [newPostAdded])
-
-  useEffect(() => {
-    if (newPostAdded) {
-      setNewPostAdded(false)
+    if (newPostChanges) {
+      setNewPostChanges(false)
     }
-  }, [newPostAdded, setNewPostAdded])
+    fetchPosts('Task')
+  }, [newPostChanges])
 
   if (loading) {
     return (
@@ -51,9 +56,10 @@ const TaskFeed = () => {
         }}
       />
       <FlatList
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         alwaysBounceVertical={true}
         showsVerticalScrollIndicator={false}
-        data={posts.filter(post => post.type === 'Task')}
+        data={posts}
         renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={false} />}
         contentContainerStyle={{ gap: 16 }}
         ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}

@@ -6,6 +6,7 @@ import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
 import UserTag from './UserTag'
 import { Post } from '@/types'
+import { getTimeAgo } from '@/utils/timeAgo'
 
 const defaultImage = require('@assets/images/default-img.png')
 
@@ -20,7 +21,7 @@ const PostItem = ({ post, variant, fromMyPostsPage }: PostItemProps) => {
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
-  // console.log('post', post)
+  const timeAgo = getTimeAgo(post.createdAt)
 
   return (
     <Link
@@ -35,11 +36,11 @@ const PostItem = ({ post, variant, fromMyPostsPage }: PostItemProps) => {
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
                   {post.title}
                 </Text>
-                <UserTag post={post} userImgStyle={styles.userImage} />
+                <UserTag post={post} userImgStyle={styles.userImage} showCreatedAt={false} maxWidth={200} />
               </>
             ) : (
               <>
-                <UserTag post={post} userImgStyle={styles.userImage} />
+                <UserTag post={post} userImgStyle={styles.userImage} timeAgo={timeAgo} />
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
                   {post.title}
                 </Text>
