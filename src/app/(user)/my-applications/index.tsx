@@ -31,7 +31,7 @@ const myApplications = () => {
     if (newPostChanges) {
       setNewPostChanges(false)
     }
-    fetchPosts(type, userId, true)
+    fetchPosts(type, userId, true, false)
   }, [newPostChanges, type, refreshing])
 
   return (
