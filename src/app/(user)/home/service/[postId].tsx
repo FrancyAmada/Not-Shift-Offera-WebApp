@@ -120,7 +120,7 @@ const PostDetails = () => {
               ₱{post.rate.toLocaleString()}
             </Text>
           </View>
-          <Link href={'/apply'} asChild>
+          <Link href={`/${postId}`} asChild>
             <Button
               text={'Inquire'}
               style={{

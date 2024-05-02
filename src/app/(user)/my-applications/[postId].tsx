@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, Image, ActivityIndicator, Alert } from 'react-n
 
 import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 
-import { useForm } from 'react-hook-form'
+import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
+import { doc, updateDoc, getDoc } from 'firebase/firestore'
 
 import Colors from '@/constants/Colors'
 import HeaderStyle from '@/constants/HeaderStyle'
 import { IconStyle } from '@/constants/Icons'
 import TextStyles from '@/constants/TextStyles'
 
-import InputField from '@/components/InputField'
 import BackButton from '@/components/BackButton'
 import IconButton from '@/components/IconButton'
 import Button from '@/components/Button'
@@ -30,45 +30,57 @@ const PostDetails = () => {
   const { postId } = useLocalSearchParams()
   const id = typeof postId === 'string' ? postId : postId[0]
 
-  const { control, handleSubmit, reset } = useForm()
-
   const { fetchPost, post, loading } = useGetPost()
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
-  const { updatePost, updateLoading } = useUpdatePost()
 
-  const [editingPost, setEditingPost] = useState(false)
+  const [isCancelling, setIsCancelling] = useState(false)
+
+  const [cancelLoading, setCancelLoading] = useState(false)
 
   useEffect(() => {
     fetchPost(id)
   }, [id, newPostChanges])
 
-  useEffect(() => {
-    if (post) {
-      reset({
-        title: post.title,
-        rate: post.rate,
-        description: post.description,
-      })
-      console.log(post)
-    }
-  }, [post, reset])
-
-  const handleEditPost = () => {
-    setEditingPost(!editingPost)
-  }
-
-  const onSubmitEdit = async (data: { title: string; rate: number; description: string }) => {
-    const response = await updatePost(data, id)
-    setEditingPost(false)
-
-    if (response.success) {
-      Alert.alert('Updated Post!', response.msg, [{ text: 'OK', onPress: () => router.navigate('/my-applications/') }])
-    } else {
-      Alert.alert('Error Updating Post.', response.msg, [
-        { text: 'OK', onPress: () => router.navigate('/my-applications/') },
+  const handleCancelling = () => {
+    if (!isCancelling) {
+      Alert.alert('Cancel Application?', 'Are you sure you want to cancel your application for this post?', [
+        { text: 'OK' },
       ])
     }
+    setIsCancelling(!isCancelling)
   }
+
+  const handleCancelApplication = async () => {
+    setCancelLoading(true)
+    const docRef = doc(FIRESTORE_DB, 'posts', id)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      const userId = FIREBASE_AUTH.currentUser?.uid || ''
+      const docData = docSnap.data()
+      let currentApplicants: Array<string> = docData.applicants
+      if (currentApplicants.includes(userId)) {
+        await updateDoc(docRef, { applicants: currentApplicants.filter(id => id != userId) })
+          .then(() => {
+            Alert.alert('Cancelled Application', 'Successfully cancelled application to the post...', [
+              { text: 'OK', onPress: () => router.navigate('/(user)/my-applications/') },
+            ])
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else {
+        Alert.alert('Error!', 'You did not have an application for this post...', [
+          { text: 'OK', onPress: () => router.navigate('/(user)/my-applications/') },
+        ])
+      }
+    } else {
+      Alert.alert('Error', 'Post does not exist...', [{ text: 'OK', onPress: () => router.navigate('/(user)/home/') }])
+    }
+    setCancelLoading(false)
+  }
+
+  const handleOpenChat = () => {}
 
   if (loading || userProfileLoading) {
     return (
@@ -82,6 +94,7 @@ const PostDetails = () => {
   if (!post) {
     return <Text>Post not found</Text>
   }
+
   const timeAgo = getTimeAgo(post.createdAt)
 
   return (
@@ -153,109 +166,37 @@ const PostDetails = () => {
             </Text>
           </View>
           <View style={styles.header}>
-            {editingPost ? (
-              <>
-                <InputField
-                  rules={{
-                    pattern: {
-                      value: /^[a-zA-Z0-9\s]+$/i,
-                      message: 'Invalid title',
-                    },
-                  }}
-                  maxLength={64}
-                  numberOfLines={4}
-                  name='title'
-                  placeholder={String(post.title)}
-                  autoGrow={true}
-                  style={styles.titleContainer}
-                  inputStyle={styles.titleInput}
-                  control={control}
-                />
-              </>
-            ) : (
-              <Text style={styles.title} numberOfLines={2}>
-                {post.title}
-              </Text>
-            )}
-            {editingPost ? (
-              <>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      ...TextStyles.medium3,
-                      color: Colors.blue,
-                    }}>
-                    ₱
-                  </Text>
-                  <InputField
-                    rules={{
-                      pattern: {
-                        value: /^[0-9]+(\.[0-9]{1,2})?$/i,
-                        message: 'Invalid rate',
-                      },
-                    }}
-                    inputMode='decimal'
-                    maxLength={10}
-                    numberOfLines={1}
-                    name='rate'
-                    placeholder={String(post.rate)}
-                    placeholderTextColor={Colors.blue + '90'}
-                    style={styles.rateContainer}
-                    inputStyle={styles.rateInput}
-                    control={control}
-                  />
-                </View>
-              </>
-            ) : (
-              <Text style={styles.rate} numberOfLines={2}>
-                ₱{post.rate}
-              </Text>
-            )}
+            <Text style={styles.title} numberOfLines={2}>
+              {post.title}
+            </Text>
+            <Text style={styles.rate} numberOfLines={2}>
+              ₱{post.rate}
+            </Text>
           </View>
-          {editingPost ? (
-            <InputField
-              rules={{
-                pattern: {
-                  value: /^[a-zA-Z0-9\s]+$/i,
-                  message: 'Invalid description',
-                },
-              }}
-              maxLength={250}
-              numberOfLines={8}
-              autoGrow={true}
-              name='description'
-              placeholder={String(post.description)}
-              style={styles.descContainer}
-              inputStyle={styles.descInput}
-              control={control}
-            />
-          ) : (
+          <View style={styles.descContainer}>
             <Text style={styles.description}>{post.description}</Text>
-          )}
+          </View>
 
-          {editingPost ? (
-            updateLoading ? (
-              <ActivityIndicator size={'large'} color={Colors.blue} style={styles.loadingIndicator} />
+          {isCancelling ? (
+            cancelLoading ? (
+              <View style={styles.cancelContainer}>
+                <ActivityIndicator size='large' color={Colors.blue} />
+              </View>
             ) : (
               <>
-                <Button text='Cancel Changes' onPress={handleEditPost}></Button>
-                <Button
-                  text='Apply Changes'
-                  onPress={handleSubmit(data => {
-                    const postData = {
-                      title: data.title,
-                      rate: data.rate,
-                      description: data.description,
-                    }
-                    onSubmitEdit(postData)
-                  })}></Button>
+                <View style={styles.cancelContainer}>
+                  <Button text='Stop Cancel' onPress={handleCancelling}></Button>
+                  <Button text='Confirm Cancel' onPress={handleCancelApplication}></Button>
+                </View>
               </>
             )
           ) : (
-            <Button text='Cancel' onPress={handleEditPost}></Button>
+            <>
+              <View style={styles.cancelContainer}>
+                <Button text='Open Chat' onPress={handleOpenChat}></Button>
+                <Button text='Cancel Application' onPress={handleCancelling}></Button>
+              </View>
+            </>
           )}
         </View>
       </View>
@@ -322,22 +263,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  titleContainer: {
-    margin: 0,
-    padding: 0,
-    paddingVertical: 0,
-    paddingHorizontal: 4,
-    marginVertical: 0,
-    borderWidth: 0,
-  },
-  titleInput: {
-    ...TextStyles.bold6,
-    margin: 0,
-    padding: 0,
-    paddingVertical: 0,
-    marginVertical: 0,
-    textAlignVertical: 'auto',
-  },
   loadingIndicator: {
     position: 'absolute',
     width: 70,
@@ -352,40 +277,24 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     elevation: 3,
   },
-  rateContainer: {
-    ...TextStyles.medium6,
-    width: '100%',
-    alignItems: 'flex-start',
-    margin: 0,
-    padding: 0,
-    paddingVertical: 0,
-    paddingHorizontal: 4,
-    marginVertical: 0,
-    borderWidth: 0,
-  },
-  rateInput: {
-    ...TextStyles.medium3,
-    color: Colors.blue,
-    margin: 0,
-    padding: 0,
-    paddingVertical: 0,
-    marginVertical: 0,
-    textAlignVertical: 'top',
-  },
   descContainer: {
     margin: 0,
     padding: 0,
     paddingVertical: 0,
-    paddingHorizontal: 4,
+    paddingHorizontal: 12,
     marginVertical: 0,
     borderWidth: 0,
+    marginBottom: '40%',
   },
-  descInput: {
-    ...TextStyles.regular3,
-    margin: 0,
-    padding: 0,
-    paddingVertical: 0,
-    marginVertical: 0,
-    textAlignVertical: 'top',
+  cancelContainer: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    width: '100%',
+    alignItems: 'center',
+    gap: 12,
+  },
+  cancelText: {
+    ...TextStyles.bold4,
+    color: Colors.red,
   },
 })

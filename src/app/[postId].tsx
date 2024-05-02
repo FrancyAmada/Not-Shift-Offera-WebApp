@@ -30,7 +30,7 @@ const ApplyScreen = () => {
 
   const [timeAgo, setTimeAgo] = useState('...')
 
-  console.log(postId)
+  // console.log(postId)
 
   const [applyLoading, setApplyLoading] = useState(false)
 
@@ -44,7 +44,9 @@ const ApplyScreen = () => {
       const docData = docSnap.data()
       let currentApplicants: Array<string> = docData.applicants
       if (currentApplicants.includes(userId)) {
-        Alert.alert('Already Applied!', 'You have already applied for this post!', [{ text: 'OK' }])
+        Alert.alert('Already Applied!', 'You have already applied for this post!', [
+          { text: 'OK', onPress: () => router.navigate(`/(user)/home/${post?.type.toLowerCase()}/${postId}`) },
+        ])
       } else {
         currentApplicants.push(userId)
         await updateDoc(docRef, { applicants: currentApplicants })
@@ -52,7 +54,7 @@ const ApplyScreen = () => {
             Alert.alert(
               'Application Successful!',
               'Successfully Applied to the post, please wait for the author to reply.',
-              [{ text: 'OK' }],
+              [{ text: 'OK', onPress: () => router.navigate(`/(user)/home/${post?.type.toLowerCase()}/${postId}`) }],
             )
           })
           .catch(err => {
@@ -60,7 +62,7 @@ const ApplyScreen = () => {
           })
       }
     } else {
-      Alert.alert('Error', 'Post does not exist...', [{ text: 'OK' }])
+      Alert.alert('Error', 'Post does not exist...', [{ text: 'OK', onPress: () => router.navigate('/(user)/home/') }])
     }
     setApplyLoading(false)
   }
