@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Pressable, Platform, TouchableOpacity } from 'react-native'
 
-import { Tabs, useRouter } from 'expo-router'
+import { Link, Redirect, Tabs, useRouter } from 'expo-router'
 
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
@@ -16,7 +16,7 @@ const HomeLayout = () => {
   return (
     <Tabs
       initialRouteName='home'
-      backBehavior='history'
+      backBehavior='firstRoute'
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
@@ -56,8 +56,21 @@ const HomeLayout = () => {
           )
         },
       })}>
-      <Tabs.Screen name='home' options={{ tabBarLabel: 'Home' }} />
-      <Tabs.Screen name='my-applications' options={{ tabBarLabel: 'Offers' }} />
+      <Tabs.Screen
+        name='home'
+        options={{
+          tabBarLabel: 'Home',
+          unmountOnBlur: true,
+          // listeners={({navigation}) => ({blur: () => navigation.setParams({screen: undefined})}),
+        }}
+      />
+      <Tabs.Screen
+        name='my-applications'
+        options={{
+          tabBarLabel: 'Offers',
+          unmountOnBlur: true,
+        }}
+      />
       <Tabs.Screen
         name='post'
         options={{
@@ -79,8 +92,8 @@ const HomeLayout = () => {
           },
         })}
       />
-      <Tabs.Screen name='my-posts' options={{ tabBarLabel: 'My Posts' }} />
-      <Tabs.Screen name='chat' options={{ tabBarLabel: 'Chats' }} />
+      <Tabs.Screen name='my-posts' options={{ tabBarLabel: 'My Posts', unmountOnBlur: true }} />
+      <Tabs.Screen name='chat' options={{ tabBarLabel: 'Chats', unmountOnBlur: true }} />
     </Tabs>
   )
 }

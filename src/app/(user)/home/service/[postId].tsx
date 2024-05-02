@@ -12,6 +12,8 @@ import BackButton from '@/components/BackButton'
 import IconButton from '@/components/IconButton'
 import Button from '@/components/Button'
 
+import { getTimeAgo } from '@/utils/timeAgo'
+
 import { useUserProfile, usePost } from '@/api/posts'
 
 const defaultUserImage = require('@assets/images/default-user.png')
@@ -39,6 +41,8 @@ const PostDetails = () => {
   if (!post) {
     return <Text>Post not found</Text>
   }
+
+  const timeAgo = getTimeAgo(post.createdAt)
 
   return (
     <View style={styles.container}>
@@ -105,7 +109,7 @@ const PostDetails = () => {
                 flexShrink: 0,
                 flex: 1,
               }}>
-              {post.createdAt}
+              {timeAgo}
             </Text>
           </View>
           <View style={styles.header}>

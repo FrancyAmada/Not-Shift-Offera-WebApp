@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
 
 import Colors from '@/constants/Colors'
@@ -6,10 +6,7 @@ import Colors from '@/constants/Colors'
 import PostItem from '@/components/PostItem'
 import Separator from '@/components/Separator'
 import ListHeader from '@/components/ListHeader'
-import { Stack, useFocusEffect, useRouter } from 'expo-router'
-import { FIRESTORE_DB } from 'firebaseConfig'
-import { collection, getDocs, orderBy, query } from 'firebase/firestore'
-import { Post } from '@/types'
+import { Stack, useRouter } from 'expo-router'
 import { usePosts } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
 
@@ -19,6 +16,14 @@ const HomeScreen = () => {
 
   const { fetchPosts, posts, loading } = usePosts()
   const { newPostChanges, setNewPostChanges } = usePostContext()
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    })
+  }, [])
 
   useEffect(() => {
     if (newPostChanges) {
@@ -42,9 +47,9 @@ const HomeScreen = () => {
       <FlatList
         alwaysBounceVertical={true}
         showsVerticalScrollIndicator={false}
-        // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         data={posts.filter(post => post.type === 'Task')}
-        renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={false} />}
+        renderItem={({ item }) => <PostItem post={item} />}
         contentContainerStyle={{ gap: 16 }}
         ListHeaderComponent={() => (
           <View style={{ gap: 16 }}>
@@ -54,7 +59,7 @@ const HomeScreen = () => {
                 style={{ flex: 1 }}
                 horizontal
                 data={posts.filter(post => post.type === 'Service')}
-                renderItem={({ item }) => <PostItem post={item} variant='portrait' fromMyPostsPage={false} />}
+                renderItem={({ item }) => <PostItem post={item} variant='portrait' />}
                 contentContainerStyle={{
                   maxWidth: '150%',
                   gap: 16,
@@ -76,6 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     padding: 16,
     paddingVertical: 8,
+    gap: -24,
   },
 })
 

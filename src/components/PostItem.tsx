@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { Link } from 'expo-router'
 
@@ -6,26 +6,27 @@ import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
 import UserTag from './UserTag'
 import { Post } from '@/types'
+import { getTimeAgo } from '@/utils/timeAgo'
+import { FIREBASE_AUTH } from 'firebaseConfig'
 
 const defaultImage = require('@assets/images/default-img.png')
 
 type PostItemProps = {
   post: Post
   variant?: 'landscape' | 'portrait'
-  fromMyPostsPage: boolean
 }
 
-const PostItem = ({ post, variant, fromMyPostsPage }: PostItemProps) => {
+const PostItem = ({ post, variant }: PostItemProps) => {
   const isPortrait = variant === 'portrait'
   const containerStyle = isPortrait ? styles.containerPortrait : styles.container
   const imageStyle = isPortrait ? styles.imagePortrait : styles.image
 
-  // console.log('post', post)
+  const userId = FIREBASE_AUTH.currentUser?.uid
+  const timeAgo = getTimeAgo(post.createdAt)
+  const isUserPost = post.authorId === userId
 
   return (
-    <Link
-      href={fromMyPostsPage ? `/my-posts/${post.postId}` : `/home/${post.type.toLowerCase()}/${post.postId}`}
-      asChild>
+    <Link href={isUserPost ? `/my-posts/${post.postId}` : `/home/${post.type.toLowerCase()}/${post.postId}`} asChild>
       <TouchableOpacity style={containerStyle}>
         <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={imageStyle} />
         <View style={styles.textContainer}>
@@ -35,11 +36,11 @@ const PostItem = ({ post, variant, fromMyPostsPage }: PostItemProps) => {
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
                   {post.title}
                 </Text>
-                <UserTag post={post} userImgStyle={styles.userImage} />
+                <UserTag post={post} userImgStyle={styles.userImage} showCreatedAt={false} maxWidth={200} />
               </>
             ) : (
               <>
-                <UserTag post={post} userImgStyle={styles.userImage} />
+                <UserTag post={post} userImgStyle={styles.userImage} timeAgo={timeAgo} />
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
                   {post.title}
                 </Text>

@@ -14,7 +14,14 @@ type BackButtonProps = {
 const BackButton = ({ icon = 'chevron-left', color = Colors.white, router, strokeWidth = 1 }: BackButtonProps) => {
   return (
     <View style={{ paddingRight: 16 }}>
-      <IconButton icon={icon} color={color} onPress={() => router.back()} strokeWidth={strokeWidth} />
+      <IconButton
+        icon={icon}
+        color={color}
+        onPress={() => {
+          router.back()
+        }}
+        strokeWidth={strokeWidth}
+      />
     </View>
   )
 }
