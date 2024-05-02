@@ -12,7 +12,7 @@ import { usePosts } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
 
 const myApplications = () => {
-  console.log('MY POSTS')
+  console.log('MY APPLICATIONS')
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
   const { fetchPosts, posts, loading, error } = usePosts()
