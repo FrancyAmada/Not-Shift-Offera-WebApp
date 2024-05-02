@@ -31,7 +31,7 @@ const myPosts = () => {
     if (newPostChanges) {
       setNewPostChanges(false)
     }
-    fetchPosts(type, userId)
+    fetchPosts(type, userId, false)
     // console.log('error', error)
   }, [newPostChanges, type])
 
