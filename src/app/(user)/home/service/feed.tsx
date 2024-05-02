@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
 
 import { Stack, useRouter } from 'expo-router'
 
@@ -15,19 +15,26 @@ import { usePosts } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
 
 const ServiceFeed = () => {
+  console.log('SERVICE FEED')
   const router = useRouter()
-  const { fetchPosts, posts, loading } = usePosts()
-  const { newPostAdded, setNewPostAdded } = usePostContext()
+  const { fetchPosts, posts, loading, error } = usePosts()
+  const { newPostChanges, setNewPostChanges } = usePostContext()
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
+  }, [])
 
   useEffect(() => {
-    fetchPosts()
-  }, [newPostAdded])
-
-  useEffect(() => {
-    if (newPostAdded) {
-      setNewPostAdded(false)
+    if (newPostChanges) {
+      setNewPostChanges(false)
     }
-  }, [newPostAdded, setNewPostAdded])
+    fetchPosts('Service')
+    console.log('error', error)
+  }, [newPostChanges, onRefresh])
 
   if (loading) {
     return (
@@ -51,10 +58,11 @@ const ServiceFeed = () => {
         }}
       />
       <FlatList
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         alwaysBounceVertical={true}
         showsVerticalScrollIndicator={false}
-        data={posts.filter(post => post.type === 'Service')}
-        renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={false} />}
+        data={posts}
+        renderItem={({ item }) => <PostItem post={item} />}
         contentContainerStyle={{ gap: 16 }}
         ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
       />

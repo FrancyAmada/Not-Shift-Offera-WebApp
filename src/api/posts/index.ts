@@ -1,6 +1,18 @@
 import { useEffect, useState } from 'react'
 
-import { collection, query, getDocs, orderBy, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  getDocs,
+  orderBy,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  Timestamp,
+  QueryConstraint,
+  where,
+} from 'firebase/firestore'
 import { FIRESTORE_DB, FIREBASE_AUTH } from 'firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { FIREBASE_STORAGE } from 'firebaseConfig'
@@ -49,7 +61,7 @@ export const useAddPost = () => {
           imageList: imageUrls,
           applicants: [],
           status: 'Active',
-          createdAt: 'Time',
+          createdAt: Timestamp.now(),
         } as Post)
 
         console.log('Document written with ID: ', newPostRef.id)
@@ -70,22 +82,33 @@ export const useAddPost = () => {
 export const usePosts = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (type?: string, authorId?: string) => {
     setLoading(true)
+    setError(null)
 
     try {
-      const q = query(collection(FIRESTORE_DB, 'posts'), orderBy('createdAt', 'desc'))
+      const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')]
+
+      if (type) {
+        constraints.push(where('type', '==', type))
+      }
+
+      if (authorId) {
+        constraints.push(where('authorId', '==', authorId))
+      }
+
+      const q = query(collection(FIRESTORE_DB, 'posts'), ...constraints)
+
       const querySnapshot = await getDocs(q)
-      const fetchedPosts: Post[] = []
-      querySnapshot.forEach(doc => {
-        fetchedPosts.push(doc.data() as Post)
-      })
+      console.log(querySnapshot.docs.map(doc => doc.data()))
+
+      const fetchedPosts: Post[] = querySnapshot.docs.map(doc => doc.data() as Post)
       setPosts(fetchedPosts)
-      setLoading(false)
     } catch (error: any) {
       setError(error.message)
+    } finally {
       setLoading(false)
     }
   }

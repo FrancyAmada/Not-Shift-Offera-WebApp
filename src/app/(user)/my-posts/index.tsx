@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
 import MultipleSwitch from 'react-native-multiple-switch'
 
-import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
+import { FIREBASE_AUTH } from 'firebaseConfig'
 import Colors from '@/constants/Colors'
 import PostItem from '@/components/PostItem'
 import Separator from '@/components/Separator'
@@ -18,12 +18,21 @@ const myPosts = () => {
   const { fetchPosts, posts, loading, error } = usePosts()
   const { newPostChanges, setNewPostChanges } = usePostContext()
   const [type, setType] = useState('Task')
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
+  }, [])
 
   useEffect(() => {
     if (newPostChanges) {
       setNewPostChanges(false)
     }
-    fetchPosts()
+    fetchPosts(type, userId)
+    // console.log('error', error)
   }, [newPostChanges, type])
 
   return (
@@ -55,10 +64,11 @@ const myPosts = () => {
           </View>
         ) : (
           <FlatList
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             alwaysBounceVertical={true}
             showsVerticalScrollIndicator={false}
-            data={posts.filter(post => post.type === type && post.authorId === userId)}
-            renderItem={({ item }) => <PostItem post={item} fromMyPostsPage={true} />}
+            data={posts}
+            renderItem={({ item }) => <PostItem post={item} />}
             contentContainerStyle={{ gap: 16 }}
             ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
           />

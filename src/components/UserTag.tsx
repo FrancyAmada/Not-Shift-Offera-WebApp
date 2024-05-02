@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react'
 import TextStyles from '@/constants/TextStyles'
 
 import { Post } from '@/types'
-import { DocumentData } from 'firebase/firestore'
 
 import { useUserProfile } from '@/api/posts'
+import Colors from '@/constants/Colors'
 
 const defaultUserImage = require('@assets/images/default-user.png')
 
@@ -16,7 +16,7 @@ type UserTagProps = {
   maxWidth?: number
   style?: ViewStyle
   showCreatedAt?: boolean
-  createdAt?: string
+  timeAgo?: string
   userImgStyle?: ImageStyle & ViewStyle
 }
 
@@ -27,9 +27,18 @@ const UserTag: React.FC<UserTagProps> = ({
   userImgStyle,
   maxWidth = 120,
   showCreatedAt = true,
+  timeAgo,
 }: UserTagProps) => {
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
-  // console.log('userProfile', userProfile.fullName)
+
+  if (userProfileLoading) {
+    return (
+      <View style={style}>
+        <View style={[styles.skeletonImage, styles.skeleton]} />
+        <View style={[styles.skeletonText, { width: maxWidth - 32 }, styles.skeleton]} />
+      </View>
+    )
+  }
 
   return (
     <View style={style}>
@@ -59,7 +68,7 @@ const UserTag: React.FC<UserTagProps> = ({
               flexShrink: 0,
               flex: 1,
             }}>
-            {post.createdAt}
+            {timeAgo}
           </Text>
         </>
       )}
@@ -78,5 +87,17 @@ const styles = StyleSheet.create({
   userImage: {
     width: 16,
     height: 16,
+  },
+  skeleton: {
+    backgroundColor: Colors.lightGrey,
+  },
+  skeletonImage: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+  },
+  skeletonText: {
+    height: 16,
+    borderRadius: 16,
   },
 })
