@@ -54,6 +54,8 @@ const ProfileScreen = () => {
     setChangePasswordLoading(false)
   }
 
+  const authChangeProfilePicture = async () => {}
+
   const { logOut } = useAuth()
   const authLogOut = async () => {
     try {
@@ -73,7 +75,10 @@ const ProfileScreen = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Image source={defaultUserImage} style={styles.userImage} />
+            <Image
+              source={userProfile.profileImg ? { uri: userProfile.profileImg } : defaultUserImage}
+              style={styles.userImage}
+            />
           </View>
           <View style={styles.headerContent}>
             <Text style={styles.name} numberOfLines={1}>
@@ -176,6 +181,9 @@ const styles = StyleSheet.create({
     height: 96,
     maxWidth: '100%',
     maxHeight: '100%',
+    borderRadius: 96,
+    borderColor: Colors.black,
+    borderWidth: 2,
   },
   settings: {
     alignContent: 'center',
