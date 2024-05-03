@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, ActivityIndicator, ScrollView } from 'react-native'
 
 import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router'
@@ -28,6 +28,12 @@ const PostDetails = () => {
   const { post, error, loading } = usePost(id)
 
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+
+  const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    setUserProfilePic(userProfile.profileImg)
+  }, [userProfile])
 
   if (loading || userProfileLoading) {
     return (
@@ -85,7 +91,7 @@ const PostDetails = () => {
       <View style={{ flex: 1 }}>
         <View style={styles.textContainer}>
           <View style={styles.userTag}>
-            <Image source={defaultUserImage} style={styles.userImage} />
+            <Image source={userProfilePic ? { uri: userProfilePic } : defaultUserImage} style={styles.userImage} />
             <Text
               style={{
                 ...TextStyles.medium2,
@@ -191,5 +197,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     width: 24,
     height: 24,
+    maxWidth: '100%',
+    maxHeight: '100%',
+    borderRadius: 24,
+    borderColor: Colors.blue,
+    borderWidth: 1,
   },
 })

@@ -145,6 +145,9 @@ const styles = StyleSheet.create({
     height: 160,
     maxWidth: '100%',
     maxHeight: '100%',
+    borderColor: Colors.blue,
+    borderRadius: 80,
+    borderWidth: 5,
   },
   userImageContainer: {
     padding: 48,
