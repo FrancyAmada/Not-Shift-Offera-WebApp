@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     paddingEnd: 5,
-    gap: 16,
+    right: 25,
+    gap: 40,
   },
   searchButtonContainer: {
     width: '100%',
@@ -89,5 +90,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOpacity: 0.1,
     backgroundColor: Colors.white,
+    width: '100%',
   },
 })
