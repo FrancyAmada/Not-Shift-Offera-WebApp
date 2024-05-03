@@ -27,6 +27,7 @@ const AuthContext = createContext<AuthData>({
     return { status: 'Idle' }
   },
 })
+
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
@@ -34,8 +35,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const unsub = onAuthStateChanged(FIREBASE_AUTH, user => {
       if (user) {
-        setIsAuthenticated(true)
-        updateUserData(user.uid)
+        if (user.emailVerified) {
+          setIsAuthenticated(true)
+          updateUserData(user.uid)
+        } else {
+          setIsAuthenticated(false)
+          setUser(null)
+        }
       } else {
         setIsAuthenticated(false)
         setUser(null)
@@ -57,9 +63,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const logIn = async (data: { email: string; password: string }): Promise<AuthResponse> => {
     try {
       const response = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
-      // if (!response.user.emailVerified) {
-      //   return { success: false, msg: 'Please verify your email address.', status: 'Error' }
-      // }
+      if (!response.user.emailVerified) {
+        return { success: false, msg: 'Please verify your email address.', status: 'Error' }
+      }
       return { success: true, status: 'Resolved' }
     } catch (error: any) {
       return {
