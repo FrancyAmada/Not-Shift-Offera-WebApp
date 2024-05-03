@@ -36,6 +36,7 @@ const SignupScreen = () => {
     if (response && !response.success) {
       Alert.alert('Sign up Failed', response.msg, [{ text: 'OK' }])
     } else {
+      router.push('/(auth)/log-in')
       router.push('/verify-email')
     }
   }

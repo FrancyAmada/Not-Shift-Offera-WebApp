@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Image, ActivityIndicator, ScrollView } from 'react-native'
 
 import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 
