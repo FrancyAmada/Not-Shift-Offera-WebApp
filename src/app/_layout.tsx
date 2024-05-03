@@ -70,7 +70,7 @@ function MainLayout() {
     const inApp = segments[0] == '(app)'
 
     if (isAuthenticated && !inApp) {
-      router.replace('/(user)/home/')
+      router.replace('/(user)/home')
     } else if (isAuthenticated == false) {
       router.replace('/')
     }
