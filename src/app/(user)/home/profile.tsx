@@ -1,11 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, Alert } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native'
 
 import { useAuth, changePassword } from '@/providers/AuthProvider'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
+import * as ImagePicker from 'expo-image-picker'
+
 import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
 import { doc, updateDoc } from 'firebase/firestore'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { FIREBASE_STORAGE } from 'firebaseConfig'
 
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
@@ -24,10 +38,19 @@ const ProfileScreen = () => {
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
   const { userProfile, userProfileLoading } = useUserProfile(userId)
   const [userFullName, setUserFullName] = useState(userProfile.fullName)
+  const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
   const [changeNameLoading, setChangeNameLoading] = useState(false)
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   const { control, handleSubmit } = useForm()
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    })
+  }, [])
 
   const authChangeName = async (data: { fullName: string }) => {
     setChangeNameLoading(true)
@@ -54,7 +77,46 @@ const ProfileScreen = () => {
     setChangePasswordLoading(false)
   }
 
-  const authChangeProfilePicture = async () => {}
+  const pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        allowsMultipleSelection: true,
+        aspect: [4, 3],
+        quality: 1,
+      })
+
+      console.log(result)
+
+      if (!result.canceled) {
+        const selectedImageUris = result.assets.map(asset => asset.uri)
+        return selectedImageUris[0]
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return null
+  }
+
+  const authChangeProfilePicture = async () => {
+    const image = await pickImage()
+    if (image) {
+      const docRef = doc(FIRESTORE_DB, 'users', userId)
+      console.log('Uploading image: ', image)
+      const response = await fetch(image)
+      const blob = await response.blob()
+      const storageRef = ref(FIREBASE_STORAGE, `profileImages/${userId}/image_profile_${Date.now()}.jpg`)
+      await uploadBytes(storageRef, blob)
+      const downloadUrl = await getDownloadURL(storageRef)
+      await updateDoc(docRef, { profileImg: downloadUrl })
+        .then(() => {
+          Alert.alert('Changed Profile Picture', 'Successfully updated your profile picture!', [{ text: 'OK' }])
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      setUserProfilePic(downloadUrl)
+    }
+  }
 
   const { logOut } = useAuth()
   const authLogOut = async () => {
@@ -67,18 +129,21 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     // console.log('Profile Loaded')
+    setUserProfilePic(userProfile.profileImg)
     setUserFullName(userProfile.fullName)
-  }, [userProfile])
+  }, [userProfile, refreshing])
 
   return (
-    <ScrollView style={styles.avoid} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.avoid}
+      showsVerticalScrollIndicator={false}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Image
-              source={userProfile.profileImg ? { uri: userProfile.profileImg } : defaultUserImage}
-              style={styles.userImage}
-            />
+            <TouchableOpacity onPress={authChangeProfilePicture}>
+              <Image source={userProfilePic ? { uri: userProfilePic } : defaultUserImage} style={styles.userImage} />
+            </TouchableOpacity>
           </View>
           <View style={styles.headerContent}>
             <Text style={styles.name} numberOfLines={1}>
