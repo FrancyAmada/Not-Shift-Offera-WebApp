@@ -54,6 +54,8 @@ const ProfileScreen = () => {
     setChangePasswordLoading(false)
   }
 
+  const authChangeProfilePicture = async () => {}
+
   const { logOut } = useAuth()
   const authLogOut = async () => {
     try {
@@ -73,7 +75,10 @@ const ProfileScreen = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Image source={defaultUserImage} style={styles.userImage} />
+            <Image
+              source={userProfile.profileImg ? { uri: userProfile.profileImg } : defaultUserImage}
+              style={styles.userImage}
+            />
           </View>
           <View style={styles.headerContent}>
             <Text style={styles.name} numberOfLines={1}>
@@ -109,7 +114,7 @@ const ProfileScreen = () => {
                   }}
                   control={control}
                   name='fullName'
-                  placeholder='Full Name'
+                  placeholder='Enter New Name'
                   autoCapitalize='words'></InputField>
               </View>
             </View>
@@ -117,7 +122,11 @@ const ProfileScreen = () => {
               <ActivityIndicator size='large' color={Colors.blue} />
             ) : (
               <>
-                <Button text='Change Name' onPress={handleSubmit(authChangeName as SubmitHandler<FieldValues>)} />
+                <Button
+                  style={styles.changeNameButton}
+                  text='Change Name'
+                  onPress={handleSubmit(authChangeName as SubmitHandler<FieldValues>)}
+                />
               </>
             )}
             <View style={styles.settingsContainer}>
@@ -127,10 +136,14 @@ const ProfileScreen = () => {
               <ActivityIndicator size='large' color={Colors.blue} />
             ) : (
               <>
-                <Button text='Send Change Password Email' onPress={authChangePassword} />
+                <Button
+                  style={styles.changeChangePassword}
+                  text='Send Change Password Email'
+                  onPress={authChangePassword}
+                />
               </>
             )}
-            <Button text='Sign Out' onPress={authLogOut} />
+            <Button style={styles.signOutButton} text='Sign Out' onPress={authLogOut} />
           </View>
         </View>
       </View>
@@ -152,12 +165,12 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: Colors.blue,
     flexDirection: 'row',
-    height: 300,
+    height: 200,
     minHeight: 100,
     maxHeight: '25%',
   },
   headerContent: {
-    gap: 12,
+    gap: 13,
     padding: 16,
     alignContent: 'center',
     justifyContent: 'center',
@@ -176,6 +189,9 @@ const styles = StyleSheet.create({
     height: 96,
     maxWidth: '100%',
     maxHeight: '100%',
+    borderRadius: 96,
+    borderColor: Colors.black,
+    borderWidth: 2,
   },
   settings: {
     alignContent: 'center',
@@ -188,18 +204,29 @@ const styles = StyleSheet.create({
   },
   settingsContent: {
     padding: 16,
-    gap: 16,
+    gap: 17,
   },
   settingsContentText: {
     ...TextStyles.bold4,
+    marginBottom: 10,
   },
   settingsContainer: {
     gap: 3,
   },
   inputContainer: {
-    padding: 10,
-    backgroundColor: Colors.white,
-    borderRadius: 5,
+    marginBottom: 5,
+    borderRadius: 15,
     marginTop: 5,
+    backgroundColor: Colors.white,
+  },
+  changeNameButton: {
+    borderRadius: 10,
+  },
+  changeChangePassword: {
+    borderRadius: 10,
+  },
+  signOutButton: {
+    borderRadius: 10,
+    backgroundColor: '#dc143c',
   },
 })
