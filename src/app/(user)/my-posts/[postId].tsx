@@ -17,7 +17,7 @@ import Button from '@/components/Button'
 
 import { getTimeAgo } from '@/utils/timeAgo'
 
-import { useGetPost, useUserProfile, useUpdatePost } from '@/api/posts'
+import { useGetPost, useUserProfile, useUpdatePost, useDeletePost } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
 
 const defaultUserImage = require('@assets/images/default-user.png')
@@ -35,7 +35,7 @@ const PostDetails = () => {
   const { fetchPost, post, loading } = useGetPost()
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
   const { updatePost, updateLoading } = useUpdatePost()
-
+  const { deletePost } = useDeletePost()
   const [editingPost, setEditingPost] = useState(false)
 
   useEffect(() => {
@@ -55,6 +55,21 @@ const PostDetails = () => {
 
   const handleEditPost = () => {
     setEditingPost(!editingPost)
+  }
+
+  const handleDeletePost = () => {
+    Alert.alert('Delete Post', 'Are you sure you want to delete this post?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          const response = await deletePost(id)
+          Alert.alert('Post Deleted!', response.msg)
+          router.navigate('/(user)/my-posts/')
+        },
+      },
+    ])
   }
 
   const onSubmitEdit = async (data: { title: string; rate: number; description: string }) => {
@@ -255,7 +270,10 @@ const PostDetails = () => {
               </>
             )
           ) : (
-            <Button text='Edit Post' onPress={handleEditPost}></Button>
+            <>
+              <Button text='Edit Post' onPress={handleEditPost}></Button>
+              <Button text='Delete Post' onPress={handleDeletePost}></Button>
+            </>
           )}
         </View>
       </View>

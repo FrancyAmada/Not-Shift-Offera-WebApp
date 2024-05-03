@@ -8,6 +8,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
 import { IconStyle } from '@/constants/Icons'
+import { usePostContext } from '@/providers/PostProvider'
 
 import BackButton from '@/components/BackButton'
 import Button from '@/components/Button'
@@ -19,6 +20,7 @@ import { usePost, useUserProfile } from '@/api/posts'
 const defaultUserImage = require('@assets/images/default-user.png')
 
 const ApplyScreen = () => {
+  const { newPostChanges, setNewPostChanges } = usePostContext()
   const router = useRouter()
   const { postId } = useLocalSearchParams()
 
@@ -45,8 +47,9 @@ const ApplyScreen = () => {
       let currentApplicants: Array<string> = docData.applicants
       if (currentApplicants.includes(userId)) {
         Alert.alert('Already Applied!', 'You have already applied for this post!', [
-          { text: 'OK', onPress: () => router.navigate(`/(user)/home/${post?.type.toLowerCase()}/${postId}`) },
+          { text: 'OK', onPress: () => router.back() },
         ])
+        setNewPostChanges(true)
       } else {
         currentApplicants.push(userId)
         await updateDoc(docRef, { applicants: currentApplicants })
@@ -54,8 +57,9 @@ const ApplyScreen = () => {
             Alert.alert(
               'Application Successful!',
               'Successfully Applied to the post, please wait for the author to reply.',
-              [{ text: 'OK', onPress: () => router.navigate(`/(user)/home/${post?.type.toLowerCase()}/${postId}`) }],
+              [{ text: 'OK', onPress: () => router.back() }],
             )
+            setNewPostChanges(true)
           })
           .catch(err => {
             console.log(err)
@@ -117,10 +121,9 @@ export default ApplyScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.white,
   },
   mainContainer: {
-    margin: 48,
     padding: 32,
     backgroundColor: Colors.white,
     height: '90%',
