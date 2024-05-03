@@ -27,6 +27,10 @@ const PostItem = ({ post, variant }: PostItemProps) => {
     return null
   }
 
+  function truncate(str: string, maxLength: number): string {
+    return str.length > maxLength ? str.substring(0, maxLength - 1) + '...' : str
+  }
+
   const timeAgo = getTimeAgo(post.createdAt)
   const isUserPost = post.authorId === userId
   const isAppliedTo = post.applicants.includes(userId)
@@ -50,7 +54,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
             {isPortrait ? (
               <>
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
-                  {post.title}
+                  {truncate(post.title, 33)}
                 </Text>
                 <UserTag post={post} userImgStyle={styles.userImage} showCreatedAt={true} maxWidth={200} />
               </>
@@ -58,7 +62,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
               <>
                 <UserTag post={post} userImgStyle={styles.userImage} timeAgo={timeAgo} />
                 <Text style={{ ...TextStyles.medium2, flex: 1 }} numberOfLines={1}>
-                  {post.title}
+                  {truncate(post.title, 33)}
                 </Text>
               </>
             )}
@@ -66,7 +70,7 @@ const PostItem = ({ post, variant }: PostItemProps) => {
           <Text
             numberOfLines={2}
             style={isPortrait ? { ...TextStyles.cardDescription, paddingTop: 2 } : TextStyles.cardDescription}>
-            {post.description}
+            {truncate(post.description, 35)}
           </Text>
         </View>
       </TouchableOpacity>
