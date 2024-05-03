@@ -38,6 +38,12 @@ const PostDetails = () => {
   const { deletePost } = useDeletePost()
   const [editingPost, setEditingPost] = useState(false)
 
+  const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    setUserProfilePic(userProfile.profileImg)
+  }, [userProfile])
+
   useEffect(() => {
     fetchPost(id)
   }, [id, newPostChanges])
@@ -140,7 +146,7 @@ const PostDetails = () => {
       <View style={{ flex: 1 }}>
         <View style={styles.textContainer}>
           <View style={styles.userTag}>
-            <Image source={defaultUserImage} style={styles.userImage} />
+            <Image source={userProfilePic ? { uri: userProfilePic } : defaultUserImage} style={styles.userImage} />
             <Text
               style={{
                 ...TextStyles.medium2,
@@ -339,6 +345,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     width: 24,
     height: 24,
+    maxWidth: '100%',
+    maxHeight: '100%',
+    borderRadius: 24,
+    borderColor: Colors.blue,
+    borderWidth: 1,
   },
   titleContainer: {
     margin: 0,
