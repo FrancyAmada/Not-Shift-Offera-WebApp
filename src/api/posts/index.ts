@@ -12,6 +12,7 @@ import {
   Timestamp,
   QueryConstraint,
   where,
+  deleteDoc,
 } from 'firebase/firestore'
 import { FIRESTORE_DB, FIREBASE_AUTH } from 'firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
@@ -245,4 +246,27 @@ export const useUpdatePost = () => {
   }
 
   return { updatePost, updateLoading }
+}
+
+export const useDeletePost = () => {
+  const { setNewPostChanges } = usePostContext()
+  const [deleteLoading, setDeleteLoading] = useState(false)
+
+  const deletePost = async (postId: string) => {
+    setDeleteLoading(true)
+
+    try {
+      const docRef = doc(FIRESTORE_DB, 'posts', postId)
+      await deleteDoc(docRef)
+      setNewPostChanges(true)
+      setDeleteLoading(false)
+      return { success: true, msg: 'Successfully deleted your post', status: 'Resolved' }
+    } catch (error: any) {
+      setDeleteLoading(false)
+      return { success: false, msg: String(error), status: 'Error' }
+    } finally {
+    }
+  }
+
+  return { deletePost, deleteLoading }
 }
