@@ -1,9 +1,11 @@
-import React from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { TouchableOpacity, StyleSheet, View, Image } from 'react-native'
 
 import { useForm } from 'react-hook-form'
 
 import { Link, Stack, useRouter } from 'expo-router'
+
+import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
 
 import Colors from '@/constants/Colors'
 import HeaderStyle from '@/constants/HeaderStyle'
@@ -13,9 +15,25 @@ import IconButton from '@/components/IconButton'
 import BackButton from '@/components/BackButton'
 import TextStyles from '@/constants/TextStyles'
 
+import { useUserProfile } from '@/api/posts'
+
+const defaultUserImage = require('@assets/images/default-user.png')
+
 const HomeStack = () => {
   const router = useRouter()
   const { control } = useForm()
+
+  const userId = FIREBASE_AUTH.currentUser?.uid || ''
+  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  const goToProfile = async () => {
+    router.navigate('/(user)/home/profile')
+  }
+
+  useEffect(() => {
+    setUserProfilePic(userProfile.profileImg)
+  }, [userProfile])
 
   return (
     <Stack initialRouteName='index'>
@@ -39,7 +57,12 @@ const HomeStack = () => {
                   />
                 </TouchableOpacity>
               </Link>
-              <IconButton icon='profile-fill' color={Colors.blue} route='/(user)/home/profile' strokeWidth={0} />
+              {/* <IconButton icon='profile-fill' color={Colors.blue} route='/(user)/home/profile' strokeWidth={0} /> */}
+              <TouchableOpacity onPress={goToProfile}>
+                <Image
+                  source={userProfilePic ? { uri: userProfilePic } : defaultUserImage}
+                  style={styles.userImage}></Image>
+              </TouchableOpacity>
             </View>
           ),
         }}
@@ -91,5 +114,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     backgroundColor: Colors.white,
     width: '100%',
+  },
+  userImage: {
+    height: 40,
+    width: 40,
+    maxWidth: '100%',
+    maxHeight: '100%',
+    borderRadius: 32,
+    borderColor: Colors.blue,
+    borderWidth: 1,
   },
 })
