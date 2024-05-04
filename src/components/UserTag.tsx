@@ -30,6 +30,11 @@ const UserTag: React.FC<UserTagProps> = ({
   timeAgo,
 }: UserTagProps) => {
   const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    setUserProfilePic(userProfile.profileImg)
+  }, [userProfile])
 
   if (userProfileLoading) {
     return (
@@ -42,7 +47,8 @@ const UserTag: React.FC<UserTagProps> = ({
 
   return (
     <View style={style}>
-      <Image source={userProfile.profileImg || defaultUserImage} style={(styles.userImage, userImgStyle)} />
+      <Image source={userProfilePic ? { uri: userProfilePic } : defaultUserImage} style={styles.userImage} />
+
       <Text
         style={{
           ...textStyle,
@@ -87,6 +93,11 @@ const styles = StyleSheet.create({
   userImage: {
     width: 16,
     height: 16,
+    maxWidth: '100%',
+    maxHeight: '100%',
+    borderColor: Colors.grey,
+    borderRadius: 8,
+    backgroundColor: Colors.lightGrey,
   },
   skeleton: {
     backgroundColor: Colors.lightGrey,
