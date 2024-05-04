@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, FlatList, ActivityIndicator, Text } from 'react-native'
+import { View, StyleSheet, FlatList, ActivityIndicator, Text, RefreshControl } from 'react-native'
 
 import Colors from '@/constants/Colors'
 import ChatItem from '@/components/ChatItem'
 import { useAuth } from '@/providers/AuthProvider'
 import { useGetChatUsers } from '@/api/chats'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { FIREBASE_AUTH } from 'firebaseConfig'
 import { usePostContext } from '@/providers/PostProvider'
 import { UserProfile } from '@/types'
@@ -17,12 +17,20 @@ const ChatListScreen = () => {
   const user = FIREBASE_AUTH.currentUser
   const { newPostChanges } = usePostContext()
   const { fetchChatUsers, chatUsers, loading, error } = useGetChatUsers()
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    })
+  }
 
   useEffect(() => {
     if (user) {
       fetchChatUsers(user.uid)
     }
-  }, [newPostChanges])
+  }, [newPostChanges, refreshing])
 
   if (loading) {
     return (
@@ -32,19 +40,13 @@ const ChatListScreen = () => {
     )
   }
 
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Error</Text>
-      </View>
-    )
-  }
-
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ headerShown: true }} />
       <FlatList
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         data={chatUsers}
-        renderItem={({ item, index }) => <ChatItem user={item as UserProfile} index={index} router={router} />}
+        renderItem={({ item }) => <ChatItem user={item as UserProfile} router={router} chatId={item.chatId} />}
         contentContainerStyle={{ gap: 16 }}
         showsVerticalScrollIndicator={false}
       />

@@ -95,14 +95,14 @@ function MainLayout() {
           gestureEnabled: true,
         }}
       />
-      {/* <Stack.Screen
-        name='apply'
+      <Stack.Screen
+        name='[postId]'
         options={{
           animation: 'slide_from_bottom',
           presentation: 'modal',
           gestureEnabled: true,
         }}
-      /> */}
+      />
     </Stack>
   )
 }

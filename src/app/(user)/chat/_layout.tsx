@@ -32,6 +32,7 @@ const ChatStack = () => {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         title: 'Chats',
         ...{ ...HeaderStyle },
         headerLeft: () => {
@@ -50,7 +51,6 @@ const ChatStack = () => {
         },
       }}>
       <Stack.Screen name='index' />
-      <Stack.Screen name='[id]' />
     </Stack>
   )
 }

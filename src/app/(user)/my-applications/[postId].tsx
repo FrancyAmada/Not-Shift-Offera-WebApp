@@ -149,7 +149,6 @@ const PostDetails = () => {
               numberOfLines={1}>
               {userProfile?.fullName}
             </Text>
-
             <Text
               style={{
                 ...TextStyles.medium2,

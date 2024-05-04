@@ -8,12 +8,12 @@ const defaultUserImage = require('@assets/images/default-user.png')
 type ChatItemProps = {
   user: UserProfile
   router: any
-  index: Number
+  chatId: string
 }
 
-const ChatItem = ({ user, index, router }: ChatItemProps) => {
+const ChatItem = ({ user, router, chatId }: ChatItemProps) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => router.push(`/chat/${user}`)}>
+    <TouchableOpacity style={styles.container} onPress={() => router.push(`/chat/${chatId}`)}>
       <View style={styles.imgContainer}>
         <Image source={user.profileImg || defaultUserImage} style={styles.userIng} />
       </View>
