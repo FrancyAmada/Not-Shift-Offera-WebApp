@@ -12,11 +12,11 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from 'firebaseConfig'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 import { AuthData, AuthResponse } from '@/types'
-import { Alert } from 'react-native'
 
 const AuthContext = createContext<AuthData>({
   user: null,
   isAuthenticated: false,
+  isLoading: true,
   logIn: async (data: { email: string; password: string }): Promise<AuthResponse> => {
     return { status: 'Idle' }
   },
@@ -29,24 +29,24 @@ const AuthContext = createContext<AuthData>({
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | any>(undefined) // user from firestore
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const unsub = onAuthStateChanged(FIREBASE_AUTH, user => {
-      if (user) {
-        if (user.emailVerified) {
-          setIsAuthenticated(true)
-          updateUserData(user.uid)
-        } else {
-          setIsAuthenticated(false)
-          setUser(null)
-        }
+      // user from firebase auth
+      if (user?.emailVerified) {
+        updateUserData(user.uid)
+        setIsAuthenticated(true)
+        setIsLoading(false)
       } else {
         setIsAuthenticated(false)
         setUser(null)
+        setIsLoading(false)
       }
     })
+
     return unsub
   }, [])
 
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     if (docSnap.exists()) {
       let data = docSnap.data() as User
-      setUser(data)
+      setUser(data) // user from firestore
     }
   }
 
@@ -64,8 +64,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     try {
       const response = await signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
       if (!response.user.emailVerified) {
-        return { success: false, msg: 'Please verify your email address.', status: 'Error' }
+        await sendEmailVerification(response.user)
       }
+
       return { success: true, status: 'Resolved' }
     } catch (error: any) {
       return {
@@ -115,6 +116,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       value={{
         user: user as User | null,
         isAuthenticated,
+        isLoading,
         logIn,
         signUp,
         logOut,

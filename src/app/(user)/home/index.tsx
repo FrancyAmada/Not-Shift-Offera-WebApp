@@ -54,7 +54,7 @@ const HomeScreen = () => {
         ListHeaderComponent={() => (
           <View style={{ gap: 16 }}>
             <View style={{ gap: 8 }}>
-              <ListHeader title={'Featured Services'} onPress={() => router.push('/home/service/feed')} />
+              <ListHeader title={'Featured Services'} onPress={() => router.navigate('/home/service/feed')} />
               <FlatList
                 style={{ flex: 1 }}
                 horizontal
@@ -66,7 +66,7 @@ const HomeScreen = () => {
                 }}
               />
             </View>
-            <ListHeader title={'Tasks'} onPress={() => router.push('/home/task/feed')} style={{ top: 8 }} />
+            <ListHeader title={'Tasks'} onPress={() => router.navigate('/home/task/feed')} style={{ top: 8 }} />
           </View>
         )}
         ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}

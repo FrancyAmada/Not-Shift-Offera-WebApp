@@ -37,6 +37,7 @@ export type UserProfile = {
 export type AuthData = {
   user: User | null
   isAuthenticated: boolean
+  isLoading: boolean
   logIn: (data: { email: string; password: string }) => Promise<AuthResponse>
   signUp: (data: { fullName: string; email: string; password: string }) => Promise<AuthResponse>
   logOut: () => Promise<AuthResponse>

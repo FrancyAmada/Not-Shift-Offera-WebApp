@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { AuthProvider, useAuth } from '@/providers/AuthProvider'
 import { PostProvider } from '@/providers/PostProvider'
 import { Platform, StatusBar, View } from 'react-native'
+import Colors from '@/constants/Colors'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -40,16 +41,9 @@ export default function RootLayout() {
     if (error) throw error
   }, [error])
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync()
-    }
-  }, [loaded])
-
   if (!loaded) {
     return null
   }
-
   return (
     <AuthProvider>
       <PostProvider>
@@ -60,11 +54,12 @@ export default function RootLayout() {
 }
 
 function MainLayout() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
   const segments = useSegments()
   const router = useRouter()
 
   useEffect(() => {
+    if (isLoading) return
     if (typeof isAuthenticated == 'undefined') return
 
     const inApp = segments[0] == '(app)'
@@ -74,10 +69,14 @@ function MainLayout() {
     } else if (isAuthenticated == false) {
       router.replace('/')
     }
-  }, [isAuthenticated])
+
+    setTimeout(() => {
+      SplashScreen.hideAsync()
+    }, 500)
+  }, [isAuthenticated, isLoading])
 
   return (
-    <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }}>
+    <Stack screenOptions={{ headerShown: false, statusBarTranslucent: true }}>
       <Stack.Screen name='index' />
       <Stack.Screen
         name='verify-email'
