@@ -29,8 +29,12 @@ const UserTag: React.FC<UserTagProps> = ({
   showCreatedAt = true,
   timeAgo,
 }: UserTagProps) => {
-  const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    fetchUser(post.authorId)
+  }, [])
 
   useEffect(() => {
     setUserProfilePic(userProfile.profileImg)

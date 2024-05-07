@@ -31,17 +31,11 @@ const ApplyScreen = () => {
   const { addChat } = useAddChat()
   const [applyLoading, setApplyLoading] = useState(false)
 
-  const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
-
   useEffect(() => {
     if (post) {
       fetchUser(post.authorId)
     }
   }, [post])
-
-  useEffect(() => {
-    setUserProfilePic(userProfile.profileImg)
-  }, [userProfile])
 
   const authApply = async () => {
     if (!post) {
@@ -112,7 +106,7 @@ const ApplyScreen = () => {
           </View>
         </View>
         <View style={styles.userImageContainer}>
-          <Image source={userProfilePic ? { uri: userProfilePic } : defaultUserImage} style={styles.userImage} />
+          <Image source={defaultUserImage} style={styles.userImage} />
         </View>
         <View style={styles.userProfileContainer}>
           <Text style={styles.userName}>{userProfile.fullName}</Text>
@@ -163,15 +157,12 @@ const styles = StyleSheet.create({
     height: 160,
     maxWidth: '100%',
     maxHeight: '100%',
-    borderColor: Colors.blue,
-    borderRadius: 80,
-    borderWidth: 5,
   },
   userImageContainer: {
+    marginLeft: 16,
     padding: 48,
     justifyContent: 'center',
     alignContent: 'center',
-    alignItems: 'center',
     width: '100%',
   },
   userName: {

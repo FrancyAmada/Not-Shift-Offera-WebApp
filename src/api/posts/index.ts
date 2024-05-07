@@ -13,6 +13,7 @@ import {
   QueryConstraint,
   where,
   deleteDoc,
+  onSnapshot,
 } from 'firebase/firestore'
 import { FIRESTORE_DB, FIREBASE_AUTH } from 'firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
@@ -85,38 +86,39 @@ export const usePosts = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchPosts = async (type?: string, userId?: string, inMyApplications?: boolean, inSearchPage?: boolean) => {
+  const fetchPosts = (type?: string, userId?: string, inMyApplications?: boolean, inSearchPage?: boolean) => {
     setLoading(true)
     setError(null)
 
-    try {
-      const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')]
+    const constraints: QueryConstraint[] = [orderBy('createdAt', 'desc')]
 
-      if (type) {
-        constraints.push(where('type', '==', type))
-      }
-
-      if (!inMyApplications && userId && !inSearchPage) {
-        constraints.push(where('authorId', '==', userId))
-      }
-
-      if (inMyApplications && userId && !inSearchPage) {
-        constraints.push(where('applicants', 'array-contains', userId))
-      }
-
-      const q = query(collection(FIRESTORE_DB, 'posts'), ...constraints)
-
-      const querySnapshot = await getDocs(q)
-      // console.log(querySnapshot.docs.map(doc => doc.data()))
-
-      const fetchedPosts: Post[] = querySnapshot.docs.map(doc => doc.data() as Post)
-      setPosts(fetchedPosts)
-    } catch (error: any) {
-      setError(error.message)
-      console.log(error)
-    } finally {
-      setLoading(false)
+    if (type) {
+      constraints.push(where('type', '==', type))
     }
+
+    if (!inMyApplications && userId && !inSearchPage) {
+      constraints.push(where('authorId', '==', userId))
+    }
+
+    if (inMyApplications && userId && !inSearchPage) {
+      constraints.push(where('applicants', 'array-contains', userId))
+    }
+
+    const q = query(collection(FIRESTORE_DB, 'posts'), ...constraints)
+
+    const unsubscribe = onSnapshot(
+      q,
+      querySnapshot => {
+        const fetchedPosts: Post[] = querySnapshot.docs.map(doc => doc.data() as Post)
+        setPosts(fetchedPosts)
+        setLoading(false)
+      },
+      err => {
+        setError(err.message)
+        setLoading(false)
+      },
+    )
+    return unsubscribe
   }
 
   return { fetchPosts, posts, loading, error }
@@ -128,27 +130,27 @@ export const usePost = (postId: string) => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchPost = async () => {
-      setLoading(true)
+    setLoading(true)
+    const docRef = doc(FIRESTORE_DB, 'posts', postId)
 
-      try {
-        const docRef = doc(FIRESTORE_DB, 'posts', postId)
-
-        const docSnap = await getDoc(docRef)
-        // console.log(docSnap.data())
-
+    const unsubscribe = onSnapshot(
+      docRef,
+      docSnap => {
         if (docSnap.exists()) {
           setPost(docSnap.data() as Post)
+          setError(null)
         } else {
           setError('Document does not exist')
         }
         setLoading(false)
-      } catch (error: any) {
-        setError(error.message)
+      },
+      err => {
+        setError(err.message)
         setLoading(false)
-      }
-    }
-    fetchPost()
+      },
+    )
+
+    return unsubscribe
   }, [postId])
 
   return { post, loading, error }
@@ -166,7 +168,6 @@ export const useGetPost = () => {
       const docRef = doc(FIRESTORE_DB, 'posts', postId)
 
       const docSnap = await getDoc(docRef)
-      console.log(docSnap.data())
 
       if (docSnap.exists()) {
         setPost(docSnap.data() as Post)
@@ -183,7 +184,7 @@ export const useGetPost = () => {
   return { fetchPost, post, loading, error }
 }
 
-export const useUserProfile = (userId: string) => {
+export const useUserProfile = () => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: '',
     email: '',
@@ -193,30 +194,25 @@ export const useUserProfile = (userId: string) => {
   const [userProfileLoading, setUserProfileLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      setUserProfileLoading(true)
+  const fetchUser = async (userId: string) => {
+    setUserProfileLoading(true)
 
-      try {
-        const docRef = doc(FIRESTORE_DB, 'users', userId)
-        const docSnap = await getDoc(docRef)
+    try {
+      const docRef = doc(FIRESTORE_DB, 'users', userId)
+      const docSnap = await getDoc(docRef)
 
-        if (docSnap.exists()) {
-          setUserProfile(docSnap.data() as UserProfile)
-        } else {
-          setError('Document does not exist')
-        }
-        setUserProfileLoading(false)
-      } catch (error: any) {
-        setError(error.message)
-        setUserProfileLoading(false)
+      if (docSnap.exists()) {
+        setUserProfile(docSnap.data() as UserProfile)
+      } else {
+        setError('Document does not exist')
       }
+      setUserProfileLoading(false)
+    } catch (error: any) {
+      setError(error.message)
+      setUserProfileLoading(false)
     }
-
-    fetchAuthor()
-  }, [userId])
-
-  return { userProfile, userProfileLoading, error }
+  }
+  return { fetchUser, userProfile, userProfileLoading, error }
 }
 
 export const useUpdatePost = () => {

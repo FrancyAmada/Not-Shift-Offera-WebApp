@@ -18,7 +18,7 @@ const ChatStack = () => {
   const router = useRouter()
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
-  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
 
   const goToProfile = async () => {
@@ -26,12 +26,14 @@ const ChatStack = () => {
   }
 
   useEffect(() => {
+    fetchUser(userId)
     setUserProfilePic(userProfile.profileImg)
   }, [userProfile])
 
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         title: 'Chats',
         ...{ ...HeaderStyle },
         headerLeft: () => {
@@ -50,7 +52,6 @@ const ChatStack = () => {
         },
       }}>
       <Stack.Screen name='index' />
-      <Stack.Screen name='[id]' />
     </Stack>
   )
 }

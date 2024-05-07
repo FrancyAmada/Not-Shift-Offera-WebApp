@@ -110,10 +110,6 @@ const addPostScreen = () => {
             <InputField
               rules={{
                 required: '*',
-                pattern: {
-                  value: /^[a-zA-Z0-9\s]+$/i,
-                  message: 'Invalid title',
-                },
               }}
               maxLength={64}
               numberOfLines={4}
@@ -169,10 +165,6 @@ const addPostScreen = () => {
           <InputField
             rules={{
               required: '*',
-              pattern: {
-                value: /^[a-zA-Z0-9\s]+$/i,
-                message: 'Invalid description',
-              },
             }}
             maxLength={250}
             numberOfLines={8}
@@ -304,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderRadius: 50,
-    backgroundColor: Colors.lightGrey,
+    backgroundColor: Colors.white,
     elevation: 3,
   },
   loadingIndicator: {

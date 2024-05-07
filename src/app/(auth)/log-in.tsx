@@ -14,6 +14,7 @@ import Separator from '@/components/Separator'
 import BackButton from '@/components/BackButton'
 
 import { useAuth } from '@/providers/AuthProvider'
+import { FIREBASE_AUTH } from 'firebaseConfig'
 
 const googleLogo = require('../../../assets/icons/google-logo.png')
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
@@ -23,6 +24,7 @@ const LoginScreen = () => {
 
   const router = useRouter()
   const { logIn } = useAuth()
+  const user = FIREBASE_AUTH.currentUser
   const [loading, setLoading] = useState(false)
   const { control, handleSubmit } = useForm()
 
@@ -30,11 +32,17 @@ const LoginScreen = () => {
     setLoading(true)
 
     let response = await logIn(data)
-    setLoading(false)
+    console.log(response)
+
+    if (user && !user.emailVerified) {
+      router.replace('/verify-email')
+    }
 
     if (response && !response.success) {
       Alert.alert('Log in Failed', response.msg, [{ text: 'OK' }])
     }
+
+    setLoading(false)
   }
 
   return (

@@ -36,7 +36,7 @@ const ProfileScreen = () => {
   console.log('PROFILE')
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
-  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userFullName, setUserFullName] = useState(userProfile.fullName)
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
   const [changeNameLoading, setChangeNameLoading] = useState(false)
@@ -44,6 +44,10 @@ const ProfileScreen = () => {
   const [refreshing, setRefreshing] = useState(false)
 
   const { control, handleSubmit } = useForm()
+
+  useEffect(() => {
+    fetchUser(userId)
+  }, [])
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
