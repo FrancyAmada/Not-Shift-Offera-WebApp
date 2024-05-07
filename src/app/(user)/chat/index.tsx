@@ -46,7 +46,11 @@ const ChatListScreen = () => {
   }
 
   if (contactsLoading || chatMetadataLoading) {
-    return <ActivityIndicator size='large' color={Colors.blue} />
+    return (
+      <View style={{ backgroundColor: Colors.white, justifyContent: 'center', flex: 1 }}>
+        <ActivityIndicator size='large' color={Colors.blue} />
+      </View>
+    )
   }
 
   const error = contactsError || chatMetadataError

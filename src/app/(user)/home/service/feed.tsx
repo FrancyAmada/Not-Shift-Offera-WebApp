@@ -13,6 +13,7 @@ import BackButton from '@/components/BackButton'
 import { usePosts } from '@/api/posts'
 
 import { usePostContext } from '@/providers/PostProvider'
+import SkeletonPost from '@/components/SkeletonPost'
 
 const ServiceFeed = () => {
   console.log('SERVICE FEED')
@@ -38,9 +39,26 @@ const ServiceFeed = () => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignSelf: 'center', justifyContent: 'center' }}>
-        <Stack.Screen options={{ headerShown: false }} />
-        <ActivityIndicator size='large' color={Colors.blue} />
+      <View style={styles.container}>
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            title: 'Services',
+            ...{ ...HeaderStyle },
+            headerLeft: () => {
+              return <BackButton router={router} color={Colors.blue} />
+            },
+          }}
+        />
+        <FlatList
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          alwaysBounceVertical={true}
+          showsVerticalScrollIndicator={false}
+          data={posts}
+          renderItem={({ item }) => <SkeletonPost post={item} />}
+          contentContainerStyle={{ gap: 16 }}
+          ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
+        />
       </View>
     )
   }

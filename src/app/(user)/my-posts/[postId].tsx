@@ -301,9 +301,12 @@ const PostDetails = () => {
             </>
           ) : (
             <>
-              <Button text='Check Applicants' onPress={handleCheckApplicants}></Button>
-              <Button text='Edit Post' onPress={handleEditPost}></Button>
-              <Button text='Delete Post' onPress={handleDeletePost}></Button>
+              <Button text='Check Applicants' style={{ borderRadius: 8 }} onPress={handleCheckApplicants}></Button>
+              <Button text='Edit' style={{ borderRadius: 8 }} onPress={handleEditPost}></Button>
+              <Button
+                text='Delete'
+                style={{ backgroundColor: Colors.red, borderRadius: 8 }}
+                onPress={handleDeletePost}></Button>
             </>
           )}
         </View>

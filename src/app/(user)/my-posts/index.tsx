@@ -10,6 +10,7 @@ import TextStyles from '@/constants/TextStyles'
 
 import { usePosts } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
+import SkeletonPost from '@/components/SkeletonPost'
 
 const myPosts = () => {
   console.log('MY POSTS')
@@ -59,9 +60,15 @@ const myPosts = () => {
           containerStyle={styles.switchContainer}
         />
         {loading ? (
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ActivityIndicator size='large' color={Colors.blue} />
-          </View>
+          <FlatList
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            alwaysBounceVertical={true}
+            showsVerticalScrollIndicator={false}
+            data={posts}
+            renderItem={({ item }) => <SkeletonPost post={item} />}
+            contentContainerStyle={{ gap: 16 }}
+            ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
+          />
         ) : (
           <FlatList
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
