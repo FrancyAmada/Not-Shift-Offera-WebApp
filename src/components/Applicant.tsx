@@ -20,6 +20,7 @@ const Applicant = ({ userId }: ApplicantProps) => {
   const { userProfile, userProfileLoading } = useUserProfile(userId)
   const [userFullName, setUserFullName] = useState(userProfile.fullName)
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+  const [selecting, setSelecting] = useState(false)
 
   useEffect(() => {
     setUserFullName(userProfile.fullName)
@@ -43,7 +44,7 @@ const Applicant = ({ userId }: ApplicantProps) => {
       </View>
 
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>{userFullName}</Text>
+        <Text style={styles.name}>{userFullName.split(' ')[0]}</Text>
       </View>
       <View style={styles.chatContainer}>
         <IconButton icon='chat-fill' size={48}></IconButton>
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: Colors.lightGrey,
     borderWidth: 1,
-    height: '100%',
+    maxHeight: '100%',
   },
   loadingIndicator: {
     height: 64,
@@ -86,14 +87,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: '70%',
     maxWidth: '70%',
+    maxHeight: '100%',
   },
   name: {
     ...TextStyles.bold3,
   },
   chatContainer: {
-    flexDirection: 'row',
+    maxHeight: '100%',
     alignContent: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 })

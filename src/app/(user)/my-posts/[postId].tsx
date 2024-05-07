@@ -259,6 +259,8 @@ const PostDetails = () => {
               inputStyle={styles.descInput}
               control={control}
             />
+          ) : checkingApplicants ? (
+            <></>
           ) : (
             <Text style={styles.description}>{post.description}</Text>
           )}
@@ -290,7 +292,7 @@ const PostDetails = () => {
                   showsVerticalScrollIndicator={false}
                   data={post.applicants}
                   renderItem={({ item }) => <Applicant userId={item}></Applicant>}
-                  contentContainerStyle={{ gap: 16 }}></FlatList>
+                  contentContainerStyle={{ gap: 12 }}></FlatList>
               </View>
             </>
           ) : (
@@ -436,6 +438,12 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     textAlignVertical: 'top',
   },
-  applicantsContainer: {},
+  applicantsContainer: {
+    borderColor: Colors.grey,
+    borderWidth: 1,
+    padding: 4,
+    borderRadius: 8,
+    minHeight: '50%',
+  },
   applicantsContent: {},
 })
