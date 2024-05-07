@@ -31,13 +31,19 @@ const PostDetails = () => {
   const id = typeof postId === 'string' ? postId : postId[0]
 
   const { fetchPost, post, loading } = useGetPost()
-  const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
 
   const [isCancelling, setIsCancelling] = useState(false)
 
   const [cancelLoading, setCancelLoading] = useState(false)
 
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    if (post) {
+      fetchUser(post.authorId)
+    }
+  }, [post])
 
   useEffect(() => {
     setUserProfilePic(userProfile.profileImg)

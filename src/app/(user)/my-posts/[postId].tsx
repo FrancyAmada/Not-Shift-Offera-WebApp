@@ -34,13 +34,19 @@ const PostDetails = () => {
   const { control, handleSubmit, reset } = useForm()
 
   const { fetchPost, post, loading } = useGetPost()
-  const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const { updatePost, updateLoading } = useUpdatePost()
   const { deletePost } = useDeletePost()
   const [editingPost, setEditingPost] = useState(false)
   const [checkingApplicants, setCheckingApplicants] = useState(false)
 
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    if (post) {
+      fetchUser(post.authorId)
+    }
+  }, [post])
 
   useEffect(() => {
     setUserProfilePic(userProfile.profileImg)

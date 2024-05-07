@@ -24,8 +24,12 @@ const HomeStack = () => {
   const { control } = useForm()
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
-  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    fetchUser(userId)
+  }, [])
 
   const goToProfile = async () => {
     router.navigate('/(user)/home/profile')

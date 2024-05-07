@@ -3,25 +3,30 @@ import React from 'react'
 import { UserProfile } from '@/types'
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
+import { format } from 'date-fns'
+
 const defaultUserImage = require('@assets/images/default-user.png')
 
 type ChatItemProps = {
-  user: UserProfile
-  router: any
-  chatId: string
+  user: UserProfile & { lastMessage?: string; lastMessageTimestamp?: Date }
+  onPress: () => void
 }
 
-const ChatItem = ({ user, router, chatId }: ChatItemProps) => {
+const ChatItem = ({ user, onPress }: ChatItemProps) => {
+  const formattedTime = user.lastMessageTimestamp ? format(user.lastMessageTimestamp, 'MMM d, yyyy h:mm a') : ''
+
   return (
-    <TouchableOpacity style={styles.container} onPress={() => router.push(`/chat/${chatId}`)}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.imgContainer}>
-        <Image source={user.profileImg || defaultUserImage} style={styles.userIng} />
+        <Image source={user.profileImg ? { uri: user.profileImg } : defaultUserImage} style={styles.userImg} />
       </View>
       <View style={styles.contentContainer}>
         <Text style={styles.username}>{user.fullName}</Text>
-        <View style={styles.lastMessage}>
-          <Text style={styles.lastMessage}>Last message goes here</Text>
-          <Text style={styles.lastMessage}>Time</Text>
+        <View style={styles.lastMessageContainer}>
+          <Text style={styles.lastMessage} numberOfLines={1} ellipsizeMode='clip'>
+            {user.lastMessage || 'No messages yet'}
+          </Text>
+          <Text style={styles.timestamp}>{formattedTime}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -32,34 +37,42 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: Colors.lightGrey,
-    paddingBottom: 8,
-    gap: 16,
+    paddingVertical: 16,
   },
   imgContainer: {
-    borderRadius: 24,
+    marginRight: 12,
   },
-  userIng: {
-    width: 54,
-    height: 54,
+  userImg: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
   },
   contentContainer: {
     flex: 1,
-    flexDirection: 'column',
-    gap: 4,
+  },
+  lastMessageContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 4,
+    gap: 8,
   },
   username: {
     ...TextStyles.medium3,
     color: Colors.black,
   },
-  lastMessage: {
+  timestamp: {
     ...TextStyles.regular2,
-    flexDirection: 'row',
     color: Colors.placeholder,
-    justifyContent: 'space-between',
+  },
+  lastMessage: {
+    maxWidth: '50%',
+    ...TextStyles.regular2,
+    color: Colors.placeholder,
   },
 })
 

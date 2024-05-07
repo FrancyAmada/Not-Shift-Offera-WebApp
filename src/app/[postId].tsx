@@ -26,12 +26,18 @@ const ApplyScreen = () => {
   const { postId } = useLocalSearchParams()
   const id = typeof postId === 'string' ? postId : postId[0]
   const { post } = usePost(id)
-  const { userProfile, userProfileLoading } = useUserProfile(post?.authorId || '')
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [timeAgo, setTimeAgo] = useState('...')
   const { addChat } = useAddChat()
   const [applyLoading, setApplyLoading] = useState(false)
 
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    if (post) {
+      fetchUser(post.authorId)
+    }
+  }, [post])
 
   useEffect(() => {
     setUserProfilePic(userProfile.profileImg)

@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderRadius: 50,
-    backgroundColor: Colors.lightGrey,
+    backgroundColor: Colors.white,
     elevation: 3,
   },
   loadingIndicator: {

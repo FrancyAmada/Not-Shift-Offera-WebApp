@@ -18,7 +18,7 @@ const ChatStack = () => {
   const router = useRouter()
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
-  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
 
   const goToProfile = async () => {
@@ -26,6 +26,7 @@ const ChatStack = () => {
   }
 
   useEffect(() => {
+    fetchUser(userId)
     setUserProfilePic(userProfile.profileImg)
   }, [userProfile])
 

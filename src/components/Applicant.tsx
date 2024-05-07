@@ -17,9 +17,13 @@ const defaultImage = require('@assets/images/default-user.png')
 type ApplicantProps = { userId: string }
 
 const Applicant = ({ userId }: ApplicantProps) => {
-  const { userProfile, userProfileLoading } = useUserProfile(userId)
+  const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userFullName, setUserFullName] = useState(userProfile.fullName)
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
+
+  useEffect(() => {
+    fetchUser(userId)
+  }, [])
 
   useEffect(() => {
     setUserFullName(userProfile.fullName)

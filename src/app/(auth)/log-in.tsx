@@ -32,6 +32,7 @@ const LoginScreen = () => {
     setLoading(true)
 
     let response = await logIn(data)
+    console.log(response)
 
     if (user && !user.emailVerified) {
       router.replace('/verify-email')

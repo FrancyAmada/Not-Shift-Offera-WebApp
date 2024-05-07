@@ -1,6 +1,5 @@
 import { User } from 'firebase/auth'
 import { Timestamp } from 'firebase/firestore'
-import { FIRESTORE_DB } from 'firebaseConfig'
 
 export type AuthStatus = 'Idle' | 'Resolved' | 'Error'
 
@@ -32,6 +31,8 @@ export type UserProfile = {
   email: string
   userId: string
   profileImg?: string | undefined
+  lastMessage?: string
+  lastMessageTimestamp?: Date
 }
 
 export type AuthData = {
