@@ -53,6 +53,17 @@ const ChatListScreen = () => {
     )
   }
 
+  const getLastMessageTimestamp = (userId: string) => {
+    const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(userId))
+    return chatId ? chatMetadata[chatId].lastMessageTimestamp : null
+  }
+
+  const sortedContacts = [...contacts].sort((a, b) => {
+    const timestampA = getLastMessageTimestamp(a.userId) || 0
+    const timestampB = getLastMessageTimestamp(b.userId) || 0
+    return timestampB - timestampA
+  })
+
   const error = contactsError || chatMetadataError
 
   return (
@@ -62,10 +73,10 @@ const ChatListScreen = () => {
         <Text style={[TextStyles.medium2, { color: Colors.red }]}>Error: {error}</Text>
       ) : (
         <FlatList
-          data={contacts}
+          data={sortedContacts}
           keyExtractor={item => item.userId}
           renderItem={({ item }) => {
-            const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(item.userId))
+            const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(item.userId)) // get chatId for this contact
             const lastMessage = chatId ? chatMetadata[chatId].lastMessage : ''
             const lastMessageTimestamp = chatId ? chatMetadata[chatId].lastMessageTimestamp : null
 

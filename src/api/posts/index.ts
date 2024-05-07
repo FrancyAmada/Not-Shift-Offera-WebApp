@@ -83,7 +83,7 @@ export const useAddPost = () => {
 
 export const usePosts = () => {
   const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const fetchPosts = (type?: string, userId?: string, inMyApplications?: boolean, inSearchPage?: boolean) => {
