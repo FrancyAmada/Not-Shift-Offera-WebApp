@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Image, ActivityIndicator, Alert, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Image, ActivityIndicator, Alert } from 'react-native'
 
 import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 
@@ -10,7 +10,6 @@ import HeaderStyle from '@/constants/HeaderStyle'
 import { IconStyle } from '@/constants/Icons'
 import TextStyles from '@/constants/TextStyles'
 
-import Applicant from '@/components/Applicant'
 import InputField from '@/components/InputField'
 import BackButton from '@/components/BackButton'
 import IconButton from '@/components/IconButton'
@@ -38,7 +37,6 @@ const PostDetails = () => {
   const { updatePost, updateLoading } = useUpdatePost()
   const { deletePost } = useDeletePost()
   const [editingPost, setEditingPost] = useState(false)
-  const [checkingApplicants, setCheckingApplicants] = useState(false)
 
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
 
@@ -63,10 +61,6 @@ const PostDetails = () => {
 
   const handleEditPost = () => {
     setEditingPost(!editingPost)
-  }
-
-  const handleCheckApplicants = () => {
-    setCheckingApplicants(!checkingApplicants)
   }
 
   const handleDeletePost = () => {
@@ -259,8 +253,6 @@ const PostDetails = () => {
               inputStyle={styles.descInput}
               control={control}
             />
-          ) : checkingApplicants ? (
-            <></>
           ) : (
             <Text style={styles.description}>{post.description}</Text>
           )}
@@ -283,21 +275,8 @@ const PostDetails = () => {
                   })}></Button>
               </>
             )
-          ) : checkingApplicants ? (
-            <>
-              <Button text='Close' onPress={handleCheckApplicants}></Button>
-              <View style={styles.applicantsContainer}>
-                <FlatList
-                  alwaysBounceVertical={true}
-                  showsVerticalScrollIndicator={false}
-                  data={post.applicants}
-                  renderItem={({ item }) => <Applicant userId={item}></Applicant>}
-                  contentContainerStyle={{ gap: 12 }}></FlatList>
-              </View>
-            </>
           ) : (
             <>
-              <Button text='Check Applicants' onPress={handleCheckApplicants}></Button>
               <Button text='Edit Post' onPress={handleEditPost}></Button>
               <Button text='Delete Post' onPress={handleDeletePost}></Button>
             </>
@@ -438,12 +417,4 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     textAlignVertical: 'top',
   },
-  applicantsContainer: {
-    borderColor: Colors.grey,
-    borderWidth: 1,
-    padding: 4,
-    borderRadius: 8,
-    minHeight: '50%',
-  },
-  applicantsContent: {},
 })
