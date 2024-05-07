@@ -275,6 +275,21 @@ const PostDetails = () => {
                   })}></Button>
               </>
             )
+<<<<<<< HEAD
+=======
+          ) : checkingApplicants ? (
+            <>
+              <Button text='Close' onPress={handleCheckApplicants}></Button>
+              <View style={styles.applicantsContainer}>
+                <FlatList
+                  alwaysBounceVertical={true}
+                  showsVerticalScrollIndicator={false}
+                  data={post.applicants}
+                  renderItem={({ item }) => <Applicant userId={item}></Applicant>}
+                  contentContainerStyle={{ gap: 16 }}></FlatList>
+              </View>
+            </>
+>>>>>>> parent of 1bdbfc5 (applicant fix)
           ) : (
             <>
               <Button text='Edit Post' onPress={handleEditPost}></Button>
@@ -417,4 +432,9 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     textAlignVertical: 'top',
   },
+<<<<<<< HEAD
+=======
+  applicantsContainer: {},
+  applicantsContent: {},
+>>>>>>> parent of 1bdbfc5 (applicant fix)
 })
