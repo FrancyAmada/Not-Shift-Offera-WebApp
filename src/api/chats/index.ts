@@ -48,7 +48,6 @@ export const useAddChat = () => {
       })
 
       setLoading(false)
-      console.log('Chat created with ID: ', newChatRef.id)
       return { chatId: newChatRef.id }
     } catch (err: any) {
       console.log('Error getting documents: ', error)
@@ -71,7 +70,6 @@ export const useGetContacts = () => {
     setError(null)
 
     try {
-      // get user posts
       const applicantsQuery = query(collection(FIRESTORE_DB, 'posts'), where('authorId', '==', currentUserId))
       const postsSnapshot = await getDocs(applicantsQuery)
       const allApplicants = new Set(postsSnapshot.docs.flatMap(doc => doc.data().applicants || []))

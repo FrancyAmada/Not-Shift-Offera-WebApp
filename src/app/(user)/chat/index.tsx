@@ -7,13 +7,20 @@ import { Stack, useRouter } from 'expo-router'
 import { FIREBASE_AUTH } from 'firebaseConfig'
 import TextStyles from '@/constants/TextStyles'
 import { useChat } from '@/providers/ChatProvider'
+import { usePostContext } from '@/providers/PostProvider'
 
 const ChatListScreen = () => {
   const router = useRouter()
   const { fetchContacts, contacts, loading: contactsLoading, error: contactsError } = useGetContacts()
   const { chatMetadata, fetchChatMetadata } = useChat()
   const { addChat } = useAddChat()
+  const { newPostChanges } = usePostContext()
   const user = FIREBASE_AUTH.currentUser
+
+  const getLastMessageTimestamp = (userId: string): number => {
+    const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(userId))
+    return chatId ? chatMetadata[chatId].lastMessageTimestamp?.getTime() || 0 : 0
+  }
 
   const sortedContacts = useMemo(() => {
     return [...contacts].sort((a, b) => {
@@ -28,7 +35,7 @@ const ChatListScreen = () => {
       fetchContacts(user.uid)
       fetchChatMetadata(user.uid)
     }
-  }, [user?.uid])
+  }, [user?.uid, newPostChanges])
 
   const handleChatPress = async (selectedUserId: string) => {
     try {
@@ -40,11 +47,6 @@ const ChatListScreen = () => {
     } catch (err: any) {
       console.error('Error handling chat press:', err.message)
     }
-  }
-
-  const getLastMessageTimestamp = (userId: string): number => {
-    const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(userId))
-    return chatId ? chatMetadata[chatId].lastMessageTimestamp?.getTime() || 0 : 0
   }
 
   if (contactsLoading) {

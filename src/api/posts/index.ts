@@ -13,7 +13,6 @@ import {
   QueryConstraint,
   where,
   deleteDoc,
-  onSnapshot,
 } from 'firebase/firestore'
 import { FIRESTORE_DB, FIREBASE_AUTH } from 'firebaseConfig'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
@@ -26,7 +25,7 @@ import { UserProfile, Post } from '@/types'
 export const useAddPost = () => {
   const { setNewPostChanges } = usePostContext()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [finished, setFinished] = useState(false)
 
   const addPost = async (data: {
@@ -52,24 +51,25 @@ export const useAddPost = () => {
           const downloadUrl = await getDownloadURL(storageRef)
           imageUrls.push(downloadUrl)
         }
-
-        await setDoc(newPostRef, {
-          postId: newPostRef.id,
-          authorId: FIREBASE_AUTH.currentUser?.uid,
-          type: data.type,
-          title: data.title,
-          rate: data.rate,
-          description: data.description,
-          imageList: imageUrls,
-          applicants: [],
-          status: 'Active',
-          createdAt: Timestamp.now(),
-        } as Post)
-
-        console.log('Document written with ID: ', newPostRef.id)
-        setNewPostChanges(true)
-        setLoading(false)
       }
+
+      await setDoc(newPostRef, {
+        postId: newPostRef.id,
+        authorId: FIREBASE_AUTH.currentUser?.uid,
+        type: data.type,
+        title: data.title,
+        rate: data.rate,
+        description: data.description,
+        imageList: imageUrls,
+        applicants: [],
+        acceptedApplicant: null,
+        status: 'Active',
+        createdAt: Timestamp.now(),
+      } as Post)
+
+      console.log('Document written with ID: ', newPostRef.id)
+      setNewPostChanges(true)
+      setLoading(false)
     } catch (error: any) {
       setError(error.message)
       setLoading(false)
@@ -86,7 +86,7 @@ export const usePosts = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchPosts = (type?: string, userId?: string, inMyApplications?: boolean, inSearchPage?: boolean) => {
+  const fetchPosts = async (type?: string, userId?: string, inMyApplications?: boolean, inSearchPage?: boolean) => {
     setLoading(true)
     setError(null)
 
@@ -106,20 +106,16 @@ export const usePosts = () => {
 
     const q = query(collection(FIRESTORE_DB, 'posts'), ...constraints)
 
-    const unsubscribe = onSnapshot(
-      q,
-      querySnapshot => {
-        const fetchedPosts: Post[] = querySnapshot.docs.map(doc => doc.data() as Post)
-        setPosts(fetchedPosts)
-        setLoading(false)
-      },
-      err => {
-        console.log('Error getting documents: ', error)
-        setError(err.message)
-        setLoading(false)
-      },
-    )
-    return unsubscribe
+    try {
+      const querySnapshot = await getDocs(q)
+      const fetchedPosts: Post[] = querySnapshot.docs.map(doc => doc.data() as Post)
+      setPosts(fetchedPosts)
+      setLoading(false)
+    } catch (err: any) {
+      console.log('Error getting documents: ', err.message)
+      setError(err.message)
+      setLoading(false)
+    }
   }
 
   return { fetchPosts, posts, loading, error }
@@ -130,29 +126,29 @@ export const usePost = (postId: string) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+  const fetchPost = async (postId: string) => {
     setLoading(true)
-    const docRef = doc(FIRESTORE_DB, 'posts', postId)
 
-    const unsubscribe = onSnapshot(
-      docRef,
-      docSnap => {
-        if (docSnap.exists()) {
-          setPost(docSnap.data() as Post)
-          setError(null)
-        } else {
-          setError('Document does not exist')
-        }
-        setLoading(false)
-      },
-      err => {
-        console.log('Error updating document: ', error)
-        setError(err.message)
-        setLoading(false)
-      },
-    )
+    try {
+      const docRef = doc(FIRESTORE_DB, 'posts', postId)
+      const docSnap = await getDoc(docRef)
 
-    return unsubscribe
+      if (docSnap.exists()) {
+        setPost(docSnap.data() as Post)
+        setError(null)
+      } else {
+        setError('Document does not exist')
+      }
+      setLoading(false)
+    } catch (err: any) {
+      console.log('Error getting document: ', err.message)
+      setError(err.message)
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchPost(postId)
   }, [postId])
 
   return { post, loading, error }
@@ -168,7 +164,6 @@ export const useGetPost = () => {
 
     try {
       const docRef = doc(FIRESTORE_DB, 'posts', postId)
-
       const docSnap = await getDoc(docRef)
 
       if (docSnap.exists()) {
@@ -178,7 +173,7 @@ export const useGetPost = () => {
       }
       setLoading(false)
     } catch (error: any) {
-      console.log('Error updating document: ', error)
+      console.log('Error getting document: ', error.message)
       setError(error.message)
       setLoading(false)
     }
@@ -193,6 +188,7 @@ export const useUserProfile = () => {
     email: '',
     fullName: '',
     profileImg: undefined,
+    location: '',
   })
   const [userProfileLoading, setUserProfileLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -241,7 +237,6 @@ export const useUpdatePost = () => {
       setUpdateLoading(false)
 
       return { success: false, msg: String(error), status: 'Error' }
-    } finally {
     }
   }
 
@@ -264,9 +259,67 @@ export const useDeletePost = () => {
     } catch (error: any) {
       setDeleteLoading(false)
       return { success: false, msg: String(error), status: 'Error' }
-    } finally {
     }
   }
 
   return { deletePost, deleteLoading }
+}
+
+export const useAcceptApplicant = () => {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const acceptApplicant = async (postId: string, userId: string) => {
+    setLoading(true)
+
+    try {
+      const postRef = doc(FIRESTORE_DB, 'posts', postId)
+
+      await updateDoc(postRef, {
+        acceptedApplicant: userId,
+        applicants: [userId],
+      })
+
+      setLoading(false)
+      return { success: true }
+    } catch (err: any) {
+      setError(err.message)
+      setLoading(false)
+      return { success: false, message: err.message }
+    }
+  }
+
+  return { acceptApplicant, loading, error }
+}
+
+export const useRemoveApplicant = () => {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const removeApplicant = async (postId: string, userId: string) => {
+    setLoading(true)
+
+    try {
+      const postRef = doc(FIRESTORE_DB, 'posts', postId)
+      const postSnap = await getDoc(postRef)
+
+      if (postSnap.exists()) {
+        const post = postSnap.data()
+        const updatedApplicants = post.applicants.filter((applicantId: string) => applicantId !== userId)
+
+        await updateDoc(postRef, {
+          applicants: updatedApplicants,
+        })
+      }
+
+      setLoading(false)
+      return { success: true }
+    } catch (err: any) {
+      setError(err.message)
+      setLoading(false)
+      return { success: false, message: err.message }
+    }
+  }
+
+  return { removeApplicant, loading, error }
 }

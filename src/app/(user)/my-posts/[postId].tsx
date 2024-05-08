@@ -257,12 +257,6 @@ const PostDetails = () => {
           )}
           {editingPost ? (
             <InputField
-              rules={{
-                pattern: {
-                  value: /^[a-zA-Z0-9\s]+$/i,
-                  message: 'Invalid description',
-                },
-              }}
               maxLength={250}
               numberOfLines={8}
               autoGrow={true}
@@ -302,13 +296,15 @@ const PostDetails = () => {
                   alwaysBounceVertical={true}
                   showsVerticalScrollIndicator={false}
                   data={post.applicants}
-                  renderItem={({ item }) => <Applicant userId={item}></Applicant>}
+                  renderItem={({ item }) => <Applicant userId={item} postId={post.postId}></Applicant>}
                   contentContainerStyle={{ gap: 16 }}></FlatList>
               </View>
             </>
           ) : (
             <>
-              <Button text='Check Applicants' style={{ borderRadius: 8 }} onPress={handleCheckApplicants}></Button>
+              {!post.acceptedApplicant && (
+                <Button text='Check Applicants' style={{ borderRadius: 8 }} onPress={handleCheckApplicants}></Button>
+              )}
               <Button text='Edit' style={{ borderRadius: 8 }} onPress={handleEditPost}></Button>
               <Button
                 text='Delete'
@@ -449,7 +445,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   descInput: {
-    ...TextStyles.regular3,
+    ...TextStyles.medium2,
     margin: 0,
     padding: 0,
     paddingVertical: 0,
