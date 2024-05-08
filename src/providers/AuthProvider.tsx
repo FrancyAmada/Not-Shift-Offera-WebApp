@@ -20,7 +20,12 @@ const AuthContext = createContext<AuthData>({
   logIn: async (data: { email: string; password: string }): Promise<AuthResponse> => {
     return { status: 'Idle' }
   },
-  signUp: async (data: { fullName: string; email: string; password: string }): Promise<AuthResponse> => {
+  signUp: async (data: {
+    fullName: string
+    location: string
+    email: string
+    password: string
+  }): Promise<AuthResponse> => {
     return { status: 'Idle' }
   },
   logOut: async (): Promise<AuthResponse> => {
@@ -77,7 +82,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   }
 
-  const signUp = async (data: { fullName: string; email: string; password: string }): Promise<AuthResponse> => {
+  const signUp = async (data: {
+    fullName: string
+    location: string
+    email: string
+    password: string
+  }): Promise<AuthResponse> => {
     try {
       const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
 
@@ -85,6 +95,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
       await setDoc(doc(FIRESTORE_DB, 'users', response.user.uid), {
         fullName: data.fullName,
+        location: data.location,
         email: data.email,
         userId: response.user.uid,
       })
