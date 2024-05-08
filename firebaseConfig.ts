@@ -11,24 +11,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyCmPNpjje-3V4kGIYjCKN5U8MPRJjUWKT8',
-  authDomain: 'offera-684e9.firebaseapp.com',
-  projectId: 'offera-684e9',
-  storageBucket: 'offera-684e9.appspot.com',
-  messagingSenderId: '963625550046',
-  appId: '1:963625550046:web:1275be8d75831f6c91424f',
-}
-
 // const firebaseConfig = {
-//   apiKey: 'AIzaSyBrM8Vej95ejKUNo5dZcti4QEDlDa3Atp4',
-//   authDomain: 'offera-28538.firebaseapp.com',
-//   projectId: 'offera-28538',
-//   storageBucket: 'offera-28538.appspot.com',
-//   messagingSenderId: '942513498399',
-//   appId: '1:942513498399:web:68b1982a92a8764d06682a',
-//   measurementId: 'G-820VXRNW53',
+//   apiKey: 'AIzaSyCmPNpjje-3V4kGIYjCKN5U8MPRJjUWKT8',
+//   authDomain: 'offera-684e9.firebaseapp.com',
+//   projectId: 'offera-684e9',
+//   storageBucket: 'offera-684e9.appspot.com',
+//   messagingSenderId: '963625550046',
+//   appId: '1:963625550046:web:1275be8d75831f6c91424f',
 // }
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBrM8Vej95ejKUNo5dZcti4QEDlDa3Atp4',
+  authDomain: 'offera-28538.firebaseapp.com',
+  projectId: 'offera-28538',
+  storageBucket: 'offera-28538.appspot.com',
+  messagingSenderId: '942513498399',
+  appId: '1:942513498399:web:68b1982a92a8764d06682a',
+  measurementId: 'G-820VXRNW53',
+}
 
 // Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig)
