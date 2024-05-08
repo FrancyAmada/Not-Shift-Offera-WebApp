@@ -32,7 +32,7 @@ export type UserProfile = {
   userId: string
   profileImg?: string | undefined
   lastMessage?: string
-  lastMessageTimestamp?: Date
+  lastMessageTimestamp?: Date | null
 }
 
 export type AuthData = {

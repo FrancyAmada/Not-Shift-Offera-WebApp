@@ -10,6 +10,7 @@ import { Stack, useRouter } from 'expo-router'
 import { usePosts } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
 import SkeletonPost from '@/components/SkeletonPost'
+import { dummyPosts } from '@/utils/dummyPosts'
 
 const HomeScreen = () => {
   const router = useRouter()
@@ -38,10 +39,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <Stack.Screen options={{ headerShown: true }} />
         <FlatList
-          alwaysBounceVertical={true}
-          showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          data={posts.filter(post => post.type === 'Task')}
+          data={dummyPosts}
           renderItem={({ item }) => <SkeletonPost post={item} />}
           contentContainerStyle={{ gap: 16 }}
           ListHeaderComponent={() => (
@@ -51,7 +49,7 @@ const HomeScreen = () => {
                 <FlatList
                   style={{ flex: 1 }}
                   horizontal
-                  data={posts.filter(post => post.type === 'Service')}
+                  data={dummyPosts}
                   renderItem={({ item }) => <SkeletonPost post={item} variant='portrait' />}
                   contentContainerStyle={{
                     maxWidth: '150%',

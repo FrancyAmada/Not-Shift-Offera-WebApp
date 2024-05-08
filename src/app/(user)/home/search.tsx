@@ -15,12 +15,14 @@ import IconButton from '@/components/IconButton'
 import Separator from '@/components/Separator'
 import PostItem from '@/components/PostItem'
 import { Post } from '@/types'
+import { dummyPosts } from '@/utils/dummyPosts'
+import SkeletonPost from '@/components/SkeletonPost'
 
 const SearchScreen = () => {
   console.log('SEARCH')
 
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
-  const { fetchPosts, posts, loading, error } = usePosts()
+  const { fetchPosts, posts, loading } = usePosts()
   const { newPostChanges, setNewPostChanges } = usePostContext()
   const [type, setType] = useState('Task')
   const [refreshing, setRefreshing] = useState(false)
@@ -64,8 +66,6 @@ const SearchScreen = () => {
     filterBySearchingFor()
   }, [searchingFor, type, posts])
 
-  // console.log(posts)
-
   return (
     <View style={styles.container}>
       <View style={styles.searchHeader}>
@@ -106,13 +106,20 @@ const SearchScreen = () => {
         />
       </View>
       <View style={styles.contentContainer}>
-        <Text style={{ ...TextStyles.bold3, color: Colors.lightGrey }}>Results for {searchingFor}</Text>
+        <Text style={{ ...TextStyles.bold3, color: Colors.placeholder }}>Results for {searchingFor}</Text>
         {loading ? (
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ActivityIndicator size='large' color={Colors.blue} />
-          </View>
+          <FlatList
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            alwaysBounceVertical={true}
+            showsVerticalScrollIndicator={false}
+            data={dummyPosts}
+            renderItem={({ item }) => <SkeletonPost post={item} />}
+            contentContainerStyle={{ gap: 16 }}
+            ItemSeparatorComponent={() => <Separator style={{ marginTop: 16 }} />}
+          />
         ) : (
           <FlatList
+            keyExtractor={item => item.postId}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             alwaysBounceVertical={true}
             showsVerticalScrollIndicator={false}
@@ -144,15 +151,15 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: 'transparent',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     borderColor: Colors.grey,
     borderWidth: 1,
-    padding: 4,
+    padding: 8,
   },
   searchInput: {
     ...TextStyles.bold4,
     padding: 8,
-    paddingLeft: 16,
-    width: '80%',
+    paddingLeft: 8,
   },
   searchIcon: {
     alignItems: 'center',

@@ -5,7 +5,6 @@ import { Link } from 'expo-router'
 import Colors from '@/constants/Colors'
 import UserTag from './UserTag'
 import { Post } from '@/types'
-import { getTimeAgo } from '@/utils/timeAgo'
 import { FIREBASE_AUTH } from 'firebaseConfig'
 
 const defaultImage = require('@assets/images/default-img.png')
@@ -26,11 +25,7 @@ const SkeletonPost = ({ post, variant }: PostItemProps) => {
     return null
   }
 
-  const timeAgo = getTimeAgo(post.createdAt)
-  const isUserPost = post.authorId === userId
-  const isAppliedTo = post.applicants.includes(userId)
-
-  console.log(isAppliedTo, userId, post.applicants, post.title)
+  // console.log(isAppliedTo, userId, post.applicants, post.title)
 
   return (
     <TouchableOpacity style={containerStyle}>
@@ -40,11 +35,11 @@ const SkeletonPost = ({ post, variant }: PostItemProps) => {
           {isPortrait ? (
             <View>
               <View style={styles.skeletonTitlePort}></View>
-              <UserTag post={post} userImgStyle={styles.userImage} showCreatedAt={true} maxWidth={200} />
+              <UserTag post={post} userImgStyle={styles.userImage} maxWidth={200} showCreatedAt />
             </View>
           ) : (
             <View>
-              <UserTag post={post} userImgStyle={styles.userImage} timeAgo={timeAgo} />
+              <UserTag post={post} userImgStyle={styles.userImage} timeAgo='' />
               <View style={styles.skeletonTitleLand}></View>
             </View>
           )}

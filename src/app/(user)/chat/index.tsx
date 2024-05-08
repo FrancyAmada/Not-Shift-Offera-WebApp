@@ -1,43 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, FlatList, ActivityIndicator, Text, RefreshControl } from 'react-native'
+import React, { useEffect, useMemo, useState } from 'react'
+import { View, StyleSheet, FlatList, ActivityIndicator, Text } from 'react-native'
 import Colors from '@/constants/Colors'
 import ChatItem from '@/components/ChatItem'
-import { useAddChat, useGetContacts, useGetChatMetadata } from '@/api/chats'
+import { useAddChat, useGetContacts } from '@/api/chats'
 import { Stack, useRouter } from 'expo-router'
 import { FIREBASE_AUTH } from 'firebaseConfig'
 import TextStyles from '@/constants/TextStyles'
+import { useChat } from '@/providers/ChatProvider'
 
 const ChatListScreen = () => {
   const router = useRouter()
-  const [refreshing, setRefreshing] = useState(false)
   const { fetchContacts, contacts, loading: contactsLoading, error: contactsError } = useGetContacts()
-  const {
-    fetchChatMetadata,
-    chatMetadata,
-    loading: chatMetadataLoading,
-    error: chatMetadataError,
-  } = useGetChatMetadata()
+  const { chatMetadata, fetchChatMetadata } = useChat()
   const { addChat } = useAddChat()
   const user = FIREBASE_AUTH.currentUser
 
+  const sortedContacts = useMemo(() => {
+    return [...contacts].sort((a, b) => {
+      const timestampA = getLastMessageTimestamp(a.userId)
+      const timestampB = getLastMessageTimestamp(b.userId)
+      return timestampB - timestampA
+    })
+  }, [contacts, chatMetadata])
+
   useEffect(() => {
     if (user) {
-      const unsubscribeContacts = fetchContacts(user.uid)
-      const unsubscribeChatMetadata = fetchChatMetadata(user.uid)
-
-      return () => {
-        unsubscribeContacts()
-        unsubscribeChatMetadata()
-      }
+      fetchContacts(user.uid)
+      fetchChatMetadata(user.uid)
     }
-  }, [user])
+  }, [user?.uid])
 
   const handleChatPress = async (selectedUserId: string) => {
     try {
       const { chatId, error } = await addChat(selectedUserId)
       if (error) {
         console.error('Error creating chat:', error)
-        return
       }
       router.push(`/chat/${chatId}`)
     } catch (err: any) {
@@ -45,7 +42,12 @@ const ChatListScreen = () => {
     }
   }
 
-  if (contactsLoading || chatMetadataLoading) {
+  const getLastMessageTimestamp = (userId: string): number => {
+    const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(userId))
+    return chatId ? chatMetadata[chatId].lastMessageTimestamp?.getTime() || 0 : 0
+  }
+
+  if (contactsLoading) {
     return (
       <View style={{ backgroundColor: Colors.white, justifyContent: 'center', flex: 1 }}>
         <ActivityIndicator size='large' color={Colors.blue} />
@@ -53,7 +55,7 @@ const ChatListScreen = () => {
     )
   }
 
-  const error = contactsError || chatMetadataError
+  const error = contactsError
 
   return (
     <View style={styles.container}>
@@ -62,7 +64,7 @@ const ChatListScreen = () => {
         <Text style={[TextStyles.medium2, { color: Colors.red }]}>Error: {error}</Text>
       ) : (
         <FlatList
-          data={contacts}
+          data={sortedContacts}
           keyExtractor={item => item.userId}
           renderItem={({ item }) => {
             const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(item.userId))
