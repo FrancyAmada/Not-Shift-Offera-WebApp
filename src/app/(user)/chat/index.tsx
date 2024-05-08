@@ -7,12 +7,14 @@ import { Stack, useRouter } from 'expo-router'
 import { FIREBASE_AUTH } from 'firebaseConfig'
 import TextStyles from '@/constants/TextStyles'
 import { useChat } from '@/providers/ChatProvider'
+import { usePostContext } from '@/providers/PostProvider'
 
 const ChatListScreen = () => {
   const router = useRouter()
   const { fetchContacts, contacts, loading: contactsLoading, error: contactsError } = useGetContacts()
   const { chatMetadata, fetchChatMetadata } = useChat()
   const { addChat } = useAddChat()
+  const { newPostChanges } = usePostContext()
   const user = FIREBASE_AUTH.currentUser
 
   const getLastMessageTimestamp = (userId: string): number => {
@@ -33,7 +35,7 @@ const ChatListScreen = () => {
       fetchContacts(user.uid)
       fetchChatMetadata(user.uid)
     }
-  }, [user?.uid])
+  }, [user?.uid, newPostChanges])
 
   const handleChatPress = async (selectedUserId: string) => {
     try {

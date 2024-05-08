@@ -188,6 +188,7 @@ export const useUserProfile = () => {
     email: '',
     fullName: '',
     profileImg: undefined,
+    location: '',
   })
   const [userProfileLoading, setUserProfileLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

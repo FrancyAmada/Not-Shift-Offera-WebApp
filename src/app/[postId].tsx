@@ -83,14 +83,6 @@ const ApplyScreen = () => {
     setApplyLoading(false)
   }
 
-  const handleInquire = () => {
-    if (post) {
-      addChat(post?.authorId)
-      setNewPostChanges(true)
-      router.navigate('/(user)/chat')
-    }
-  }
-
   useEffect(() => {
     if (post) {
       setTimeAgo(getTimeAgo(post.createdAt))
