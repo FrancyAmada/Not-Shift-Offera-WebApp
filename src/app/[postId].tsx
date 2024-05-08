@@ -119,9 +119,15 @@ const ApplyScreen = () => {
         </View>
         <View style={styles.postDetailsContainer}>
           <Text style={styles.postTitle}>{post?.title}</Text>
+          <View style={styles.separator}></View>
           <Text style={styles.postTime}>Posted {timeAgo} ago</Text>
-
-          <Text style={styles.postRate}>Rate: ₱{post?.rate}</Text>
+          <Text style={styles.postLocation} numberOfLines={2}>
+            {userProfile.location != undefined ? userProfile.location : 'No Address'}
+          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.rateText}>Rate: </Text>
+            <Text style={styles.postRate}>₱{post?.rate}</Text>
+          </View>
         </View>
         <View style={styles.buttonsContainer}>
           <Button
@@ -145,9 +151,11 @@ export default ApplyScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: 'transparent',
   },
   mainContainer: {
+    margin: 16,
+    marginTop: 32,
     padding: 32,
     backgroundColor: Colors.white,
     height: '90%',
@@ -156,7 +164,7 @@ const styles = StyleSheet.create({
   header: {
     margin: -32,
     paddingLeft: 16,
-    paddingTop: 16,
+    paddingTop: 32,
   },
   userImage: {
     width: 160,
@@ -196,15 +204,28 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   postTime: {
-    ...TextStyles.bold3,
+    ...TextStyles.bold4,
+    color: Colors.black,
+  },
+  rateText: {
+    ...TextStyles.bold6,
     color: Colors.black,
   },
   postRate: {
+    ...TextStyles.bold6,
+    color: Colors.blue,
+  },
+  postLocation: {
     ...TextStyles.bold4,
-    color: Colors.black,
+    color: Colors.darkGrey,
   },
   buttonsContainer: {
     gap: 16,
     marginTop: -64,
+  },
+  separator: {
+    backgroundColor: Colors.grey,
+    minHeight: 2,
+    maxHeight: 2,
   },
 })

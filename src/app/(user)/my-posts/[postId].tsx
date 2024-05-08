@@ -249,6 +249,13 @@ const PostDetails = () => {
             )}
           </View>
           {editingPost ? (
+            <></>
+          ) : (
+            <Text style={styles.location} numberOfLines={2}>
+              {userProfile.location != undefined ? userProfile.location : 'No Address'}
+            </Text>
+          )}
+          {editingPost ? (
             <InputField
               rules={{
                 pattern: {
@@ -359,6 +366,10 @@ const styles = StyleSheet.create({
   rate: {
     ...TextStyles.medium6,
     color: Colors.blue,
+  },
+  location: {
+    ...TextStyles.bold3,
+    color: Colors.darkGrey,
   },
   description: {
     textAlign: 'justify',

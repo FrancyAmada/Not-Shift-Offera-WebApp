@@ -131,6 +131,9 @@ const PostDetails = () => {
             <Text style={styles.rate} numberOfLines={2}>
               ₱{post.rate.toLocaleString()}
             </Text>
+            <Text style={styles.location} numberOfLines={2}>
+              {userProfile.location != undefined ? userProfile.location : 'No Address'}
+            </Text>
           </View>
           <Link href={`/${postId}`} asChild>
             <Button
@@ -189,6 +192,10 @@ const styles = StyleSheet.create({
   rate: {
     ...TextStyles.medium6,
     color: Colors.blue,
+  },
+  location: {
+    ...TextStyles.bold3,
+    color: Colors.darkGrey,
   },
   description: {
     textAlign: 'justify',

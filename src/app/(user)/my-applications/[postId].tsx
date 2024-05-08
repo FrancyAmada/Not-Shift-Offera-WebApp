@@ -183,6 +183,9 @@ const PostDetails = () => {
             <Text style={styles.rate} numberOfLines={2}>
               ₱{post.rate}
             </Text>
+            <Text style={styles.location} numberOfLines={2}>
+              {userProfile.location != undefined ? userProfile.location : 'No Address'}
+            </Text>
           </View>
           <View style={styles.descContainer}>
             <Text style={styles.description}>{post.description}</Text>
@@ -259,6 +262,10 @@ const styles = StyleSheet.create({
   rate: {
     ...TextStyles.medium6,
     color: Colors.blue,
+  },
+  location: {
+    ...TextStyles.bold3,
+    color: Colors.darkGrey,
   },
   description: {
     textAlign: 'justify',
