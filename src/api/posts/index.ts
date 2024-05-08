@@ -114,6 +114,7 @@ export const usePosts = () => {
         setLoading(false)
       },
       err => {
+        console.log('Error getting documents: ', error)
         setError(err.message)
         setLoading(false)
       },
@@ -145,6 +146,7 @@ export const usePost = (postId: string) => {
         setLoading(false)
       },
       err => {
+        console.log('Error updating document: ', error)
         setError(err.message)
         setLoading(false)
       },
@@ -176,6 +178,7 @@ export const useGetPost = () => {
       }
       setLoading(false)
     } catch (error: any) {
+      console.log('Error updating document: ', error)
       setError(error.message)
       setLoading(false)
     }
@@ -236,6 +239,7 @@ export const useUpdatePost = () => {
       return { success: true, msg: 'Successfully updated your post', status: 'Resolved' }
     } catch (error: any) {
       setUpdateLoading(false)
+
       return { success: false, msg: String(error), status: 'Error' }
     } finally {
     }

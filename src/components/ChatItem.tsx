@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 const defaultUserImage = require('@assets/images/default-user.png')
 
 type ChatItemProps = {
-  user: UserProfile & { lastMessage?: string; lastMessageTimestamp?: Date }
+  user: UserProfile
   onPress: () => void
 }
 

@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from '@/providers/AuthProvider'
 import { PostProvider } from '@/providers/PostProvider'
 import { Platform, StatusBar, View } from 'react-native'
 import Colors from '@/constants/Colors'
+import { ChatProvider } from '@/providers/ChatProvider'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,11 +46,13 @@ export default function RootLayout() {
     return null
   }
   return (
-    <AuthProvider>
-      <PostProvider>
-        <MainLayout />
-      </PostProvider>
-    </AuthProvider>
+    <ChatProvider>
+      <AuthProvider>
+        <PostProvider>
+          <MainLayout />
+        </PostProvider>
+      </AuthProvider>
+    </ChatProvider>
   )
 }
 

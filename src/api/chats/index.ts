@@ -48,8 +48,10 @@ export const useAddChat = () => {
       })
 
       setLoading(false)
+      console.log('Chat created with ID: ', newChatRef.id)
       return { chatId: newChatRef.id }
     } catch (err: any) {
+      console.log('Error getting documents: ', error)
       setError(err.message)
       setLoading(false)
       return { error: err.message }
@@ -64,129 +66,45 @@ export const useGetContacts = () => {
   const [error, setError] = useState<string | null>(null)
   const [contacts, setContacts] = useState<UserProfile[]>([])
 
-  const fetchContacts = (currentUserId: string) => {
+  const fetchContacts = async (currentUserId: string) => {
     setLoading(true)
     setError(null)
 
-    // get user posts
-    const applicantsQuery = query(collection(FIRESTORE_DB, 'posts'), where('authorId', '==', currentUserId))
+    try {
+      // get user posts
+      const applicantsQuery = query(collection(FIRESTORE_DB, 'posts'), where('authorId', '==', currentUserId))
+      const postsSnapshot = await getDocs(applicantsQuery)
+      const allApplicants = new Set(postsSnapshot.docs.flatMap(doc => doc.data().applicants || []))
 
-    const unsubscribeApplicants = onSnapshot(
-      applicantsQuery,
-      async postsSnapshot => {
-        // all applicants to your posts
-        const allApplicants = postsSnapshot.docs.flatMap(doc => doc.data().applicants || [])
-        const uniqueApplicants = [...new Set(allApplicants)]
+      const appliedPostsQuery = query(
+        collection(FIRESTORE_DB, 'posts'),
+        where('applicants', 'array-contains', currentUserId),
+      )
+      const appliedPostsSnapshot = await getDocs(appliedPostsQuery)
+      const allAuthors = new Set(appliedPostsSnapshot.docs.map(doc => doc.data().authorId))
 
+      const userIds = new Set([...allApplicants, ...allAuthors])
+
+      if (userIds.size > 0) {
         const usersRef = collection(FIRESTORE_DB, 'users')
-        // get user profile of all applicants
-        const applicantsUsersQuery = query(usersRef, where('userId', 'in', uniqueApplicants))
-        const applicantsUsersSnapshot = await getDocs(applicantsUsersQuery)
-        const fetchedApplicants = applicantsUsersSnapshot.docs.map(doc => doc.data() as UserProfile)
+        const usersQuery = query(usersRef, where('userId', 'in', [...userIds]))
+        const usersSnapshot = await getDocs(usersQuery)
+        const fetchedContacts = usersSnapshot.docs.map(doc => doc.data() as UserProfile)
 
-        const postsRef = collection(FIRESTORE_DB, 'posts')
-        const postsQuery = query(postsRef, where('applicants', 'array-contains', currentUserId))
+        setContacts(fetchedContacts)
+      } else {
+        setContacts([])
+      }
 
-        const unsubscribeApplications = onSnapshot(
-          postsQuery,
-          async postsSnapshot => {
-            const authorIds = postsSnapshot.docs.map(doc => doc.data().authorId)
-            const uniqueAuthorIds = [...new Set(authorIds)]
-
-            if (uniqueAuthorIds.length === 0) {
-              setLoading(false)
-              setContacts(fetchedApplicants)
-              return
-            }
-
-            const usersQuery = query(usersRef, where('userId', 'in', uniqueAuthorIds))
-            const usersSnapshot = await getDocs(usersQuery)
-
-            const fetchedAuthors = usersSnapshot.docs.map(doc => doc.data() as UserProfile)
-
-            const combinedContacts = [...fetchedApplicants, ...fetchedAuthors]
-            const uniqueContacts = Array.from(new Set(combinedContacts.map(contact => contact.userId))).map(userId =>
-              combinedContacts.find(contact => contact.userId === userId),
-            )
-
-            setLoading(false)
-            setContacts(uniqueContacts as UserProfile[])
-          },
-          err => {
-            setError(err.message)
-            setLoading(false)
-          },
-        )
-
-        return () => unsubscribeApplications()
-      },
-      err => {
-        setError(err.message)
-        setLoading(false)
-      },
-    )
-
-    return unsubscribeApplicants
+      setLoading(false)
+    } catch (err: any) {
+      console.error('Error fetching contacts:', err.message)
+      setError(err.message)
+      setLoading(false)
+    }
   }
 
   return { fetchContacts, contacts, loading, error }
-}
-
-export const useGetChatMetadata = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [chatMetadata, setChatMetadata] = useState<Record<string, any>>({})
-
-  const fetchChatMetadata = (currentUserId: string) => {
-    setLoading(true)
-    setError(null)
-
-    const chatsRef = collection(FIRESTORE_DB, 'chats')
-    const q = query(chatsRef, where('participants', 'array-contains', currentUserId))
-
-    const unsubscribe = onSnapshot(
-      q,
-      async snapshot => {
-        const chatMetadata = await Promise.all(
-          snapshot.docs.map(async doc => {
-            const chatId = doc.id
-            const chatData = doc.data()
-
-            const messagesRef = collection(FIRESTORE_DB, `chats/${chatId}/messages`)
-            const lastMessageQuery = query(messagesRef, orderBy('timestamp', 'desc'), limit(1))
-            const lastMessageSnapshot = await getDocs(lastMessageQuery)
-            const lastMessageData = lastMessageSnapshot.docs[0]?.data() || {}
-
-            return {
-              chatId,
-              lastMessage: lastMessageData.text || '',
-              lastMessageTimestamp: lastMessageData.timestamp?.toDate(),
-              participants: chatData.participants,
-            }
-          }),
-        )
-
-        setLoading(false)
-        setChatMetadata(
-          chatMetadata.reduce(
-            (acc, chat) => {
-              acc[chat.chatId] = chat
-              return acc
-            },
-            {} as Record<string, any>,
-          ),
-        )
-      },
-      err => {
-        setError(err.message)
-        setLoading(false)
-      },
-    )
-
-    return unsubscribe
-  }
-
-  return { fetchChatMetadata, chatMetadata, loading, error }
 }
 
 export const useGetChatMessages = () => {

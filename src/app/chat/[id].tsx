@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, FlatList, TextInput, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TextInput } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import { useGetChatMessages, useGetChatMetadata, useSendMessage } from '@/api/chats'
+import { useUserProfile } from '@/api/posts'
+import { useGetChatMessages, useSendMessage } from '@/api/chats'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { FIREBASE_AUTH } from 'firebaseConfig'
 import IconButton from '@/components/IconButton'
@@ -8,8 +9,8 @@ import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
 import HeaderStyle from '@/constants/HeaderStyle'
 import BackButton from '@/components/BackButton'
-import { useUserProfile } from '@/api/posts'
 import ChatSkeleton from '@/components/ChatSkeleton'
+import { useChat } from '@/providers/ChatProvider'
 
 const ChatScreen = () => {
   const { id } = useLocalSearchParams()
@@ -18,30 +19,26 @@ const ChatScreen = () => {
   const currentUserId = FIREBASE_AUTH.currentUser?.uid || ''
   const { fetchMessages, messages, loading: loadingMessages } = useGetChatMessages()
   const { fetchUser, userProfile } = useUserProfile()
-  const { fetchChatMetadata, chatMetadata, loading: loadingMetadata } = useGetChatMetadata()
-  const router = useRouter()
   const { sendMessage } = useSendMessage()
   const flatListRef = useRef<FlatList>(null)
+  const router = useRouter()
+  const { chatMetadata, updateChatMetadata } = useChat()
 
   useEffect(() => {
     if (chatId) {
       const unsubscribeMessages = fetchMessages(chatId)
-      const unsubscribeMetadata = fetchChatMetadata(currentUserId)
+
+      if (chatMetadata[chatId]) {
+        const participants = chatMetadata[chatId].participants
+        const contactId = participants.find((id: string) => id !== currentUserId)
+        fetchUser(contactId as string)
+      }
 
       return () => {
         unsubscribeMessages()
-        unsubscribeMetadata()
       }
     }
-  }, [chatId])
-
-  useEffect(() => {
-    if (chatMetadata[chatId]) {
-      const participants = chatMetadata[chatId].participants
-      const contactId = participants.find((id: string) => id !== currentUserId)
-      fetchUser(contactId)
-    }
-  }, [chatMetadata, chatId])
+  }, [chatId, chatMetadata])
 
   useEffect(() => {
     flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })
@@ -51,6 +48,12 @@ const ChatScreen = () => {
     if (message.trim() !== '') {
       await sendMessage(chatId, message)
       setMessage('')
+
+      // Update chat metadata with the new last message
+      updateChatMetadata(chatId, {
+        lastMessage: message,
+        lastMessageTimestamp: new Date(),
+      })
     }
   }
 
