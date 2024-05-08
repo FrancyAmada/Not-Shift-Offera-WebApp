@@ -29,6 +29,7 @@ export type Post = {
 
 export type UserProfile = {
   fullName: string
+  location: string
   email: string
   userId: string
   profileImg?: string | undefined
@@ -42,6 +43,6 @@ export type AuthData = {
   isAuthenticated: boolean
   isLoading: boolean
   logIn: (data: { email: string; password: string }) => Promise<AuthResponse>
-  signUp: (data: { fullName: string; email: string; password: string }) => Promise<AuthResponse>
+  signUp: (data: { fullName: string; location: string; email: string; password: string }) => Promise<AuthResponse>
   logOut: () => Promise<AuthResponse>
 }

@@ -38,8 +38,10 @@ const ProfileScreen = () => {
   const userId = FIREBASE_AUTH.currentUser?.uid || ''
   const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [userFullName, setUserFullName] = useState(userProfile.fullName)
+  const [userLocation, setUserLocation] = useState(userProfile.location)
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
   const [changeNameLoading, setChangeNameLoading] = useState(false)
+  const [changeAddressLoading, setChangeAddressLoading] = useState(false)
   const [changePasswordLoading, setChangePasswordLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -58,16 +60,34 @@ const ProfileScreen = () => {
 
   const authChangeName = async (data: { fullName: string }) => {
     setChangeNameLoading(true)
-    const docRef = doc(FIRESTORE_DB, 'users', userId)
-    await updateDoc(docRef, { fullName: data.fullName })
-      .then(() => {
-        Alert.alert('Change Name Success', 'Successfully updated your Full Name!', [{ text: 'OK' }])
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (data.fullName) {
+      const docRef = doc(FIRESTORE_DB, 'users', userId)
+      await updateDoc(docRef, { fullName: data.fullName })
+        .then(() => {
+          Alert.alert('Change Name Success', 'Successfully updated your Full Name!', [{ text: 'OK' }])
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      setUserFullName(data.fullName)
+    }
     setChangeNameLoading(false)
-    setUserFullName(data.fullName)
+  }
+
+  const authChangeAddress = async (data: { location: string }) => {
+    setChangeAddressLoading(true)
+    if (data.location) {
+      const docRef = doc(FIRESTORE_DB, 'users', userId)
+      await updateDoc(docRef, { location: data.location })
+        .then(() => {
+          Alert.alert('Change Location Success', 'Successfully updated your Location!', [{ text: 'OK' }])
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      setUserFullName(data.location)
+    }
+    setChangeAddressLoading(false)
   }
 
   const authChangePassword = async () => {
@@ -135,6 +155,7 @@ const ProfileScreen = () => {
     // console.log('Profile Loaded')
     setUserProfilePic(userProfile.profileImg)
     setUserFullName(userProfile.fullName)
+    setUserLocation(userProfile.location)
   }, [userProfile, refreshing])
 
   return (
@@ -156,8 +177,12 @@ const ProfileScreen = () => {
             <Text style={styles.email} numberOfLines={1}>
               {userProfile.email}
             </Text>
+            <Text style={styles.location} numberOfLines={2}>
+              {userLocation}
+            </Text>
           </View>
         </View>
+
         <View style={styles.settings}>
           <Text style={styles.settingsText}>Settings</Text>
           <View style={styles.settingsContent}>
@@ -166,7 +191,6 @@ const ProfileScreen = () => {
               <View style={styles.inputContainer}>
                 <InputField
                   rules={{
-                    required: 'Full name is required',
                     pattern: {
                       value: FULL_NAME_REGEX,
                       message:
@@ -186,32 +210,66 @@ const ProfileScreen = () => {
                   placeholder='Enter New Name'
                   autoCapitalize='words'></InputField>
               </View>
+              {changeNameLoading ? (
+                <ActivityIndicator size='large' color={Colors.blue} />
+              ) : (
+                <>
+                  <Button
+                    style={styles.changeNameButton}
+                    text='Change Name'
+                    onPress={handleSubmit(authChangeName as SubmitHandler<FieldValues>)}
+                  />
+                </>
+              )}
             </View>
-            {changeNameLoading ? (
-              <ActivityIndicator size='large' color={Colors.blue} />
-            ) : (
-              <>
-                <Button
-                  style={styles.changeNameButton}
-                  text='Change Name'
-                  onPress={handleSubmit(authChangeName as SubmitHandler<FieldValues>)}
-                />
-              </>
-            )}
+
+            <View style={styles.settingsContainer}>
+              <Text style={styles.settingsContentText}>Change Address</Text>
+              <View style={styles.inputContainer}>
+                <InputField
+                  rules={{
+                    minLength: {
+                      value: 5,
+                      message: 'Address must be at least 5 characters',
+                    },
+                    maxLength: {
+                      value: 60,
+                      message: 'Address must be at most 60 characters',
+                    },
+                  }}
+                  control={control}
+                  name='location'
+                  placeholder='Enter New Address'
+                  autoCapitalize='words'></InputField>
+              </View>
+              {changeAddressLoading ? (
+                <ActivityIndicator size='large' color={Colors.blue} />
+              ) : (
+                <>
+                  <Button
+                    style={styles.changeNameButton}
+                    text='Change Address'
+                    onPress={handleSubmit(authChangeAddress as SubmitHandler<FieldValues>)}
+                  />
+                </>
+              )}
+            </View>
+
             <View style={styles.settingsContainer}>
               <Text style={styles.settingsContentText}>Change Password</Text>
+              {changePasswordLoading ? (
+                <ActivityIndicator size='large' color={Colors.blue} />
+              ) : (
+                <>
+                  <Button
+                    style={styles.changeChangePassword}
+                    text='Send Change Password Email'
+                    onPress={authChangePassword}
+                  />
+                </>
+              )}
             </View>
-            {changePasswordLoading ? (
-              <ActivityIndicator size='large' color={Colors.blue} />
-            ) : (
-              <>
-                <Button
-                  style={styles.changeChangePassword}
-                  text='Send Change Password Email'
-                  onPress={authChangePassword}
-                />
-              </>
-            )}
+
             <Button style={styles.signOutButton} text='Sign Out' onPress={authLogOut} />
           </View>
         </View>
@@ -225,7 +283,7 @@ export default ProfileScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lightGrey,
+    backgroundColor: Colors.white,
   },
   avoid: {
     flex: 1,
@@ -234,8 +292,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: Colors.blue,
     flexDirection: 'row',
-    height: 200,
-    minHeight: 100,
+    height: 180,
+    minHeight: 120,
     maxHeight: '25%',
   },
   headerContent: {
@@ -251,6 +309,10 @@ const styles = StyleSheet.create({
   },
   email: {
     ...TextStyles.bold4,
+    color: Colors.white,
+  },
+  location: {
+    ...TextStyles.bold3,
     color: Colors.white,
   },
   userImage: {
@@ -272,8 +334,8 @@ const styles = StyleSheet.create({
     ...TextStyles.bold6,
   },
   settingsContent: {
-    padding: 16,
-    gap: 17,
+    padding: 4,
+    gap: 10,
   },
   settingsContentText: {
     ...TextStyles.bold4,
@@ -281,6 +343,11 @@ const styles = StyleSheet.create({
   },
   settingsContainer: {
     gap: 3,
+    padding: 12,
+    backgroundColor: Colors.lightGrey,
+    borderRadius: 16,
+    borderColor: Colors.grey,
+    borderWidth: 3,
   },
   inputContainer: {
     marginBottom: 5,

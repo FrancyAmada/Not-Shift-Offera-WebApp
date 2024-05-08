@@ -27,7 +27,7 @@ const SignupScreen = () => {
   const [loading, setLoading] = useState(false)
   const { control, handleSubmit } = useForm()
 
-  const authSignUp = async (data: { fullName: string; email: string; password: string }) => {
+  const authSignUp = async (data: { fullName: string; email: string; location: string; password: string }) => {
     setLoading(true)
 
     let response = await signUp(data)
@@ -80,6 +80,25 @@ const SignupScreen = () => {
               autoCapitalize='words'></InputField>
           </View>
           <View style={FormStyles.inputContainer}>
+            {/* <Text style={FormStyles.label}>Name</Text> */}
+            <InputField
+              rules={{
+                required: 'Location is required',
+                minLength: {
+                  value: 5,
+                  message: 'Location must be at least 5 characters',
+                },
+                maxLength: {
+                  value: 60,
+                  message: 'Location must be at most 60 characters',
+                },
+              }}
+              control={control}
+              name='location'
+              placeholder='Barangay, City, Province'
+              autoCapitalize='words'></InputField>
+          </View>
+          <View style={FormStyles.inputContainer}>
             {/* <Text style={FormStyles.label}>Email</Text> */}
             <InputField
               rules={{
@@ -116,7 +135,7 @@ const SignupScreen = () => {
             </>
           )}
           <View style={FormStyles.rowFix}>
-            <Text style={FormStyles.captionCenter}>By continuing, you agree to our</Text>
+            <Text style={FormStyles.captionCenter}>By continuing, you agree to our </Text>
             <Text style={FormStyles.highlight}>Terms of Service</Text>
             <Text style={FormStyles.captionCenter}> and </Text>
             <Text style={FormStyles.highlight}>Privacy Policy</Text>
