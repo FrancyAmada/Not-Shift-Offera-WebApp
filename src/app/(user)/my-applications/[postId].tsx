@@ -19,6 +19,7 @@ import { getTimeAgo } from '@/utils/timeAgo'
 
 import { useGetPost, useUserProfile, useUpdatePost } from '@/api/posts'
 import { usePostContext } from '@/providers/PostProvider'
+import { useAddChat } from '@/api/chats'
 
 const defaultUserImage = require('@assets/images/default-user.png')
 const defaultImage = require('@assets/images/default-img.png')
@@ -32,6 +33,7 @@ const PostDetails = () => {
 
   const { fetchPost, post, loading } = useGetPost()
   const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
+  const { addChat } = useAddChat()
 
   const [isCancelling, setIsCancelling] = useState(false)
 
@@ -71,8 +73,12 @@ const PostDetails = () => {
       const userId = FIREBASE_AUTH.currentUser?.uid || ''
       const docData = docSnap.data()
       let currentApplicants: Array<string> = docData.applicants
+      let acceptedApplicant: Array<string> = docData.acceptedApplicant
       if (currentApplicants.includes(userId)) {
-        await updateDoc(docRef, { applicants: currentApplicants.filter(id => id != userId) })
+        await updateDoc(docRef, {
+          applicants: currentApplicants.filter(id => id != userId),
+          acceptedApplicant: acceptedApplicant.filter(id => id != userId),
+        })
           .then(() => {
             Alert.alert('Cancelled Application', 'Successfully cancelled application to the post...', [
               { text: 'OK', onPress: () => router.navigate('/(user)/my-applications/') },
@@ -92,7 +98,12 @@ const PostDetails = () => {
     setCancelLoading(false)
   }
 
-  const handleOpenChat = () => {}
+  const handleOpenChat = async () => {
+    if (post) {
+      const chatId = (await addChat(post.authorId)).chatId
+      router.navigate(`/chat/${chatId}`)
+    }
+  }
 
   if (loading || userProfileLoading) {
     return (
@@ -137,10 +148,10 @@ const PostDetails = () => {
             return (
               <View
                 style={{
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.white,
                   ...IconStyle.fill,
                 }}>
-                <IconButton icon='more-options' color={Colors.white} strokeWidth={0} />
+                <IconButton icon='chat-fill' color={Colors.blue} strokeWidth={0} size={50} onPress={handleOpenChat} />
               </View>
             )
           },
@@ -196,16 +207,21 @@ const PostDetails = () => {
             ) : (
               <>
                 <View style={styles.cancelContainer}>
-                  <Button text='Stop Cancel' onPress={handleCancelling}></Button>
-                  <Button text='Confirm Cancel' onPress={handleCancelApplication}></Button>
+                  <Button text='Stop Cancel' onPress={handleCancelling} style={{ borderRadius: 8 }}></Button>
+                  <Button
+                    text='Confirm Cancel'
+                    onPress={handleCancelApplication}
+                    style={{ backgroundColor: Colors.red, borderRadius: 8 }}></Button>
                 </View>
               </>
             )
           ) : (
             <>
               <View style={styles.cancelContainer}>
-                <Button text='Open Chat' onPress={handleOpenChat}></Button>
-                <Button text='Cancel Application' onPress={handleCancelling}></Button>
+                <Button
+                  text='Cancel'
+                  style={{ backgroundColor: Colors.red, borderRadius: 8 }}
+                  onPress={handleCancelling}></Button>
               </View>
             </>
           )}

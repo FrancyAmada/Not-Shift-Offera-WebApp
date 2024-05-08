@@ -15,6 +15,11 @@ const ChatListScreen = () => {
   const { addChat } = useAddChat()
   const user = FIREBASE_AUTH.currentUser
 
+  const getLastMessageTimestamp = (userId: string): number => {
+    const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(userId))
+    return chatId ? chatMetadata[chatId].lastMessageTimestamp?.getTime() || 0 : 0
+  }
+
   const sortedContacts = useMemo(() => {
     return [...contacts].sort((a, b) => {
       const timestampA = getLastMessageTimestamp(a.userId)
@@ -40,11 +45,6 @@ const ChatListScreen = () => {
     } catch (err: any) {
       console.error('Error handling chat press:', err.message)
     }
-  }
-
-  const getLastMessageTimestamp = (userId: string): number => {
-    const chatId = Object.keys(chatMetadata).find(id => chatMetadata[id].participants.includes(userId))
-    return chatId ? chatMetadata[chatId].lastMessageTimestamp?.getTime() || 0 : 0
   }
 
   if (contactsLoading) {

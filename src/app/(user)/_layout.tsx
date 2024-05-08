@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Pressable, Platform, TouchableOpacity } from 'react-native'
 
-import { Link, Redirect, Tabs, useRouter } from 'expo-router'
+import { Link, Redirect, Tabs, useRouter, useSegments } from 'expo-router'
 
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'

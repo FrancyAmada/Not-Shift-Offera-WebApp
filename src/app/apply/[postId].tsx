@@ -77,14 +77,6 @@ const ApplyScreen = () => {
     setApplyLoading(false)
   }
 
-  const handleInquire = () => {
-    if (post) {
-      addChat(post?.authorId)
-      setNewPostChanges(true)
-      router.navigate('/(user)/chat')
-    }
-  }
-
   useEffect(() => {
     if (post) {
       setTimeAgo(getTimeAgo(post.createdAt))
@@ -114,15 +106,9 @@ const ApplyScreen = () => {
         <View style={styles.postDetailsContainer}>
           <Text style={styles.postTitle}>{post?.title}</Text>
           <Text style={styles.postTime}>Posted {timeAgo} ago</Text>
-
           <Text style={styles.postRate}>Rate: ₱{post?.rate}</Text>
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
-            text={'Inquire'}
-            onPress={() => {
-              handleInquire()
-            }}></Button>
           {applyLoading ? (
             <ActivityIndicator size='large' color={Colors.blue} />
           ) : (

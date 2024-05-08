@@ -71,7 +71,7 @@ const ChatScreen = () => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: userProfile.fullName || 'Chat',
+          title: userProfile.fullName.split(' ')[0] || 'Chat',
           ...HeaderStyle,
           headerLeft: () => <BackButton router={router} color={Colors.blue} />,
         }}

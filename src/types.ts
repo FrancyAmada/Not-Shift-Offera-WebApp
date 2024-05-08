@@ -23,6 +23,7 @@ export type Post = {
   rate: number
   createdAt: Timestamp
   applicants: string[]
+  acceptedApplicant: string | null
   status: PostStatus
 }
 
@@ -33,6 +34,7 @@ export type UserProfile = {
   profileImg?: string | undefined
   lastMessage?: string
   lastMessageTimestamp?: Date | null
+  contacts?: string[]
 }
 
 export type AuthData = {
