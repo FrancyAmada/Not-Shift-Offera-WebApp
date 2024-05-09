@@ -5,6 +5,13 @@ import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 
 import { useForm } from 'react-hook-form'
 
+import * as ImagePicker from 'expo-image-picker'
+
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { FIRESTORE_DB } from 'firebaseConfig'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { FIREBASE_STORAGE } from 'firebaseConfig'
+
 import Colors from '@/constants/Colors'
 import HeaderStyle from '@/constants/HeaderStyle'
 import { IconStyle } from '@/constants/Icons'
@@ -38,6 +45,7 @@ const PostDetails = () => {
   const { updatePost, updateLoading } = useUpdatePost()
   const { deletePost } = useDeletePost()
   const [editingPost, setEditingPost] = useState(false)
+  const [newImage, setNewImage] = useState('')
   const [checkingApplicants, setCheckingApplicants] = useState(false)
 
   const [userProfilePic, setUserProfilePic] = useState(userProfile.profileImg)
@@ -69,6 +77,10 @@ const PostDetails = () => {
 
   const handleEditPost = () => {
     setEditingPost(!editingPost)
+    if (newImage != '') {
+      setNewImage('')
+    }
+    console.log(newImage)
   }
 
   const handleCheckApplicants = () => {
@@ -90,8 +102,63 @@ const PostDetails = () => {
     ])
   }
 
+  const pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        allowsMultipleSelection: true,
+        aspect: [4, 3],
+        quality: 1,
+      })
+
+      console.log(result)
+
+      if (!result.canceled) {
+        const selectedImageUris = result.assets.map(asset => asset.uri)
+        return selectedImageUris[0]
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return ''
+  }
+
+  const getNewImage = async () => {
+    let newImage = await pickImage()
+    setNewImage(newImage)
+    console.log(newImage)
+  }
+
+  const handleUpdateImage = async () => {
+    const imageUrls: string[] = []
+    console.log('Uploading image: ', newImage)
+    const response = await fetch(newImage)
+    const blob = await response.blob()
+    const storageRef = ref(FIREBASE_STORAGE, `posts/${id}/image_${0}_${Date.now()}.jpg`)
+    await uploadBytes(storageRef, blob)
+    const downloadUrl = await getDownloadURL(storageRef)
+    imageUrls.push(downloadUrl)
+    return imageUrls
+  }
+
+  const handleConfirmEdit = async (data: { title: string; rate: number; description: string }) => {
+    Alert.alert('Edit Post', 'Are you sure with your changes?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: async () => {
+          onSubmitEdit(data)
+        },
+      },
+    ])
+  }
+
   const onSubmitEdit = async (data: { title: string; rate: number; description: string }) => {
-    const response = await updatePost(data, id)
+    let imageUrls: string[] | undefined = undefined
+    if (newImage != '') {
+      imageUrls = await handleUpdateImage()
+    }
+    const response = await updatePost(data, imageUrls, id)
     setEditingPost(false)
 
     if (response.success) {
@@ -154,7 +221,11 @@ const PostDetails = () => {
           },
         }}
       />
-      <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={styles.image} />
+      {editingPost ? (
+        <Image source={newImage ? { uri: newImage } : { uri: post.imageList[0] }} style={styles.image} />
+      ) : (
+        <Image source={post.imageList[0] ? { uri: post.imageList[0] } : defaultImage} style={styles.image} />
+      )}
       <View style={{ flex: 1 }}>
         <View style={styles.textContainer}>
           <View style={styles.userTag}>
@@ -281,7 +352,8 @@ const PostDetails = () => {
               <ActivityIndicator size={'large'} color={Colors.blue} style={styles.loadingIndicator} />
             ) : (
               <>
-                <Button text='Cancel Changes' onPress={handleEditPost}></Button>
+                <Button text='Select New Image' onPress={getNewImage}></Button>
+                <Button text='Cancel Edit' onPress={handleEditPost}></Button>
                 <Button
                   text='Apply Changes'
                   onPress={handleSubmit(data => {
@@ -290,7 +362,7 @@ const PostDetails = () => {
                       rate: data.rate,
                       description: data.description,
                     }
-                    onSubmitEdit(postData)
+                    handleConfirmEdit(postData)
                   })}></Button>
               </>
             )
