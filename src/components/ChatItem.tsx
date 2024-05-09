@@ -23,7 +23,10 @@ const ChatItem = ({ user, onPress }: ChatItemProps) => {
       <View style={styles.contentContainer}>
         <Text style={styles.username}>{user.fullName}</Text>
         <View style={styles.lastMessageContainer}>
-          <Text style={styles.lastMessage} numberOfLines={1} ellipsizeMode='clip'>
+          <Text
+            style={{ ...styles.lastMessage, ...(user.lastMessage ? TextStyles.medium2 : TextStyles.regular2) }}
+            numberOfLines={1}
+            ellipsizeMode='clip'>
             {user.lastMessage || 'No messages yet'}
           </Text>
           <Text style={styles.timestamp}>{formattedTime}</Text>
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
   },
   lastMessage: {
     maxWidth: '50%',
-    ...TextStyles.regular2,
     color: Colors.placeholder,
   },
 })

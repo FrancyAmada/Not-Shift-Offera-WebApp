@@ -83,14 +83,6 @@ const ApplyScreen = () => {
     setApplyLoading(false)
   }
 
-  const handleInquire = () => {
-    if (post) {
-      addChat(post?.authorId)
-      setNewPostChanges(true)
-      router.navigate('/(user)/chat')
-    }
-  }
-
   useEffect(() => {
     if (post) {
       setTimeAgo(getTimeAgo(post.createdAt))
@@ -130,15 +122,10 @@ const ApplyScreen = () => {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
-            text={'Inquire'}
-            onPress={() => {
-              handleInquire()
-            }}></Button>
           {applyLoading ? (
             <ActivityIndicator size='large' color={Colors.blue} />
           ) : (
-            <Button text={'Confirm'} onPress={authApply}></Button>
+            <Button text={'Confirm'} onPress={authApply} style={{ width: '100%', borderRadius: 8 }}></Button>
           )}
         </View>
       </View>

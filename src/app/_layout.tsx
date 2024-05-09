@@ -79,7 +79,11 @@ function MainLayout() {
   }, [isAuthenticated, isLoading])
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        navigationBarHidden: true,
+      }}>
       <Stack.Screen name='index' />
       <Stack.Screen
         name='verify-email'
