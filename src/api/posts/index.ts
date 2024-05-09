@@ -187,6 +187,7 @@ export const useUserProfile = () => {
     userId: '',
     email: '',
     fullName: '',
+    location: '',
     profileImg: undefined,
     location: '',
   })
@@ -218,7 +219,11 @@ export const useUpdatePost = () => {
   const { setNewPostChanges } = usePostContext()
   const [updateLoading, setUpdateLoading] = useState(false)
 
-  const updatePost = async (data: { title: string; rate: number; description: string }, postId: string) => {
+  const updatePost = async (
+    data: { title: string; rate: number; description: string },
+    imageUrls: string[] | undefined,
+    postId: string,
+  ) => {
     setUpdateLoading(true)
 
     try {
@@ -228,6 +233,7 @@ export const useUpdatePost = () => {
       if (data.title !== undefined) updates.title = data.title
       if (data.rate !== undefined) updates.rate = data.rate
       if (data.description !== undefined) updates.description = data.description
+      if (imageUrls !== undefined) updates.imageList = imageUrls
 
       await updateDoc(docRef, updates)
       setNewPostChanges(true)
