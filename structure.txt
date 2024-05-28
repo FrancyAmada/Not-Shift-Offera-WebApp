@@ -1,0 +1,129 @@
+.
+|-- app.json
+|-- assets
+|   |-- fonts
+|   |   |-- Montserrat-Black.ttf
+|   |   |-- Montserrat-BlackItalic.ttf
+|   |   |-- Montserrat-Bold.ttf
+|   |   |-- Montserrat-BoldItalic.ttf
+|   |   |-- Montserrat-ExtraBold.ttf
+|   |   |-- Montserrat-ExtraBoldItalic.ttf
+|   |   |-- Montserrat-ExtraLight.ttf
+|   |   |-- Montserrat-ExtraLightItalic.ttf
+|   |   |-- Montserrat-Italic.ttf
+|   |   |-- Montserrat-Light.ttf
+|   |   |-- Montserrat-LightItalic.ttf
+|   |   |-- Montserrat-Medium.ttf
+|   |   |-- Montserrat-MediumItalic.ttf
+|   |   |-- Montserrat-Regular.ttf
+|   |   |-- Montserrat-SemiBold.ttf
+|   |   |-- Montserrat-SemiBoldItalic.ttf
+|   |   |-- Montserrat-Thin.ttf
+|   |   `-- Montserrat-ThinItalic.ttf
+|   |-- icons
+|   |   |-- adaptive-icon.png
+|   |   |-- favicon.png
+|   |   |-- google-logo.png
+|   |   |-- icon.png
+|   |   `-- img_placeholder.png
+|   |-- images
+|   |   |-- default-img.png
+|   |   |-- default-user.png
+|   |   |-- service-sample.png
+|   |   `-- task-sample.png
+|   `-- logo
+|       |-- altLogo.png
+|       |-- altSplash.png
+|       |-- logo.png
+|       |-- logo.svg
+|       `-- splash.png
+|-- babel.config.js
+|-- expo-env.d.ts
+|-- firebaseConfig.ts
+|-- metro.config.js
+|-- package-lock.json
+|-- package.json
+|-- project-structure.txt
+|-- src
+|   |-- api
+|   |   |-- chats
+|   |   |   `-- index.ts
+|   |   `-- posts
+|   |       `-- index.ts
+|   |-- app
+|   |   |-- (auth)
+|   |   |   |-- _layout.tsx
+|   |   |   |-- log-in.tsx
+|   |   |   `-- sign-up.tsx
+|   |   |-- (user)
+|   |   |   |-- _layout.tsx
+|   |   |   |-- chat
+|   |   |   |   |-- _layout.tsx
+|   |   |   |   `-- index.tsx
+|   |   |   |-- home
+|   |   |   |   |-- _layout.tsx
+|   |   |   |   |-- index.tsx
+|   |   |   |   |-- profile.tsx
+|   |   |   |   |-- search.tsx
+|   |   |   |   |-- service
+|   |   |   |   |   |-- [postId].tsx
+|   |   |   |   |   `-- feed.tsx
+|   |   |   |   `-- task
+|   |   |   |       |-- [postId].tsx
+|   |   |   |       `-- feed.tsx
+|   |   |   |-- my-applications
+|   |   |   |   |-- [postId].tsx
+|   |   |   |   |-- _layout.tsx
+|   |   |   |   `-- index.tsx
+|   |   |   |-- my-posts
+|   |   |   |   |-- [postId].tsx
+|   |   |   |   |-- _layout.tsx
+|   |   |   |   `-- index.tsx
+|   |   |   `-- post
+|   |   |       `-- _layout.tsx
+|   |   |-- [...unmatched].tsx
+|   |   |-- [postId].tsx
+|   |   |-- _layout.tsx
+|   |   |-- add-post.tsx
+|   |   |-- apply
+|   |   |   |-- [postId].tsx
+|   |   |   `-- _layout.tsx
+|   |   |-- chat
+|   |   |   `-- [id].tsx
+|   |   |-- index.tsx
+|   |   `-- verify-email.tsx
+|   |-- components
+|   |   |-- Applicant.tsx
+|   |   |-- BackButton.tsx
+|   |   |-- Button.tsx
+|   |   |-- ChatItem.tsx
+|   |   |-- ChatSkeleton.tsx
+|   |   |-- HomeHeader.tsx
+|   |   |-- Icon.tsx
+|   |   |-- IconButton.tsx
+|   |   |-- InputField.tsx
+|   |   |-- ListHeader.tsx
+|   |   |-- PostItem.tsx
+|   |   |-- Separator.tsx
+|   |   |-- SkeletonPost.tsx
+|   |   `-- UserTag.tsx
+|   |-- constants
+|   |   |-- Colors.tsx
+|   |   |-- FormStyles.tsx
+|   |   |-- HeaderStyle.tsx
+|   |   |-- Icons.tsx
+|   |   `-- TextStyles.tsx
+|   |-- hooks
+|   |-- providers
+|   |   |-- AuthProvider.tsx
+|   |   |-- ChatProvider.tsx
+|   |   `-- PostProvider.tsx
+|   |-- types.ts
+|   `-- utils
+|       |-- dummyPosts.ts
+|       `-- timeAgo.ts
+|-- structure.txt
+|-- tree.txt
+`-- tsconfig.json
+
+26 directories, 100 files

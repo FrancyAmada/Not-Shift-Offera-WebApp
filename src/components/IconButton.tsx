@@ -1,7 +1,8 @@
 import React from 'react'
 import { TouchableOpacity, View, ViewStyle } from 'react-native'
 
-import { Link, LinkProps } from 'expo-router'
+import { Link } from 'expo-router'
+import { LinkProps } from 'expo-router/build/link/Link'
 
 import Colors from '@/constants/Colors'
 
@@ -9,7 +10,7 @@ import Icon from '@/components/Icon'
 
 interface IconButtonProps {
   icon: string
-  route?: LinkProps<string>['href']
+  route?: LinkProps['href']
   color?: string
   size?: number
   strokeWidth?: number

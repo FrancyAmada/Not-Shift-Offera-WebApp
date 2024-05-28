@@ -6,14 +6,8 @@ import * as SplashScreen from 'expo-splash-screen'
 
 import { AuthProvider, useAuth } from '@/providers/AuthProvider'
 import { PostProvider } from '@/providers/PostProvider'
-import { Platform, StatusBar, View } from 'react-native'
-import Colors from '@/constants/Colors'
+import { Platform, StatusBar } from 'react-native'
 import { ChatProvider } from '@/providers/ChatProvider'
-
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router'
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -46,13 +40,13 @@ export default function RootLayout() {
     return null
   }
   return (
-    <ChatProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <ChatProvider>
         <PostProvider>
           <MainLayout />
         </PostProvider>
-      </AuthProvider>
-    </ChatProvider>
+      </ChatProvider>
+    </AuthProvider>
   )
 }
 
@@ -62,21 +56,20 @@ function MainLayout() {
   const router = useRouter()
 
   useEffect(() => {
-    if (isLoading) return
-    if (typeof isAuthenticated == 'undefined') return
+    if (isLoading) return // dont do anything if auth state is still loading
 
-    const inApp = segments[0] == '(app)'
+    const inApp = segments[0] == '(app)' // check if user is in the app segment
 
     if (isAuthenticated && !inApp) {
-      router.replace('/(user)/home')
+      router.replace('/(user)/home') // redirect to home page if authenticated
     } else if (isAuthenticated == false) {
-      router.replace('/')
+      router.replace('/') // redirect to log-in page if not authenticated
     }
 
     setTimeout(() => {
-      SplashScreen.hideAsync()
+      SplashScreen.hideAsync() // delay hiding the splash screen to prevent log-in page flicker
     }, 500)
-  }, [isAuthenticated, isLoading])
+  }, [isLoading])
 
   return (
     <Stack

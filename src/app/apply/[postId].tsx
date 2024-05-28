@@ -24,7 +24,7 @@ const ApplyScreen = () => {
   const { newPostChanges, setNewPostChanges } = usePostContext()
   const router = useRouter()
   const { postId } = useLocalSearchParams()
-  const id = typeof postId === 'string' ? postId : postId[0]
+  const id = typeof postId === 'string' ? postId : ''
   const { post } = usePost(id)
   const { fetchUser, userProfile, userProfileLoading } = useUserProfile()
   const [timeAgo, setTimeAgo] = useState('...')
