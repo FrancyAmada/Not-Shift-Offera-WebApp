@@ -11,6 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
+// TESTING DATABASE
+
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyCmPNpjje-3V4kGIYjCKN5U8MPRJjUWKT8',
 //   authDomain: 'offera-684e9.firebaseapp.com',
@@ -19,6 +21,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 //   messagingSenderId: '963625550046',
 //   appId: '1:963625550046:web:1275be8d75831f6c91424f',
 // }
+
+// PRODUCTION DATABASE
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBrM8Vej95ejKUNo5dZcti4QEDlDa3Atp4',

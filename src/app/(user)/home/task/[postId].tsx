@@ -23,7 +23,7 @@ const PostDetails = () => {
   const router = useRouter()
   const { postId } = useLocalSearchParams()
 
-  const id = typeof postId === 'string' ? postId : postId[0]
+  const id = typeof postId === 'string' ? postId : ''
 
   const { post, error, loading } = usePost(id)
 

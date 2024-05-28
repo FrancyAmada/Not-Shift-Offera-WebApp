@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Pressable, Platform, TouchableOpacity } from 'react-native'
 
-import { Link, Redirect, Tabs, useRouter, useSegments } from 'expo-router'
+import { Tabs, useRouter } from 'expo-router'
 
 import Colors from '@/constants/Colors'
 import TextStyles from '@/constants/TextStyles'
@@ -60,15 +60,12 @@ const HomeLayout = () => {
         name='home'
         options={{
           tabBarLabel: 'Home',
-          // unmountOnBlur: true,
-          // listeners={({navigation}) => ({blur: () => navigation.setParams({screen: undefined})}),
         }}
       />
       <Tabs.Screen
         name='my-applications'
         options={{
           tabBarLabel: 'Offers',
-          // unmountOnBlur: true,
         }}
       />
       <Tabs.Screen

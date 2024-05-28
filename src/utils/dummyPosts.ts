@@ -13,6 +13,7 @@ export const dummyPosts = Array.from(
       imageList: [],
       rate: 0,
       createdAt: Timestamp.now(),
+      acceptedApplicant: null,
       applicants: [],
       status: 'Pending',
     }) as Post,
