@@ -36,7 +36,7 @@ const PostDetails = () => {
   const { newPostChanges } = usePostContext()
 
   const { postId } = useLocalSearchParams()
-  const id = typeof postId === 'string' ? postId : postId[0]
+  const id = typeof postId === 'string' ? postId : ''
 
   const { control, handleSubmit, reset } = useForm()
 

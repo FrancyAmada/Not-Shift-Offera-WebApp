@@ -26,7 +26,7 @@ const ChatScreen = () => {
 
   useEffect(() => {
     if (chatId) {
-      const unsubscribeMessages = fetchMessages(chatId)
+      const unsubscribeMessages = fetchMessages(chatId) // Fetch messages for the chat
 
       if (chatMetadata[chatId]) {
         const participants = chatMetadata[chatId].participants
